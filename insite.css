@@ -1,0 +1,35 @@
+.daiz-ss-cropper, .daiz-ss-cropper-main {
+    border: 1px solid #777;
+    cursor: move;
+    background-color: #ddd;
+    opacity: 0.4;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.daiz-ss-cropper {
+    z-index: 100001;
+    background-color: #FFD54F;
+    border: 1px solid #FFC107;
+}
+
+#daiz-ss-run, #daiz-ss-send {
+    position: fixed;
+    z-index: 10000;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: orange;
+    border-radius: 4px;
+    bottom: 12px;
+    right: 12px;
+}
+
+#daiz-ss-send {
+    background-color: #FFC107;
+    bottom: 48px;
+}
+
+#export {
+    color: #1E88E5;
+}

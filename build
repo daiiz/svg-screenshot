@@ -1,0 +1,1 @@
+babel src/insite-main.js > insite.js
