@@ -105,7 +105,7 @@ class ScreenShot {
                     var aid = 'daiz-ss-a' + idx;
                     var pos = this.correctPosition(rect, croppedRect);
                     pos.id = aid;
-                    pos.url = window.location.href;  //NOTE
+                    // pos.url = window.location.href;  //NOTE
                     pos.href = $(aTag).prop('href');
                     $cropper.attr('title', $(aTag).attr('href'));
                     $cropper.attr('id', aid);
@@ -127,8 +127,9 @@ class ScreenShot {
         var res = {
             cropperRect : pos_cropper,
             aTagRects   : aTagRects,
-            winW  : window.innerWidth,
-            winH  : window.innerHeight
+            winW        : window.innerWidth,
+            winH        : window.innerHeight,
+            baseUri     : window.location.href
         };
         return res;
     }

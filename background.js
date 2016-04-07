@@ -6,6 +6,7 @@ var sendChromeMsg = (json, callback) => {
 var renderImage = function (linkdata, base64img) {
     var canvas = document.querySelector("#cav");
     var pos_cropper = linkdata.cropperRect;
+    var baseUri = linkdata.baseUri;
     var w = +pos_cropper.width;
     var h = +pos_cropper.height;
     canvas.width  = w;
@@ -17,12 +18,12 @@ var renderImage = function (linkdata, base64img) {
         ctx.drawImage(img, pos_cropper.orgX, pos_cropper.orgY, w, h, 0, 0, w, h);
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
-        makeSVGtag(linkdata.aTagRects, screenshot, w, h);
+        makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri);
     }
     img.src = base64img;
 };
 
-var makeSVGtag = function (aTagRects, base64img, width, height) {
+var makeSVGtag = function (aTagRects, base64img, width, height, baseUri) {
     var svgns  = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
@@ -63,10 +64,9 @@ var makeSVGtag = function (aTagRects, base64img, width, height) {
 
     localStorage['w'] = width;
     localStorage['h'] = height;
-    localStorage['url'] = aTagRect.url;
+    localStorage['url'] = baseUri;
     localStorage['svgroot'] = rootSVGtag.outerHTML;
 
-    //console.info(rootSVGtag);
     window.open('viewer.html');
 }
 
