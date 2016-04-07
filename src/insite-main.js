@@ -9,11 +9,6 @@ class ScreenShot {
     }
 
     uiInit () {
-        // NOTE: 将来的には右クリックメニューに変更
-        // aタグを長方形で覆うためのボタンを設置する
-        var $btnRun = $(`<div id="daiz-ss-run"></div>`);
-        $('body').append($btnRun);
-        console.info('[END] init ui');
         this.bindEvents();
         console.info('[END] init js');
     }
@@ -184,10 +179,6 @@ class ScreenShot {
             $(ev.target).remove();
         });
 
-        $('#daiz-ss-run').on('click', ev => {
-            this.setCropper();
-        });
-
         // 切り抜きボックスがダブルクリックされたとき
         $('body').on('dblclick', '#daiz-ss-cropper-main', ev => {
             var res = [];
@@ -215,6 +206,13 @@ class ScreenShot {
                     });
                 }
             }, 1000);
+        });
+
+        // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
+        chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+            if (request.event === 'click-context-menu') {
+                this.setCropper();
+            }
         });
     }
 }

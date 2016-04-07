@@ -70,6 +70,14 @@ var makeSVGtag = function (aTagRects, base64img, width, height) {
     window.open('viewer.html');
 }
 
+chrome.contextMenus.create({
+    title: 'SVGスクリーンショットを撮る',
+    onclick: function (clicked, tab) {
+        chrome.tabs.sendRequest(tab.id, {
+            event: 'click-context-menu'
+        });
+    }
+});
 
 // ポップアップ画面から命令を受ける
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

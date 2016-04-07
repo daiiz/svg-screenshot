@@ -28,6 +28,7 @@
     }
    ],
    "permissions": [
+       "contextMenus",
        "pageCapture",
        "tabs",
        "activeTab",
