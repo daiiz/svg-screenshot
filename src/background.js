@@ -1,17 +1,15 @@
-'use strict';
-
-var sendChromeMsg = function sendChromeMsg(json, callback) {
-    chrome.runtime.sendMessage(json, callback);
-};
+var sendChromeMsg = (json, callback) => {
+     chrome.runtime.sendMessage(json, callback);
+}
 
 // Canvasに画像をセットして，必要部分のみ切り出す
-var renderImage = function renderImage(linkdata, base64img) {
+var renderImage = function (linkdata, base64img) {
     var canvas = document.querySelector("#cav");
     var pos_cropper = linkdata.cropperRect;
     var baseUri = linkdata.baseUri;
     var w = +pos_cropper.width;
     var h = +pos_cropper.height;
-    canvas.width = w;
+    canvas.width  = w;
     canvas.height = h;
     var ctx = canvas.getContext('2d');
 
@@ -21,16 +19,16 @@ var renderImage = function renderImage(linkdata, base64img) {
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
         makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri);
-    };
+    }
     img.src = base64img;
 };
 
-var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUri) {
-    var svgns = 'http://www.w3.org/2000/svg';
+var makeSVGtag = function (aTagRects, base64img, width, height, baseUri) {
+    var svgns  = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
     var rootSVGtag = document.createElementNS(svgns, 'svg');
-    rootSVGtag.setAttributeNS(null, 'version', '1.1');
+    rootSVGtag.setAttributeNS(null, 'version', '1.1')
     rootSVGtag.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     rootSVGtag.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     rootSVGtag.setAttributeNS(null, 'class', 'svg-screenshot');
@@ -70,12 +68,12 @@ var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUr
     localStorage['svgroot'] = rootSVGtag.outerHTML;
 
     window.open('preview.html');
-};
+}
 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
     title: 'SVGスクリーンショットを撮る',
-    onclick: function onclick(clicked, tab) {
+    onclick: function (clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
             event: 'click-context-menu'
         });
@@ -88,7 +86,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.warn(opts.sitedata);
     if (request.command === 'make-screen-shot') {
         var linkdata = opts.sitedata;
-        chrome.tabs.captureVisibleTab({ format: 'png' }, function (dataUrl) {
+        chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
 
             //window.open(dataUrl);
             renderImage(linkdata, dataUrl);
@@ -97,8 +95,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// browser_actionボタンが押された
-chrome.browserAction.onClicked.addListener(function (tab) {
+// browser_actionボタンが押されたとき
+chrome.browserAction.onClicked.addListener(tab => {
     window.open("viewer.html");
 });
-

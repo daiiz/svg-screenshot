@@ -1,1 +1,3 @@
-babel src/insite-main.js > insite.js
+babel src/content_script.js > insite.js
+babel src/background.js > background.js
+babel src/viewer.js > viewer.js
