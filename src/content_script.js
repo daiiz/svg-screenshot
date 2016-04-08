@@ -129,7 +129,8 @@ class ScreenShot {
             aTagRects   : aTagRects,
             winW        : window.innerWidth,
             winH        : window.innerHeight,
-            baseUri     : window.location.href
+            baseUri     : window.location.href,
+            title       : document.title || ''
         };
         return res;
     }

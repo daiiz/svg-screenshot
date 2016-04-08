@@ -1,5 +1,3 @@
-'use strict';
-
 window.addEventListener('load', function () {
     var w = localStorage.w + 'px';
     var h = localStorage.h + 'px';
@@ -20,7 +18,6 @@ window.addEventListener('load', function () {
         type: "image/svg+xml"
     });
     var url = window.URL.createObjectURL(blob);
-    exportTag.download = 'ss_w' + localStorage.w + '_h' + localStorage.h;
+    exportTag.download = 'ss_w'+ localStorage.w + '_h' + localStorage.h;
     exportTag.href = url;
 }, false);
-

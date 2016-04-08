@@ -7,6 +7,7 @@ var renderImage = function (linkdata, base64img) {
     var canvas = document.querySelector("#cav");
     var pos_cropper = linkdata.cropperRect;
     var baseUri = linkdata.baseUri;
+    var title = linkdata.title;
     var w = +pos_cropper.width;
     var h = +pos_cropper.height;
     canvas.width  = w;
@@ -18,12 +19,12 @@ var renderImage = function (linkdata, base64img) {
         ctx.drawImage(img, pos_cropper.orgX, pos_cropper.orgY, w, h, 0, 0, w, h);
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
-        makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri);
+        makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri, title);
     }
     img.src = base64img;
 };
 
-var makeSVGtag = function (aTagRects, base64img, width, height, baseUri) {
+var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) {
     var svgns  = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
@@ -65,6 +66,7 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri) {
     localStorage['w'] = width;
     localStorage['h'] = height;
     localStorage['url'] = baseUri;
+    localStorage['title'] = title;
     localStorage['svgroot'] = rootSVGtag.outerHTML;
 
     window.open('preview.html');

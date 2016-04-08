@@ -1,3 +1,4 @@
 babel src/content_script.js > insite.js
 babel src/background.js > background.js
+babel src/preview.js > preview.js
 babel src/viewer.js > viewer.js
