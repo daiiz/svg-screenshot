@@ -97,7 +97,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// browser_actionボタンが押された
+// browser_actionボタンが押されたとき
 chrome.browserAction.onClicked.addListener(function (tab) {
     window.open("viewer.html");
 });
