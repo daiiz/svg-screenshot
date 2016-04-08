@@ -10,6 +10,13 @@
       "48": "128x128.png",
       "16": "128x128.png"
    },
+   "browser_action": {
+      "default_icon": {
+         "19": "128x128.png",
+         "38": "128x128.png"
+      },
+      "default_title": "Open viewer"
+   },
    "manifest_version": 2,
    "name": "SVG ScreenShot (beta)",
    "content_scripts": [
