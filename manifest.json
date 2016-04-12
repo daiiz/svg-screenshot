@@ -4,7 +4,7 @@
     },
     "options_page": "options.html",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-    "description": "SVG ScreenShot",
+    "description": "SVG Screenshot",
     "icons": {
         "128": "128x128.png",
         "48": "128x128.png",
@@ -18,7 +18,7 @@
         "default_title": "Open viewer"
     },
     "manifest_version": 2,
-    "name": "SVG ScreenShot (beta)",
+    "name": "SVG Screenshot",
     "content_scripts": [{
         "matches": ["<all_urls>"],
         "css": [
@@ -39,5 +39,5 @@
         "activeTab",
         "<all_urls>"
     ],
-    "version": "0.0.4"
+    "version": "0.0.5"
 }
