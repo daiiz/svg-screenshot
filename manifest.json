@@ -4,7 +4,7 @@
     },
     "options_page": "options.html",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-    "description": "SVG ScreenShot (beta)",
+    "description": "SVG ScreenShot",
     "icons": {
         "128": "128x128.png",
         "48": "128x128.png",
@@ -39,5 +39,5 @@
         "activeTab",
         "<all_urls>"
     ],
-    "version": "0.0.3"
+    "version": "0.0.4"
 }
