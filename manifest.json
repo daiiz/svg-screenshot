@@ -1,45 +1,43 @@
 ﻿{
-   "background": {
-      "page": "background.html"
-   },
-   "options_page": "options.html",
-   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-   "description": "SVG ScreenShot (beta)",
-   "icons": {
-      "128": "128x128.png",
-      "48": "128x128.png",
-      "16": "128x128.png"
-   },
-   "browser_action": {
-      "default_icon": {
-         "19": "128x128.png",
-         "38": "128x128.png"
-      },
-      "default_title": "Open viewer"
-   },
-   "manifest_version": 2,
-   "name": "SVG ScreenShot (beta)",
-   "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "css": [
-        "lib/jquery-ui.min.css",
-        "insite.css"
-      ],
-      "js": [
-        "lib/jquery.js",
-        "lib/jquery-ui.min.js",
-        "insite.js"
-      ],
-      "run_at": "document_end"
-    }
-   ],
-   "permissions": [
-       "contextMenus",
-       "pageCapture",
-       "tabs",
-       "activeTab",
-       "<all_urls>"
-   ],
-   "version": "0.0.2"
+    "background": {
+        "page": "background.html"
+    },
+    "options_page": "options.html",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "description": "SVG ScreenShot (beta)",
+    "icons": {
+        "128": "128x128.png",
+        "48": "128x128.png",
+        "16": "128x128.png"
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "128x128.png",
+            "38": "128x128.png"
+        },
+        "default_title": "Open viewer"
+    },
+    "manifest_version": 2,
+    "name": "SVG ScreenShot (beta)",
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "css": [
+            "lib/jquery-ui.min.css",
+            "insite.css"
+        ],
+        "js": [
+            "lib/jquery.js",
+            "lib/jquery-ui.min.js",
+            "dist/insite.js"
+        ],
+        "run_at": "document_end"
+    }],
+    "permissions": [
+        "contextMenus",
+        "pageCapture",
+        "tabs",
+        "activeTab",
+        "<all_urls>"
+    ],
+    "version": "0.0.3"
 }
