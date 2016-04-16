@@ -14,7 +14,7 @@ var ScreenShot = (function () {
 
         this.CROP_BOX_SIZE = 60;
         this.uiInit();
-        this.postionLastRclick = [0, 0];
+        this.positionLastRclick = [0, 0];
         this.linkdata = null;
     }
 
@@ -70,8 +70,8 @@ var ScreenShot = (function () {
             $cropper[0].id = 'daiz-ss-cropper-main';
             // 切り抜きボックスの位置を初期化
             $cropper.css({
-                left: this.postionLastRclick[0] - this.CROP_BOX_SIZE / 2,
-                top: this.postionLastRclick[1] - this.CROP_BOX_SIZE / 2,
+                left: this.positionLastRclick[0] - this.CROP_BOX_SIZE / 2,
+                top: this.positionLastRclick[1] - this.CROP_BOX_SIZE / 2,
                 width: this.CROP_BOX_SIZE,
                 height: this.CROP_BOX_SIZE
             });
@@ -238,7 +238,7 @@ var ScreenShot = (function () {
 
             // ページでの右クリックを検出
             $(window).bind('contextmenu', function (e) {
-                _this2.postionLastRclick = [e.clientX, e.clientY];
+                _this2.positionLastRclick = [e.clientX, e.clientY];
             });
 
             // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
