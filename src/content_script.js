@@ -4,23 +4,24 @@ var sendChromeMsg = (json, callback) => {
 
 class ScreenShot {
     constructor () {
+        this.CROP_BOX_SIZE = 60;
         this.uiInit();
+        this.postionLastRclick = [0, 0];
         this.linkdata = null;
     }
 
     uiInit () {
         this.bindEvents();
-        console.info('[END] init js');
     }
 
+    // 切り抜きボックス, a要素カバーボックス
     $genCropper () {
         var $cropper = $('<div class="daiz-ss-cropper" style="position: fixed;"></div>');
-        // 切り抜きボックスの位置を初期化
         $cropper.css({
-            top: 0,
-            left: 0,
-            width: 50,
-            height: 50
+            top   : 0,
+            left  : 0,
+            width : this.CROP_BOX_SIZE,
+            height: this.CROP_BOX_SIZE
         });
         return $cropper;
     }
@@ -51,10 +52,10 @@ class ScreenShot {
         $cropper[0].id = 'daiz-ss-cropper-main';
         // 切り抜きボックスの位置を初期化
         $cropper.css({
-            top: 0,
-            left: 0,
-            width: 50,
-            height: 50
+            left  : this.postionLastRclick[0] - (this.CROP_BOX_SIZE / 2),
+            top   : this.postionLastRclick[1] - (this.CROP_BOX_SIZE / 2),
+            width : this.CROP_BOX_SIZE,
+            height: this.CROP_BOX_SIZE
         });
         // ドラッグ可能にする
         $cropper.draggable({
@@ -105,7 +106,6 @@ class ScreenShot {
                     var aid = 'daiz-ss-a' + idx;
                     var pos = this.correctPosition(rect, croppedRect);
                     pos.id = aid;
-                    // pos.url = window.location.href;  //NOTE
                     pos.href = $(aTag).prop('href');
                     $cropper.attr('title', $(aTag).attr('href'));
                     $cropper.attr('id', aid);
@@ -208,6 +208,11 @@ class ScreenShot {
                     });
                 }
             }, 1000);
+        });
+
+        // ページでの右クリックを検出
+        $(window).bind('contextmenu', (e) => {
+            this.postionLastRclick = [e.clientX, e.clientY];
         });
 
         // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
