@@ -45,11 +45,13 @@ var Viewer = (function () {
                 $('body').css('background-color', '#303030');
                 // main領域背景色
                 $('#main').css('background-color', '#424242');
+                $('#main').css('color', '#fafafa');
             } else if (this.ui_theme === this.UI_LIGHT) {
                 $('header').css('background-color', '#607D8B');
                 $('.headmenu').css('background-color', '#607D8B');
                 $('body').css('background-color', '#fafafa');
                 $('#main').css('background-color', '#ffffff');
+                $('#main').css('color', '#111');
             }
         }
     }, {
@@ -94,6 +96,7 @@ var Viewer = (function () {
                 var reader = new FileReader();
                 if (files.length <= 0) return false;
 
+                // ファイルimage/svg+xmlの読み込み
                 // 複数与えられた場合でも，読み込むのは最初のファイルのみ
                 var file = files[0];
                 if (file.type.match('image/svg+xml') == -1) return false;

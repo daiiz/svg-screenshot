@@ -12,8 +12,13 @@ body {
     outline: none;
     background: rgba(0, 0, 0, 0);
 }
+
 *:focus {
   outline: none;
+}
+
+.msg-dd {
+    padding: 24px;
 }
 
 header {
