@@ -5,8 +5,52 @@ html {
 
 body {
     margin: 0px;
-    background-color: #e9e7e4;
+    background-color: #303030;
 }
+
+header {
+    position: fixed;
+    z-index: 200;
+    background-color: #212121 !important;
+}
+
+.mdl-navigation__link {
+    cursor: pointer;
+}
+
+.mdl-layout__drawer.is-visible {
+    position: fixed;
+    z-index: 600;
+}
+
+.mdl-layout__obfuscator.is-visible {
+    position: fixed;
+    z-index: 550;
+}
+
+.mdl-js-snackbar.mdl-snackbar {
+    background-color: #424242 !important;
+    z-index: 550;
+}
+
+#btn-site-open {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    color: #212121;
+    background-color: #FFC107 !important;
+    z-index: 1000;
+}
+
+.headmenu.mdl-navigation {
+    z-index: 400;
+    position: absolute;
+    right: 0px;
+    padding-right: 12px !important;
+    padding-left: 6px !important;
+    background-color: #212121 !important;
+}
+
 
 #header {
     position: fixed;
@@ -17,14 +61,14 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.28);
 }
 
-#site-title {
+/*#site-title {
     color: #fff;
     font-size: 20px;
     font-weight: 400;
     padding: 10px;
     padding-top: 8px;
     padding-left: 20px;
-}
+}*/
 
 #site-url {
     color: #fff;
@@ -52,7 +96,10 @@ body {
     width: 400px;
     height: 250px;
     top: 125px;
+    z-index: 400;
     margin: auto;
     margin-bottom: 60px;
-    box-shadow: 0px 2px 2px rgba(0,0,0,0.14);
+    background-color: #424242;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.4);
+    //box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
 }

@@ -13,20 +13,51 @@
         <link rel="stylesheet" href="viewer.css">
     </head>
     <body>
-        <div id="header">
-            <div id="site-title" class="s">
-                <!-- auto -->Viewer
+        <!-- Always shows a header, even in smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+              <!-- Title -->
+              <span class="mdl-layout-title" id="site-title" title="">Viewer</span>
+              <!-- Add spacer, to align navigation to the right -->
+              <div class="mdl-layout-spacer"></div>
+              <!-- Navigation. We hide it in small screens. -->
+              <nav class="mdl-navigation headmenu">
+                <span class="mdl-navigation__link">
+                    <i class="material-icons" title="リンク領域表示/非表示切り替え">visibility</i>
+                </span>
+                <span class="mdl-navigation__link">
+                    <i class="material-icons" title="埋め込みコード取得">code</i>
+                </span>
+                <span class="mdl-navigation__link">
+                    <i class="material-icons" title="ライトUI/ダークUI切り換え">brightness_high</i>
+                </span>
+              </nav>
             </div>
-            <div id="site-url" class="s">
-                <a href="#" target="_blank" id="a-site-url">
-                    表示したいスクリーンショットSVGファイルをドラッグ・アンド・ドロップ
-                    <!-- auto -->
-                </a>
-            </div>
+          </header>
+          <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">ファイルリスト</span>
+            <nav class="mdl-navigation">
+              <a class="mdl-navigation__link" href="#">Link</a>
+            </nav>
+          </div>
+          <main class="mdl-layout__content">
+            <div class="page-content"><!-- Your content goes here --></div>
+          </main>
         </div>
 
         <div id="main">
             <!-- auto -->
+        </div>
+
+        <!-- Colored FAB button with ripple -->
+        <button id="btn-site-open" data-orgpageurl="url" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+          <i class="material-icons">open_in_new</i>
+        </button>
+
+        <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
         </div>
 
         <div id="hide" style="visibility: hidden; width: 2px; height: 2px;">

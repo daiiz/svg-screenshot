@@ -6,7 +6,7 @@ class Viewer {
     renderSvgFile (f) {
         var $stage = $('#main');
         var $title = $('#site-title');
-        var $url   = $('#a-site-url');
+        var $url   = $('#btn-site-open');
         $stage[0].innerHTML = '';
 
         var reader = new FileReader();
@@ -23,8 +23,8 @@ class Viewer {
             var pageUrl = svgRootTag.getAttribute('data-url') || '';
             var pageTitle = svgRootTag.getAttribute('data-title') || 'Viewer';
             $title[0].innerHTML = pageTitle;
-            $url[0].innerHTML = pageUrl;
-            $url[0].href = pageUrl;
+            $title[0].title = pageTitle;
+            $url[0].dataset.orgpageurl = pageUrl;
             svgRootTag.setAttributeNS(null, 'title', `${w} x ${h}`);
             $stage[0].appendChild(svgRootTag);
         }
@@ -52,10 +52,29 @@ class Viewer {
         }).bind('dragleave', e => {
             return false;
         });
+
+        // オリジナルサイトを新しいタブで開く
+        $('#btn-site-open').on('click', e => {
+            var $btn = $(e.target).closest('#btn-site-open');
+            var url = $btn[0].dataset.orgpageurl || '';
+            window.open(url);
+        });
     }
 }
 
 $(function () {
+    // オリジナルサイトオープンボタンをホバーしたとき，
+    // 移動先URLをToast表示する
+    var snackbarContainer = document.querySelector('#toast');
+    var $showToastButton = $('#btn-site-open');
+    $showToastButton.on('mouseenter', function (e) {
+        if (!$(snackbarContainer).hasClass('mdl-snackbar--active')) {
+            var msg = e.target.dataset.orgpageurl;
+            var data = {
+                message: msg
+            };
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+        }
+    });
     var viewer = new Viewer();
-    console.info(viewer);
 });
