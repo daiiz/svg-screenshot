@@ -5,6 +5,8 @@ class Viewer {
         this.STORE_KEY__VIEWER_UI_THEME = 'viewer_ui_theme';
         // ローカルストレージに設定情報が存在すれば，それを使用する
         this.ui_theme = this.getVariable(this.STORE_KEY__VIEWER_UI_THEME) || this.UI_LIGHT;
+        // SVGのrect要素を可視化するかどうか
+        this.isVisibleRect = false;
         this.setUi();
         this.bindEvents();
     }
@@ -104,6 +106,26 @@ class Viewer {
                 this.ui_theme = this.UI_LIGHT;
             }
             this.setUi();
+        });
+
+        // SVG中のリンクRect要素の表示非表示を切り換える
+        $('#btn_toggle_a_rect').on('click', e => {
+            var rects = document.querySelectorAll('rect');
+            if (!this.isVisibleRect) {
+                // 表示する
+                for (var i = 0; i < rects.length; i++) {
+                    var rect = rects[i];
+                    rect.setAttribute('class', 'visibleRect');
+                }
+                this.isVisibleRect = true;
+            }else {
+                // 隠す
+                for (var i = 0; i < rects.length; i++) {
+                    var rect = rects[i];
+                    rect.setAttribute('class', '');
+                }
+                this.isVisibleRect = false;
+            }
         });
     }
 }

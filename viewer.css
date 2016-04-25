@@ -13,6 +13,13 @@ header {
     background-color: #607D8B
 }
 
+.visibleRect {
+    fill: rgb(255, 213, 79);
+    stroke-width: 1;
+    stroke: rgb(255, 193, 7);
+    opacity: 0.4;
+}
+
 .head_btn, .drawer_btn {
     cursor: pointer;
     -webkit-user-select: none;
