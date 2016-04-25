@@ -79,8 +79,8 @@ class Viewer {
             // 複数与えられた場合でも，読み込むのは最初のファイルのみ
             var file = files[0];
             if (file.type.match('image/svg+xml') == -1) return false;
+            this.isVisibleRect = false;
             this.renderSvgFile(file);
-
         }).bind('dragenter', e => {
             return false;
         }).bind('dragover', e => {
@@ -127,6 +127,12 @@ class Viewer {
                 }
                 this.isVisibleRect = false;
             }
+        });
+
+        // 埋め込み用iframe要素コードを表示する
+        $('#btn_get_embeded_code').on('click', e => {
+            var code = `<iframe></iframe>`;
+            window.prompt('埋め込みHTMLコード', code);
         });
     }
 }
