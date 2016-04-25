@@ -17,11 +17,19 @@ var Viewer = (function () {
         this.bindEvents();
     }
 
-    // UIモードに応じた配色を適用する
+    // ローカルストレージに設定変数を保存する
 
     _createClass(Viewer, [{
+        key: 'storeVariable',
+        value: function storeVariable(key, value) {
+            localStorage[key] = value;
+        }
+
+        // UIモードに応じた配色を適用する
+    }, {
         key: 'setUi',
         value: function setUi() {
+            this.storeVariable(this.STORE_KEY__VIEWER_UI_THEME, this.ui_theme);
             if (this.ui_theme === this.UI_DARK) {
                 // ヘッダ背景色
                 $('header').css('background-color', '#212121');

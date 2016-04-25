@@ -2,15 +2,21 @@ class Viewer {
     constructor () {
         this.UI_DARK  = 'dark';
         this.UI_LIGHT = 'light';
-        this.STORE_KEY__VIEWER_UI_THEME= 'viewer_ui_theme';
+        this.STORE_KEY__VIEWER_UI_THEME = 'viewer_ui_theme';
         // ローカルストレージに設定情報が存在すれば，それを使用する
         this.ui_theme = localStorage[this.STORE_KEY__VIEWER_UI_THEME] || this.UI_LIGHT;
         this.setUi();
         this.bindEvents();
     }
 
+    // ローカルストレージに設定変数を保存する
+    storeVariable (key, value) {
+        localStorage[key] = value;
+    }
+
     // UIモードに応じた配色を適用する
     setUi () {
+        this.storeVariable(this.STORE_KEY__VIEWER_UI_THEME, this.ui_theme);
         if (this.ui_theme === this.UI_DARK) {
             // ヘッダ背景色
             $('header').css('background-color', '#212121');
