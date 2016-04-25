@@ -12,7 +12,7 @@ var Viewer = (function () {
         this.UI_LIGHT = 'light';
         this.STORE_KEY__VIEWER_UI_THEME = 'viewer_ui_theme';
         // ローカルストレージに設定情報が存在すれば，それを使用する
-        this.ui_theme = localStorage[this.STORE_KEY__VIEWER_UI_THEME] || this.UI_LIGHT;
+        this.ui_theme = this.getVariable(this.STORE_KEY__VIEWER_UI_THEME) || this.UI_LIGHT;
         this.setUi();
         this.bindEvents();
     }
@@ -23,6 +23,11 @@ var Viewer = (function () {
         key: 'storeVariable',
         value: function storeVariable(key, value) {
             localStorage[key] = value;
+        }
+    }, {
+        key: 'getVariable',
+        value: function getVariable(key) {
+            return localStorage[key];
         }
 
         // UIモードに応じた配色を適用する

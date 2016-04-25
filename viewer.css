@@ -10,6 +10,7 @@ body {
 header {
     position: fixed;
     z-index: 200;
+    background-color: #607D8B
 }
 
 .head_btn, .drawer_btn {
@@ -40,6 +41,7 @@ header {
 .mdl-js-snackbar.mdl-snackbar {
     background-color: #424242 !important;
     z-index: 550;
+    overflow-x: hidden;
 }
 
 #btn-site-open {
