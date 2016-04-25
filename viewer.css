@@ -5,21 +5,24 @@ html {
 
 body {
     margin: 0px;
-    background-color: #303030;
 }
 
 header {
     position: fixed;
     z-index: 200;
-    background-color: #212121 !important;
 }
 
-.mdl-navigation__link {
+.head_btn, .drawer_btn {
     cursor: pointer;
+}
+
+.mdl-navigation.mdl-navigation__link {
+    color: #111;
 }
 
 .mdl-layout__drawer.is-visible {
     position: fixed;
+    color: #111;
     z-index: 600;
 }
 
@@ -48,47 +51,6 @@ header {
     right: 0px;
     padding-right: 12px !important;
     padding-left: 6px !important;
-    background-color: #212121 !important;
-}
-
-
-#header {
-    position: fixed;
-    box-sizing: border-box;
-    width: 100%;
-    height: 65px;
-    background-color: #607D8B;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.28);
-}
-
-/*#site-title {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 400;
-    padding: 10px;
-    padding-top: 8px;
-    padding-left: 20px;
-}*/
-
-#site-url {
-    color: #fff;
-    padding-left: 20px;
-    font-size: 14px;
-    margin-top: -6px;
-}
-
-#a-site-url {
-    color: #fff;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-#a-site-url:hover {
-    text-decoration: underline;
-}
-
-.s {
-    font-family: "RobotoDraft", "Roboto", sans-serif, arial;
 }
 
 #main {
@@ -99,7 +61,5 @@ header {
     z-index: 400;
     margin: auto;
     margin-bottom: 60px;
-    background-color: #424242;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.4);
-    //box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
 }
