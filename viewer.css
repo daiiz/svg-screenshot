@@ -54,6 +54,10 @@ header {
     z-index: 600;
 }
 
+.mdl-layout__header-row {
+    padding-left: 40px;
+}
+
 .mdl-layout__obfuscator.is-visible {
     position: fixed;
     z-index: 550;

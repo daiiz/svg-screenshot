@@ -75,6 +75,7 @@ var Viewer = (function () {
                 });
                 var pageUrl = svgRootTag.getAttribute('data-url') || '';
                 var pageTitle = svgRootTag.getAttribute('data-title') || 'Viewer';
+                document.title = pageTitle;
                 $title[0].innerHTML = pageTitle;
                 $title[0].title = pageTitle;
                 $url[0].dataset.orgpageurl = pageUrl;
