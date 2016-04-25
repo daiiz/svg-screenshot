@@ -14,6 +14,12 @@ header {
 
 .head_btn, .drawer_btn {
     cursor: pointer;
+    -webkit-user-select: none;
+}
+
+.hb {
+    margin-right: 12px;
+    margin-left: 12px;
 }
 
 .mdl-navigation.mdl-navigation__link {
@@ -38,8 +44,8 @@ header {
 
 #btn-site-open {
     position: fixed;
-    bottom: 16px;
-    right: 16px;
+    bottom: 24px;
+    right: 24px;
     color: #212121;
     background-color: #FFC107 !important;
     z-index: 1000;
@@ -49,7 +55,7 @@ header {
     z-index: 400;
     position: absolute;
     right: 0px;
-    padding-right: 12px !important;
+    padding-right: 28px !important;
     padding-left: 6px !important;
 }
 

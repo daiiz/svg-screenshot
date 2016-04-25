@@ -23,22 +23,23 @@
               <div class="mdl-layout-spacer"></div>
               <!-- Navigation. We hide it in small screens. -->
               <nav class="mdl-navigation headmenu">
-                <span class="mdl-navigation__link">
-                    <i class="material-icons head_btn" title="リンク領域表示/非表示切り替え">visibility</i>
-                </span>
-                <span class="mdl-navigation__link">
-                    <i class="material-icons head_btn" title="埋め込みコード取得">code</i>
-                </span>
-                <span class="mdl-navigation__link">
+                <button class="mdl-button mdl-js-button mdl-button--icon hb">
+                    <i class="material-icons head_btn" id="btn_toggle_a_rect" title="リンク領域表示/非表示切り替え">visibility</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--icon hb">
+                    <i class="material-icons head_btn" id="btn_get_embeded_code" title="埋め込みコード取得">code</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--icon hb">
                     <i class="material-icons head_btn" id="btn_switch_ui_theme" title="ライトUI/ダークUI切り換え">brightness_high</i>
-                </span>
+                </button>
+
               </nav>
             </div>
           </header>
           <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">ファイルリスト</span>
             <nav class="mdl-navigation">
-              <a class="mdl-navigation__link drawer_btn" href="#">Link</a>
+              <a class="mdl-navigation__link drawer_btn" href="#"></a>
             </nav>
           </div>
           <main class="mdl-layout__content">
@@ -51,7 +52,7 @@
         </div>
 
         <!-- Colored FAB button with ripple -->
-        <button id="btn-site-open" data-orgpageurl="url" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+        <button id="btn-site-open" data-orgpageurl="" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
           <i class="material-icons">open_in_new</i>
         </button>
 

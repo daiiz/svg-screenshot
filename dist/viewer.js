@@ -10,9 +10,9 @@ var Viewer = (function () {
 
         this.UI_DARK = 'dark';
         this.UI_LIGHT = 'light';
-        this.STORE_KEY__VIEWER_UI_MODE = 'viewer_ui_mode';
+        this.STORE_KEY__VIEWER_UI_THEME = 'viewer_ui_theme';
         // ローカルストレージに設定情報が存在すれば，それを使用する
-        this.ui_mode = localStorage[this.STORE_KEY__VIEWER_UI_MODE] || this.UI_LIGHT;
+        this.ui_theme = localStorage[this.STORE_KEY__VIEWER_UI_THEME] || this.UI_LIGHT;
         this.setUi();
         this.bindEvents();
     }
@@ -22,7 +22,7 @@ var Viewer = (function () {
     _createClass(Viewer, [{
         key: 'setUi',
         value: function setUi() {
-            if (this.ui_mode === this.UI_DARK) {
+            if (this.ui_theme === this.UI_DARK) {
                 // ヘッダ背景色
                 $('header').css('background-color', '#212121');
                 $('.headmenu').css('background-color', '#212121');
@@ -30,7 +30,7 @@ var Viewer = (function () {
                 $('body').css('background-color', '#303030');
                 // main領域背景色
                 $('#main').css('background-color', '#424242');
-            } else if (this.ui_mode === this.UI_LIGHT) {
+            } else if (this.ui_theme === this.UI_LIGHT) {
                 $('header').css('background-color', '#607D8B');
                 $('.headmenu').css('background-color', '#607D8B');
                 $('body').css('background-color', '#fafafa');
@@ -95,15 +95,17 @@ var Viewer = (function () {
             $('#btn-site-open').on('click', function (e) {
                 var $btn = $(e.target).closest('#btn-site-open');
                 var url = $btn[0].dataset.orgpageurl || '';
-                window.open(url);
+                if (url.length > 0) {
+                    window.open(url);
+                }
             });
 
             // UIテーマを切り替える
             $('#btn_switch_ui_theme').on('click', function (e) {
-                if (_this.ui_mode === _this.UI_LIGHT) {
-                    _this.ui_mode = _this.UI_DARK;
+                if (_this.ui_theme === _this.UI_LIGHT) {
+                    _this.ui_theme = _this.UI_DARK;
                 } else {
-                    _this.ui_mode = _this.UI_LIGHT;
+                    _this.ui_theme = _this.UI_LIGHT;
                 }
                 _this.setUi();
             });
@@ -121,10 +123,9 @@ $(function () {
     $showToastButton.on('mouseenter', function (e) {
         if (!$(snackbarContainer).hasClass('mdl-snackbar--active')) {
             var msg = e.target.dataset.orgpageurl;
-            var data = {
-                message: msg
-            };
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            if (msg.length > 0) {
+                snackbarContainer.MaterialSnackbar.showSnackbar({ message: msg });
+            }
         }
     });
     var viewer = new Viewer();
