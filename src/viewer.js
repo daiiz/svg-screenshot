@@ -111,6 +111,7 @@ class Viewer {
         // SVG中のリンクRect要素の表示非表示を切り換える
         $('#btn_toggle_a_rect').on('click', e => {
             var rects = document.querySelectorAll('rect');
+            if (rects.length === 0) return;
             if (!this.isVisibleRect) {
                 // 表示する
                 for (var i = 0; i < rects.length; i++) {

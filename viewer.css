@@ -7,6 +7,15 @@ body {
     margin: 0px;
 }
 
+::selection {
+    text-shadow: none;
+    outline: none;
+    background: rgba(0, 0, 0, 0);
+}
+*:focus {
+  outline: none;
+}
+
 header {
     position: fixed;
     z-index: 200;

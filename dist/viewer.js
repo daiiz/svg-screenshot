@@ -128,6 +128,7 @@ var Viewer = (function () {
             // SVG中のリンクRect要素の表示非表示を切り換える
             $('#btn_toggle_a_rect').on('click', function (e) {
                 var rects = document.querySelectorAll('rect');
+                if (rects.length === 0) return;
                 if (!_this.isVisibleRect) {
                     // 表示する
                     for (var i = 0; i < rects.length; i++) {
