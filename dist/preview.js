@@ -1,5 +1,3 @@
-'use strict';
-
 window.addEventListener('load', function () {
     var w = localStorage.w + 'px';
     var h = localStorage.h + 'px';

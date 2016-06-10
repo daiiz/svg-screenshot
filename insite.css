@@ -33,3 +33,19 @@
 #export {
     color: #1E88E5;
 }
+
+.daiz-ss-cropper-close {
+    position: absolute;
+    top: -11px;
+    right: -11px;
+    width: 21px;
+    height: 21px;
+    background-color: #777;
+    border-radius: 50%;
+    z-index: 10001;
+    color: #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+}

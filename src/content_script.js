@@ -16,7 +16,11 @@ class ScreenShot {
 
     // 切り抜きボックス, a要素カバーボックス
     $genCropper () {
-        var $cropper = $('<div class="daiz-ss-cropper" style="position: fixed;"></div>');
+        var $cropper = $(`<div class="daiz-ss-cropper" style="position: fixed;">
+            <div class="daiz-ss-cropper-close">
+                x
+            </div>
+        </div>`);
         $cropper.css({
             top   : 0,
             left  : 0,
@@ -77,8 +81,7 @@ class ScreenShot {
         var $cropper = $('#daiz-ss-cropper-main');
         var rect = $cropper[0].getBoundingClientRect();
         if (rect === undefined) return;
-        // 前回生成した長方形カバーを消去
-        $('.daiz-ss-cropper').remove();
+        this.removeCropper();
         this.linkdata = this.setRects(rect);
     }
 
@@ -172,6 +175,11 @@ class ScreenShot {
             height: aTagRect.height
         };
         return res;
+    }
+
+    // 描画されている長方形カバーを消去
+    removeCropper () {
+        $('.daiz-ss-cropper').remove();
     }
 
     bindEvents () {
