@@ -4,7 +4,7 @@ var sendChromeMsg = (json, callback) => {
 
 class ScreenShot {
     constructor() {
-        this.CROP_BOX_SIZE = 60;
+        this.CROP_BOX_SIZE = 120;
         this.uiInit();
         this.positionLastRclick = [0, 0];
         this.linkdata = null;
@@ -16,11 +16,7 @@ class ScreenShot {
 
     // 切り抜きボックス, a要素カバーボックス
     $genCropper() {
-        var $cropper = $(`<div class="daiz-ss-cropper" style="position: fixed;">
-            <div class="daiz-ss-cropper-close">
-                x
-            </div>
-        </div>`);
+        var $cropper = $(`<div class="daiz-ss-cropper" style="position: fixed;"></div>`);
         $cropper.css({
             top: 0,
             left: 0,
@@ -61,6 +57,7 @@ class ScreenShot {
             width: this.CROP_BOX_SIZE,
             height: this.CROP_BOX_SIZE
         });
+        $cropper.append(`<div id="daiz-ss-cropper-close">x</div>`);
         // ドラッグ可能にする
         $cropper.draggable({
             stop: (ev, ui) => {
@@ -177,7 +174,7 @@ class ScreenShot {
         return res;
     }
 
-    // 描画されている長方形カバーを消去
+    // 描画されている長方形カバーを全て消去
     removeCropper() {
         $('.daiz-ss-cropper').remove();
     }
@@ -216,6 +213,13 @@ class ScreenShot {
                     });
                 }
             }, 1000);
+        });
+
+        // 切り抜きボックスの閉じるボタンがクリックされたとき
+        $('body').on('click', '#daiz-ss-cropper-close', ev => {
+            this.removeCropper();
+            $(".daiz-ss-cropper-main").remove();
+            this.fixHtml(false);
         });
 
         // ページでの右クリックを検出

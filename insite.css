@@ -34,7 +34,7 @@
     color: #1E88E5;
 }
 
-.daiz-ss-cropper-close {
+#daiz-ss-cropper-close {
     position: absolute;
     top: -11px;
     right: -11px;
