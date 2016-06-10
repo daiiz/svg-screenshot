@@ -23,7 +23,6 @@
         "matches": ["<all_urls>"],
         "css": [
             "lib/jquery-ui.min.css",
-            "lib/mdl/material.min.css",
             "insite.css"
         ],
         "js": [
