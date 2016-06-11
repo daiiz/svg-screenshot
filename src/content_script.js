@@ -48,6 +48,12 @@ class ScreenShot {
     // 範囲指定のための長方形を表示する
     setCropper () {
         var $cropper = this.$genCropper();
+        var closeBtnImg = chrome.extension.getURL('x.png');
+        var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
+        $closeBtn.css({
+            'background-image': `url(${closeBtnImg})`
+        });
+
         $cropper[0].className = 'daiz-ss-cropper-main';
         $cropper[0].id = 'daiz-ss-cropper-main';
         // 切り抜きボックスの位置を初期化
@@ -57,7 +63,7 @@ class ScreenShot {
             width : this.CROP_BOX_SIZE,
             height: this.CROP_BOX_SIZE
         });
-        $cropper.append(`<div id="daiz-ss-cropper-close">x</div>`);
+        $cropper.append($closeBtn);
         // ドラッグ可能にする
         $cropper.draggable({
             stop: (ev, ui) => {
