@@ -99,5 +99,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // browser_actionボタンが押されたとき
 chrome.browserAction.onClicked.addListener(tab => {
-    window.open("viewer.html");
+    window.open("https://svgscreenshot.appspot.com/viewer");
 });
