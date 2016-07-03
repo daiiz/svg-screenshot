@@ -1,9 +1,11 @@
-var sendChromeMsg = (json, callback) => {
+'use strict';
+
+var sendChromeMsg = function sendChromeMsg(json, callback) {
     chrome.runtime.sendMessage(json, callback);
 };
 
 // Canvasに画像をセットして，必要部分のみ切り出す
-var renderImage = function (linkdata, base64img) {
+var renderImage = function renderImage(linkdata, base64img) {
     var canvas = document.querySelector("#cav");
     var pos_cropper = linkdata.cropperRect;
     var baseUri = linkdata.baseUri;
@@ -24,7 +26,7 @@ var renderImage = function (linkdata, base64img) {
     img.src = base64img;
 };
 
-var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) {
+var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUri, title) {
     var svgns = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
@@ -75,7 +77,7 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
     title: 'SVGスクリーンショットを撮る',
-    onclick: function (clicked, tab) {
+    onclick: function onclick(clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
             event: 'click-context-menu'
         });
@@ -98,7 +100,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 // browser_actionボタンが押されたとき
-chrome.browserAction.onClicked.addListener(tab => {
+chrome.browserAction.onClicked.addListener(function (tab) {
     window.open("https://svgscreenshot.appspot.com/");
 });
-

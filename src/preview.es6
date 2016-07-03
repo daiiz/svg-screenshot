@@ -39,7 +39,7 @@ var getSvgBgImg = (svgTag) => {
     if (imageTag.length === 0) return null;
     var dataImage = imageTag[0].getAttribute('xlink:href');
     return dataImage;
-}
+};
 
 var showToast = (msg) => {
     var snackbarContainer = document.querySelector('#toast');

@@ -1,6 +1,7 @@
 var sendChromeMsg = (json, callback) => {
      chrome.runtime.sendMessage(json, callback);
-}
+};
+
 
 // Canvasに画像をセットして，必要部分のみ切り出す
 var renderImage = function (linkdata, base64img) {

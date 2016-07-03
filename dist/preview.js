@@ -1,3 +1,5 @@
+'use strict';
+
 var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
 
 window.addEventListener('load', function () {
@@ -24,7 +26,7 @@ window.addEventListener('load', function () {
     exportTag.href = url;
 }, false);
 
-var getSvgTag = () => {
+var getSvgTag = function getSvgTag() {
     var $stage = $('.daiz-ss');
     var tag = $stage[0].firstElementChild;
     if (tag.tagName === 'svg' && tag.classList[0] === 'svg-screenshot') {
@@ -33,20 +35,20 @@ var getSvgTag = () => {
     return null;
 };
 
-var getSvgBgImg = svgTag => {
+var getSvgBgImg = function getSvgBgImg(svgTag) {
     var imageTag = svgTag.getElementsByTagName('image');
     if (imageTag.length === 0) return null;
     var dataImage = imageTag[0].getAttribute('xlink:href');
     return dataImage;
 };
 
-var showToast = msg => {
+var showToast = function showToast(msg) {
     var snackbarContainer = document.querySelector('#toast');
     snackbarContainer.MaterialSnackbar.showSnackbar({ message: msg });
 };
 
 // Uploadリンクがクリックされたとき
-$('#upload').on('click', e => {
+$('#upload').on('click', function (e) {
     // SVGが表示されているときのみ有効
     var svgtag = getSvgTag();
     if (svgtag === null) return;
@@ -65,7 +67,7 @@ $('#upload').on('click', e => {
             title: svgtag.getAttribute('data-title') || '',
             viewbox: svgtag.getAttribute('viewBox')
         })
-    }).success(data => {
+    }).success(function (data) {
         var stat = data.status;
         // console.info(data);
         if (stat === 'ok-saved-new-screenshot') {
@@ -77,8 +79,7 @@ $('#upload').on('click', e => {
             showToast("アップロードに失敗しました");
         }
         console.log(data);
-    }).fail(data => {
+    }).fail(function (data) {
         console.error("[Err api/uploadsvg]");
     });
 });
-

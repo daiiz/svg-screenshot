@@ -139,7 +139,7 @@ class Viewer {
             window.prompt('埋め込みHTMLコード', code);
         });
     }
-}
+};
 
 $(function () {
     // オリジナルサイトオープンボタンをホバーしたとき，
