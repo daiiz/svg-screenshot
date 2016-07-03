@@ -70,7 +70,7 @@ $('#gen-share-url').on('click', function (e) {
         console.info(data);
         var $tweetBtn = $('#tweetBtn').find('a');
         $tweetBtn.attr('data-url', data.public_viewer_url);
-        $tweetBtn.attr('data-text', data.title + ' - ' + data.orgurl);
+        $tweetBtn.attr('data-text', data.title);
         tw(document, 'script', 'twitter-wjs');
         $('#tweetBtn').show('slow');
     }).fail(function (data) {

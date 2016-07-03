@@ -70,8 +70,10 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
     localStorage['title'] = title;
     localStorage['svgroot'] = rootSVGtag.outerHTML;
 
-    window.open('preview.html');
-}
+    chrome.tabs.create({
+        url: chrome.extension.getURL("preview.html")
+    }, null);
+};
 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
@@ -90,8 +92,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.command === 'make-screen-shot') {
         var linkdata = opts.sitedata;
         chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
-
-            //window.open(dataUrl);
             renderImage(linkdata, dataUrl);
             console.warn(opts.sitedata);
         });
