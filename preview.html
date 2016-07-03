@@ -35,17 +35,43 @@
             body a {
                 color: #546E7A;
             }
+
+            #tweetBtn {
+                padding: 20px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+                display: none;
+            }
         </style>
         <script src="./lib/jquery.js"></script>
     </head>
     <body>
-        <iframe src="https://svgscreenshot.appspot.com/head" id="ghead"></iframe>
+        <iframe src="http://127.0.0.1:8080/head" id="ghead"></iframe>
         <center>
             <svg class="daiz-ss" data-url=""></svg>
             <br>
             <br>
-            <a href="#" download="ss" id="export">Download SVG</a>　|　<a href="#" id="upload">Upload SVG（ログイン時のみ）</a>
+            <a href="#" download="ss" id="export">SVGスクリーンショットをダウンロード</a><br><br>
+            <a href="#" id="upload">アップロードして保存（ログイン時のみ）</a>　|　
+            <a href="#" id="gen-share-url">Twitterシェアリンクを取得（ログイン時のみ）</a>
+
+            <div id="tweetBtn">
+                <a href="https://twitter.com/share" class="twitter-share-button"
+                   data-url="https://svgscreenshot.appspot.com/"
+                   data-text="SVGスクリーンショット"
+                   data-lang="ja" data-size="large" data-hashtags="SVGScreenshot">ツイート</a>
+                <br><br>
+                ツイートボタンを押しても，勝手に投稿されることはありません．
+            </div>
         </center>
+        <script src="./dist/twitter.js"></script>
+
+        <div class="mdl-tooltip" for="upload">
+            自分のみが閲覧・削除できます
+        </div>
+        <div class="mdl-tooltip" for="gen-share-url">
+            誰でも閲覧できます
+        </div>
 
         <div id="gfoot">
             <center>

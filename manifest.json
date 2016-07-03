@@ -3,7 +3,7 @@
         "page": "background.html"
     },
     "options_page": "options.html",
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://platform.twitter.com/; object-src 'self'",
     "description": "SVG Screenshot",
     "icons": {
         "128": "128x128.png",

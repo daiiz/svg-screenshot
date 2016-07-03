@@ -1,4 +1,4 @@
-var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
+var SVGSCREENSHOT_APP = 'http://127.0.0.1:8080';//https://svgscreenshot.appspot.com';
 
 window.addEventListener('load', function () {
     var w = localStorage.w + 'px';
@@ -45,6 +45,38 @@ var showToast = (msg) => {
     var snackbarContainer = document.querySelector('#toast');
     snackbarContainer.MaterialSnackbar.showSnackbar({message: msg});
 };
+
+// ShareURL生成リンクがクリックされたとき
+$('#gen-share-url').on('click', e => {
+    // SVGが表示されているときのみ有効
+    var svgtag = getSvgTag();
+    if (svgtag === null) return;
+    var svgBgBase64Img = getSvgBgImg(svgtag);
+
+    $.ajax({
+        url: SVGSCREENSHOT_APP + '/api/uploadsvg-public',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({
+            svg: svgtag.outerHTML,
+            base64png: svgBgBase64Img,
+            orgurl: svgtag.getAttribute('data-url'),
+            title: svgtag.getAttribute('data-title') || '',
+            viewbox: svgtag.getAttribute('viewBox')
+        })
+    }).success (data => {
+        console.info(data)
+        var $tweetBtn = $('#tweetBtn').find('a');
+        $tweetBtn.attr('data-url', data.public_viewer_url);
+        $tweetBtn.attr('data-text', data.title + ' - ' + data.orgurl);
+        tw(document, 'script', 'twitter-wjs');
+        $('#tweetBtn').show('slow');
+    }).fail (data => {
+        console.error("[Err api/uploadsvg-public]");
+    });
+});
+
 
 // Uploadリンクがクリックされたとき
 $('#upload').on('click', e => {
