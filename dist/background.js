@@ -101,5 +101,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // browser_actionボタンが押されたとき
 chrome.browserAction.onClicked.addListener(function (tab) {
-    window.open("https://svgscreenshot.appspot.com/");
+    chrome.tabs.create({
+        url: "https://svgscreenshot.appspot.com/"
+    }, null);
 });
