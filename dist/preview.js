@@ -1,6 +1,6 @@
 'use strict';
 
-var SVGSCREENSHOT_APP = 'http://127.0.0.1:8080'; //https://svgscreenshot.appspot.com';
+var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
 
 window.addEventListener('load', function () {
     var w = localStorage.w + 'px';
