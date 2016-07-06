@@ -344,12 +344,12 @@ var ScreenShot = function () {
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
                     if (_this2.linkdata !== null) {
-                        // sendChromeMsg({
-                        //     command: 'make-screen-shot',
-                        //     options: {
-                        //         sitedata: this.linkdata
-                        //     }
-                        // });
+                        sendChromeMsg({
+                            command: 'make-screen-shot',
+                            options: {
+                                sitedata: _this2.linkdata
+                            }
+                        });
                     }
                 }, 1000);
             });

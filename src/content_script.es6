@@ -308,12 +308,12 @@ class ScreenShot {
             // 1秒待ってから送信する
             window.setTimeout(() => {
                 if (this.linkdata !== null) {
-                    // sendChromeMsg({
-                    //     command: 'make-screen-shot',
-                    //     options: {
-                    //         sitedata: this.linkdata
-                    //     }
-                    // });
+                    sendChromeMsg({
+                        command: 'make-screen-shot',
+                        options: {
+                            sitedata: this.linkdata
+                        }
+                    });
                 }
             }, 1000);
         });
