@@ -148,20 +148,19 @@ var ScreenShot = function () {
                     left: text.rect.left,
                     top: text.rect.top
                 });
-                var aid = 'daiz-ss-txt' + idx;
+                var textId = 'daiz-ss-txt' + idx;
                 var pos = this.correctPosition(text.rect, croppedRect);
-                pos.id = aid;
+                pos.id = textId;
                 pos.text = text.text;
                 pos.fontSize = text.fontSize;
                 pos.fontFamily = text.fontFamily;
 
                 $cropper.addClass('daiz-ss-cropper-text');
+                $cropper.attr('id', textId);
                 $('body').append($cropper);
                 res.push(pos);
-                idx += 1;
             }
-
-            console.info(res);
+            return res;
         }
     }, {
         key: 'setRects',
@@ -217,11 +216,12 @@ var ScreenShot = function () {
 
             // リンク以外のテキスト
             var textRects = [];
-            this.setTextRects(croppedRect);
+            textRects = this.setTextRects(croppedRect);
 
             var res = {
                 cropperRect: pos_cropper,
                 aTagRects: aTagRects,
+                textRects: textRects,
                 winW: window.innerWidth,
                 winH: window.innerHeight,
                 baseUri: window.location.href,
@@ -314,6 +314,7 @@ var ScreenShot = function () {
             // 切り抜きボックスがダブルクリックされたとき
             $('body').on('dblclick', '#daiz-ss-cropper-main', function (ev) {
                 var res = [];
+                // 切り取りボックス内のa要素
                 for (var j = 0; j < _this2.linkdata.aTagRects.length; j++) {
                     var aTagDatum = _this2.linkdata.aTagRects[j];
                     var aid = aTagDatum.id;
@@ -323,20 +324,32 @@ var ScreenShot = function () {
                 }
                 _this2.linkdata.aTagRects = res;
 
+                // 切り取りボックス内のtextNodes
+                var resText = [];
+                for (j = 0; j < _this2.linkdata.textRects.length; j++) {
+                    var textDatum = _this2.linkdata.textRects[j];
+                    var textId = textDatum.id;
+                    if ($('#' + textId).length > 0) {
+                        resText.push(textDatum);
+                    }
+                }
+                _this2.linkdata.textRects = resText;
+
                 _this2.removeCropperMain();
                 _this2.removeCropper();
                 _this2.fixHtml(false);
                 console.info(_this2.linkdata);
+
                 // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
                     if (_this2.linkdata !== null) {
-                        sendChromeMsg({
-                            command: 'make-screen-shot',
-                            options: {
-                                sitedata: _this2.linkdata
-                            }
-                        });
+                        // sendChromeMsg({
+                        //     command: 'make-screen-shot',
+                        //     options: {
+                        //         sitedata: this.linkdata
+                        //     }
+                        // });
                     }
                 }, 1000);
             });

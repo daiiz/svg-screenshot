@@ -125,20 +125,19 @@ class ScreenShot {
                 left  : text.rect.left,
                 top   : text.rect.top
             });
-            var aid = 'daiz-ss-txt' + idx;
+            var textId = 'daiz-ss-txt' + idx;
             var pos = this.correctPosition(text.rect, croppedRect);
-            pos.id = aid;
+            pos.id = textId;
             pos.text = text.text;
             pos.fontSize = text.fontSize;
             pos.fontFamily = text.fontFamily;
 
             $cropper.addClass('daiz-ss-cropper-text');
+            $cropper.attr('id', textId);
             $('body').append($cropper);
             res.push(pos);
-            idx += 1;
         }
-
-        console.info(res);
+        return res;
     }
 
     setRects (croppedRect) {
@@ -193,12 +192,13 @@ class ScreenShot {
 
         // リンク以外のテキスト
         var textRects = [];
-        this.setTextRects(croppedRect);
+        textRects = this.setTextRects(croppedRect);
 
 
         var res = {
             cropperRect : pos_cropper,
             aTagRects   : aTagRects,
+            textRects   : textRects,
             winW        : window.innerWidth,
             winH        : window.innerHeight,
             baseUri     : window.location.href,
@@ -277,6 +277,7 @@ class ScreenShot {
         // 切り抜きボックスがダブルクリックされたとき
         $('body').on('dblclick', '#daiz-ss-cropper-main', ev => {
             var res = [];
+            // 切り取りボックス内のa要素
             for (var j = 0; j < this.linkdata.aTagRects.length; j++) {
                 var aTagDatum = this.linkdata.aTagRects[j];
                 var aid = aTagDatum.id;
@@ -286,20 +287,33 @@ class ScreenShot {
             }
             this.linkdata.aTagRects = res;
 
+            // 切り取りボックス内のtextNodes
+            var resText = [];
+            for (j = 0; j < this.linkdata.textRects.length; j++) {
+                var textDatum = this.linkdata.textRects[j];
+                var textId = textDatum.id;
+                if ($(`#${textId}`).length > 0) {
+                    resText.push(textDatum);
+                }
+            }
+            this.linkdata.textRects = resText;
+
+
             this.removeCropperMain();
             this.removeCropper();
             this.fixHtml(false);
-            console.info(this.linkdata)
+            console.info(this.linkdata);
+
             // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
             // 1秒待ってから送信する
             window.setTimeout(() => {
                 if (this.linkdata !== null) {
-                    sendChromeMsg({
-                        command: 'make-screen-shot',
-                        options: {
-                            sitedata: this.linkdata
-                        }
-                    });
+                    // sendChromeMsg({
+                    //     command: 'make-screen-shot',
+                    //     options: {
+                    //         sitedata: this.linkdata
+                    //     }
+                    // });
                 }
             }, 1000);
         });
