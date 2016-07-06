@@ -13,8 +13,13 @@ window.addEventListener('load', function () {
     res.innerHTML = rootSVGtag;
     res.querySelector('.svg-screenshot').setAttributeNS(null, 'data-url', localStorage.url);
     res.querySelector('.svg-screenshot').setAttributeNS(null, 'data-title', localStorage.title);
-    var svg = res.innerHTML;
 
+    var svg = res.innerHTML;
+    setDownloadLink(svg);
+}, false);
+
+// SVGファイルをダウンロードするリンクの準備
+var setDownloadLink = (svg) => {
     var exportTag = document.getElementById("export");
     var blob = new Blob([svg], {
         type: "image/svg+xml"
@@ -22,7 +27,7 @@ window.addEventListener('load', function () {
     var url = window.URL.createObjectURL(blob);
     exportTag.download = 'ss_w'+ localStorage.w + '_h' + localStorage.h;
     exportTag.href = url;
-}, false);
+};
 
 
 var getSvgTag = () => {

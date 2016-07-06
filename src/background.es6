@@ -52,6 +52,7 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
         var a = document.createElementNS(svgns, 'a');
         a.setAttributeNS(hrefns, 'href', aTagRect.href);
         a.setAttributeNS(null, 'target', '_blank');
+
         // rect element
         var rect = document.createElementNS(svgns, 'rect');
         rect.setAttributeNS(null, 'width', aTagRect.width);
@@ -60,7 +61,15 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
         rect.setAttributeNS(null, 'y', aTagRect.y);
         rect.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
 
+        // text element
+        var text = document.createElementNS(svgns, 'text');
+        text.setAttributeNS(null, 'x', aTagRect.x);
+        text.setAttributeNS(null, 'y', aTagRect.y + aTagRect.height);
+        text.textContent = aTagRect.text;
+        text.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
+
         a.appendChild(rect);
+        a.appendChild(text);
         rootSVGtag.appendChild(a);
     }
 

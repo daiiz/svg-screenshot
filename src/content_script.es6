@@ -114,6 +114,8 @@ class ScreenShot {
                     pos.id = aid;
                     pos.href = $(aTag).prop('href');
                     pos.text = $(aTag)[0].innerText;
+                    pos.fontSize = $(aTag).css('font-size');
+                    pos.fontFamily = $(aTag).css('font-family');
 
                     $cropper.attr('title', $(aTag).attr('href'));
                     $cropper.attr('id', aid);
