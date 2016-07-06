@@ -110,9 +110,64 @@ var ScreenShot = function () {
             this.linkdata = this.setRects(rect);
         }
     }, {
+        key: 'setTextRects',
+        value: function setTextRects(croppedRect) {
+            var self = this;
+            var textNodes = this.detectTextNodes();
+            var texts = [];
+            var i = 0;
+            textNodes.each(function () {
+                var textNode = this;
+                // textNodeの位置を調べる
+                // textNodeに対して，直接的に関数getBoundingClientRectを実行できないため，span要素を介して行う
+                var span = document.createElement('span');
+                span.className = 'daiz-ss-span' + i;
+                textNode.parentNode.insertBefore(span, textNode);
+                span.appendChild(textNode);
+                var rect = span.getBoundingClientRect();
+                // 検出したtextNodeが切り抜かれた領域内に完全に含まれているかを確認する
+                var fg = self.isInCroppedBox(rect, croppedRect);
+                if (fg) {
+                    texts.push({
+                        rect: rect,
+                        text: textNode.nodeValue.trim(),
+                        fontSize: $(textNode.parentElement).css('font-size'),
+                        fontFamily: $(textNode.parentElement).css('font-family')
+                    });
+                }
+                $('.daiz-ss-span' + i)[0].outerHTML = textNode.nodeValue;
+            });
+
+            var res = [];
+            for (var idx = 0; idx < texts.length; idx++) {
+                var text = texts[idx];
+                var $cropper = this.$genCropper();
+                $cropper.css({
+                    width: text.rect.width,
+                    height: text.rect.height,
+                    left: text.rect.left,
+                    top: text.rect.top
+                });
+                var aid = 'daiz-ss-txt' + idx;
+                var pos = this.correctPosition(text.rect, croppedRect);
+                pos.id = aid;
+                pos.text = text.text;
+                pos.fontSize = text.fontSize;
+                pos.fontFamily = text.fontFamily;
+
+                $cropper.addClass('daiz-ss-cropper-text');
+                $('body').append($cropper);
+                res.push(pos);
+                idx += 1;
+            }
+
+            console.info(res);
+        }
+    }, {
         key: 'setRects',
         value: function setRects(croppedRect) {
             var idx = 0;
+
             // 切り抜かれた長方形内のみ，aタグを覆えばよい
             this.fixHtml(true);
             var aTags = $('body').find('a');
@@ -149,6 +204,8 @@ var ScreenShot = function () {
                     }
                 }
             }
+
+            // 切り取り領域
             var pos_cropper = {
                 x: 0,
                 y: 0,
@@ -157,6 +214,11 @@ var ScreenShot = function () {
                 width: croppedRect.width,
                 height: croppedRect.height
             };
+
+            // リンク以外のテキスト
+            var textRects = [];
+            this.setTextRects(croppedRect);
+
             var res = {
                 cropperRect: pos_cropper,
                 aTagRects: aTagRects,
@@ -223,6 +285,20 @@ var ScreenShot = function () {
         key: 'removeCropperMain',
         value: function removeCropperMain() {
             $(".daiz-ss-cropper-main").remove();
+        }
+
+        // a要素以外のtextNodesを取得する
+
+    }, {
+        key: 'detectTextNodes',
+        value: function detectTextNodes() {
+            var $body = $('body');
+            var $contents = $body.find(':not(iframe, a, script, noscript, object, font)').addBack().contents();
+            return $contents.filter(function () {
+                var v = this.nodeValue;
+                var t = this.nodeType;
+                return t === 3 && v.trim().length > 0;
+            });
         }
     }, {
         key: 'bindEvents',

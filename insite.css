@@ -13,6 +13,12 @@
     border: 1px solid #FFC107;
 }
 
+.daiz-ss-cropper-text {
+    z-index: 100001;
+    background-color: #9575CD !important;
+    border: 1px solid #673AB7 !important;
+}
+
 #daiz-ss-run, #daiz-ss-send {
     position: fixed;
     z-index: 10000;
