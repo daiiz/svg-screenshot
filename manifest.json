@@ -15,7 +15,7 @@
             "19": "icon-l.png",
             "38": "icon-l.png"
         },
-        "default_title": "Open viewer"
+        "default_title": "SVG Screenshot"
     },
     "manifest_version": 2,
     "name": "SVG Screenshot",
@@ -44,5 +44,5 @@
         "activeTab",
         "<all_urls>"
     ],
-    "version": "0.0.14"
+    "version": "0.1.2"
 }

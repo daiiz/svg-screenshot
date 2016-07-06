@@ -21,7 +21,7 @@ var renderImage = function (linkdata, base64img) {
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
         makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri, title);
-    }
+    };
     img.src = base64img;
 };
 
@@ -30,7 +30,7 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
     var rootSVGtag = document.createElementNS(svgns, 'svg');
-    rootSVGtag.setAttributeNS(null, 'version', '1.1')
+    rootSVGtag.setAttributeNS(null, 'version', '1.1');
     rootSVGtag.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     rootSVGtag.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     rootSVGtag.setAttributeNS(null, 'class', 'svg-screenshot');
@@ -77,7 +77,7 @@ var makeSVGtag = function (aTagRects, base64img, width, height, baseUri, title) 
 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
-    title: 'SVGスクリーンショットを撮る',
+    title: 'SVGスクリーンショットを撮る!',
     onclick: function (clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
             event: 'click-context-menu'

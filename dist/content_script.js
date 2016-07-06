@@ -136,6 +136,8 @@ var ScreenShot = function () {
                         var pos = this.correctPosition(rect, croppedRect);
                         pos.id = aid;
                         pos.href = $(aTag).prop('href');
+                        pos.text = $(aTag)[0].innerText;
+
                         $cropper.attr('title', $(aTag).attr('href'));
                         $cropper.attr('id', aid);
                         $('body').append($cropper);
@@ -188,6 +190,7 @@ var ScreenShot = function () {
         }
 
         // aタグの位置補正
+        // stageRectの左端，上端を基準とした距離表現に直す
         // aTagRect ⊂ stageRect は保証されている
 
     }, {
@@ -215,6 +218,11 @@ var ScreenShot = function () {
             $('.daiz-ss-cropper').remove();
         }
     }, {
+        key: 'removeCropperMain',
+        value: function removeCropperMain() {
+            $(".daiz-ss-cropper-main").remove();
+        }
+    }, {
         key: 'bindEvents',
         value: function bindEvents() {
             var _this2 = this;
@@ -222,7 +230,7 @@ var ScreenShot = function () {
             // cropperがクリックされたとき
             // 自身を消去する
             $('body').on('click', '.daiz-ss-cropper', function (ev) {
-                $(ev.target).remove();
+                _this2.removeCropper();
             });
 
             // 切り抜きボックスがダブルクリックされたとき
@@ -236,10 +244,11 @@ var ScreenShot = function () {
                     }
                 }
                 _this2.linkdata.aTagRects = res;
-                console.info(res);
-                $(".daiz-ss-cropper-main").remove();
-                $(".daiz-ss-cropper").remove();
+
+                _this2.removeCropperMain();
+                _this2.removeCropper();
                 _this2.fixHtml(false);
+                console.info(_this2.linkdata);
                 // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
@@ -257,7 +266,7 @@ var ScreenShot = function () {
             // 切り抜きボックスの閉じるボタンがクリックされたとき
             $('body').on('click', '#daiz-ss-cropper-close', function (ev) {
                 _this2.removeCropper();
-                $(".daiz-ss-cropper-main").remove();
+                _this2.removeCropperMain();
                 _this2.fixHtml(false);
             });
 

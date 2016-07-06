@@ -68,7 +68,7 @@ class ScreenShot {
         $cropper.draggable({
             stop: (ev, ui) => {
                 this._setRects();
-            },
+            }
         });
         // リサイズ可能にする
         $cropper.resizable({
@@ -113,6 +113,8 @@ class ScreenShot {
                     var pos = this.correctPosition(rect, croppedRect);
                     pos.id = aid;
                     pos.href = $(aTag).prop('href');
+                    pos.text = $(aTag)[0].innerText;
+
                     $cropper.attr('title', $(aTag).attr('href'));
                     $cropper.attr('id', aid);
                     $('body').append($cropper);
@@ -164,6 +166,7 @@ class ScreenShot {
     }
 
     // aタグの位置補正
+    // stageRectの左端，上端を基準とした距離表現に直す
     // aTagRect ⊂ stageRect は保証されている
     correctPosition (aTagRect, stageRect) {
         var res = {};
@@ -185,11 +188,15 @@ class ScreenShot {
         $('.daiz-ss-cropper').remove();
     }
 
+    removeCropperMain () {
+        $(".daiz-ss-cropper-main").remove();
+    }
+
     bindEvents () {
         // cropperがクリックされたとき
         // 自身を消去する
         $('body').on('click', '.daiz-ss-cropper', ev => {
-            $(ev.target).remove();
+            this.removeCropper();
         });
 
         // 切り抜きボックスがダブルクリックされたとき
@@ -203,10 +210,11 @@ class ScreenShot {
                 }
             }
             this.linkdata.aTagRects = res;
-            console.info(res);
-            $(".daiz-ss-cropper-main").remove();
-            $(".daiz-ss-cropper").remove();
+
+            this.removeCropperMain();
+            this.removeCropper();
             this.fixHtml(false);
+            console.info(this.linkdata)
             // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
             // 1秒待ってから送信する
             window.setTimeout(() => {
@@ -224,7 +232,7 @@ class ScreenShot {
         // 切り抜きボックスの閉じるボタンがクリックされたとき
         $('body').on('click', '#daiz-ss-cropper-close', ev => {
             this.removeCropper();
-            $(".daiz-ss-cropper-main").remove();
+            this.removeCropperMain();
             this.fixHtml(false);
         });
 
