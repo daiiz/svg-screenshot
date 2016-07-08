@@ -88,32 +88,33 @@ class ScreenShot {
         this.linkdata = this.setRects(rect);
     }
 
+    // ページ上で選択されている文字列を取得して，存在すれば，テキスト用のrectで覆う
     setTextRects (croppedRect) {
         var self = this;
-        var textNodes = this.detectTextNodes();
         var texts = [];
-        var i = 0;
-        textNodes.each(function () {
-            var textNode = this;
-            // textNodeの位置を調べる
-            // textNodeに対して，直接的に関数getBoundingClientRectを実行できないため，span要素を介して行う
-            var span = document.createElement('span');
-            span.className = 'daiz-ss-span' + i;
-            textNode.parentNode.insertBefore(span, textNode);
-            span.appendChild(textNode);
-            var rect = span.getBoundingClientRect();
-            // 検出したtextNodeが切り抜かれた領域内に完全に含まれているかを確認する
-            var fg = self.isInCroppedBox(rect, croppedRect);
-            if (fg) {
-                texts.push({
-                    rect: rect,
-                    text: textNode.nodeValue.trim(),
-                    fontSize: $(textNode.parentElement).css('font-size'),
-                    fontFamily: $(textNode.parentElement).css('font-family')
-                });
-            }
-            $(`.daiz-ss-span${i}`)[0].outerHTML = textNode.nodeValue;
-        });
+        var selection = window.getSelection();
+        var text = selection.toString();
+
+        var rect = {left: Infinity, top: Infinity, right: 0, bottom: 0};
+        for (var i = 0; i < selection.rangeCount; i++) {
+            var r = selection.getRangeAt(i).getBoundingClientRect();
+            if (r.left  < rect.left) rect.left = r.left;
+            if (r.top   < rect.top)  rect.top  = r.top;
+            if (rect.right  < r.right)  rect.right  = r.right;
+            if (rect.bottom < r.bottom) rect.bottom = r.bottom;
+        }
+        rect.width  = rect.right - rect.left;
+        rect.height = rect.bottom - rect.top;
+
+        // 検出したtextNodeが切り抜かれた領域内に完全に含まれているかを確認する
+        var fg = this.isInCroppedBox(rect, croppedRect);
+        if (fg) {
+            texts.push({
+                rect: rect,
+                text: text
+            });
+            selection.removeAllRanges();
+        }
 
         var res = [];
         for (var idx = 0; idx < texts.length; idx++) {
@@ -129,22 +130,25 @@ class ScreenShot {
             var pos = this.correctPosition(text.rect, croppedRect);
             pos.id = textId;
             pos.text = text.text;
-            pos.fontSize = text.fontSize;
-            pos.fontFamily = text.fontFamily;
 
             $cropper.addClass('daiz-ss-cropper-text');
             $cropper.attr('id', textId);
             $('body').append($cropper);
             res.push(pos);
         }
+
         return res;
     }
 
     setRects (croppedRect) {
-        var idx = 0;
-
-        // 切り抜かれた長方形内のみ，aタグを覆えばよい
         this.fixHtml(true);
+
+        // リンク以外のテキスト:
+        var textRects = [];
+        textRects = this.setTextRects(croppedRect);
+
+        // リンク: 切り抜かれた形内のみ，aタグを覆えばよい
+        var idx = 0;
         var aTags = $('body').find('a');
         var aTagRects = [];
         for (var i = 0; i < aTags.length; i++) {
@@ -189,11 +193,6 @@ class ScreenShot {
             width : croppedRect.width,
             height: croppedRect.height
         };
-
-        // リンク以外のテキスト
-        var textRects = [];
-        textRects = this.setTextRects(croppedRect);
-
 
         var res = {
             cropperRect : pos_cropper,
@@ -297,7 +296,6 @@ class ScreenShot {
                 }
             }
             this.linkdata.textRects = resText;
-
 
             this.removeCropperMain();
             this.removeCropper();
