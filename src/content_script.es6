@@ -91,7 +91,6 @@ class ScreenShot {
     // ページ上で選択されている文字列を取得
     getSelectedText () {
         var self = this;
-        var texts = [];
         var selection = window.getSelection();
         var text = selection.toString();
         return text;
@@ -210,17 +209,6 @@ class ScreenShot {
 
     removeCropperMain () {
         $(".daiz-ss-cropper-main").remove();
-    }
-
-    // a要素以外のtextNodesを取得する
-    detectTextNodes () {
-        var $body = $('body');
-        var $contents = $body.find(':not(iframe, a, script, noscript, object, font)').addBack().contents();
-        return $contents.filter(function () {
-            var v = this.nodeValue;
-            var t = this.nodeType;
-            return (t === 3 && v.trim().length > 0);
-        });
     }
 
     bindEvents () {

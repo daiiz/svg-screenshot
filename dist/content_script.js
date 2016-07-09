@@ -116,7 +116,6 @@ var ScreenShot = function () {
         key: 'getSelectedText',
         value: function getSelectedText() {
             var self = this;
-            var texts = [];
             var selection = window.getSelection();
             var text = selection.toString();
             return text;
@@ -244,20 +243,6 @@ var ScreenShot = function () {
         key: 'removeCropperMain',
         value: function removeCropperMain() {
             $(".daiz-ss-cropper-main").remove();
-        }
-
-        // a要素以外のtextNodesを取得する
-
-    }, {
-        key: 'detectTextNodes',
-        value: function detectTextNodes() {
-            var $body = $('body');
-            var $contents = $body.find(':not(iframe, a, script, noscript, object, font)').addBack().contents();
-            return $contents.filter(function () {
-                var v = this.nodeValue;
-                var t = this.nodeType;
-                return t === 3 && v.trim().length > 0;
-            });
         }
     }, {
         key: 'bindEvents',
