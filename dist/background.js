@@ -89,7 +89,7 @@ var makeSVGtag = function makeSVGtag(aTagRects, text, base64img, width, height, 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
     title: 'SVGスクリーンショットを撮る',
-    contexts: ['page', 'select'],
+    contexts: ['page', 'selection'],
     onclick: function onclick(clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
             event: 'click-context-menu'

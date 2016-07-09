@@ -90,7 +90,7 @@ chrome.contextMenus.create({
     title: 'SVGスクリーンショットを撮る',
     contexts: [
         'page',
-        'select'
+        'selection'
     ],
     onclick: function (clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
