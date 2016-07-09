@@ -20,12 +20,12 @@ var renderImage = function (linkdata, base64img) {
         ctx.drawImage(img, pos_cropper.orgX, pos_cropper.orgY, w, h, 0, 0, w, h);
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
-        makeSVGtag(linkdata.aTagRects, linkdata.textRects, screenshot, w, h, baseUri, title);
+        makeSVGtag(linkdata.aTagRects, linkdata.text, screenshot, w, h, baseUri, title);
     };
     img.src = base64img;
 };
 
-var makeSVGtag = function (aTagRects, textRects, base64img, width, height, baseUri, title) {
+var makeSVGtag = function (aTagRects, text, base64img, width, height, baseUri, title) {
     var svgns  = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
@@ -41,6 +41,7 @@ var makeSVGtag = function (aTagRects, textRects, base64img, width, height, baseU
     img.setAttributeNS(null, 'height', height);
     img.setAttributeNS(null, 'x', 0);
     img.setAttributeNS(null, 'y', 0);
+    img.setAttributeNS(null, 'data-selectedtext', text);
     img.setAttributeNS(hrefns, 'href', base64img);
 
     rootSVGtag.appendChild(img);
@@ -71,37 +72,6 @@ var makeSVGtag = function (aTagRects, textRects, base64img, width, height, baseU
         a.appendChild(rect);
         a.appendChild(text);
         rootSVGtag.appendChild(a);
-    }
-
-    // TODO:リファクタリング
-    // textNodes用のrect elements
-    for (i = 0; i < textRects.length; i++) {
-        var textRect = textRects[i];
-
-        // g element
-        var g = document.createElementNS(svgns, 'g');
-
-        // rect element
-        var rect = document.createElementNS(svgns, 'rect');
-        rect.setAttributeNS(null, 'width', textRect.width);
-        rect.setAttributeNS(null, 'height', textRect.height);
-        rect.setAttributeNS(null, 'x', textRect.x);
-        rect.setAttributeNS(null, 'y', textRect.y);
-        rect.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
-        rect.setAttributeNS(null, 'class', 'textnode');
-
-        // text element
-        var text = document.createElementNS(svgns, 'text');
-        text.setAttributeNS(null, 'x', textRect.x);
-        text.setAttributeNS(null, 'y', textRect.y + textRect.height - 3);
-        text.textContent = textRect.text;
-        text.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
-        text.setAttributeNS(null, 'font-size', textRect.fontSize);
-        text.setAttributeNS(null, 'font-family', textRect.fontFamily);
-
-        g.appendChild(rect);
-        g.appendChild(text);
-        rootSVGtag.appendChild(g);
     }
 
     localStorage['w'] = width;

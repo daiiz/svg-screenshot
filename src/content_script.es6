@@ -88,64 +88,21 @@ class ScreenShot {
         this.linkdata = this.setRects(rect);
     }
 
-    // ページ上で選択されている文字列を取得して，存在すれば，テキスト用のrectで覆う
-    setTextRects (croppedRect) {
+    // ページ上で選択されている文字列を取得
+    getSelectedText () {
         var self = this;
         var texts = [];
         var selection = window.getSelection();
         var text = selection.toString();
-
-        var rect = {left: Infinity, top: Infinity, right: 0, bottom: 0};
-        for (var i = 0; i < selection.rangeCount; i++) {
-            var r = selection.getRangeAt(i).getBoundingClientRect();
-            if (r.left  < rect.left) rect.left = r.left;
-            if (r.top   < rect.top)  rect.top  = r.top;
-            if (rect.right  < r.right)  rect.right  = r.right;
-            if (rect.bottom < r.bottom) rect.bottom = r.bottom;
-        }
-        rect.width  = rect.right - rect.left;
-        rect.height = rect.bottom - rect.top;
-
-        // 検出したtextNodeが切り抜かれた領域内に完全に含まれているかを確認する
-        var fg = this.isInCroppedBox(rect, croppedRect);
-        if (fg) {
-            texts.push({
-                rect: rect,
-                text: text
-            });
-            selection.removeAllRanges();
-        }
-
-        var res = [];
-        for (var idx = 0; idx < texts.length; idx++) {
-            var text = texts[idx];
-            var $cropper = this.$genCropper();
-            $cropper.css({
-                width : text.rect.width,
-                height: text.rect.height,
-                left  : text.rect.left,
-                top   : text.rect.top
-            });
-            var textId = 'daiz-ss-txt' + idx;
-            var pos = this.correctPosition(text.rect, croppedRect);
-            pos.id = textId;
-            pos.text = text.text;
-
-            $cropper.addClass('daiz-ss-cropper-text');
-            $cropper.attr('id', textId);
-            $('body').append($cropper);
-            res.push(pos);
-        }
-
-        return res;
+        return text;
     }
 
     setRects (croppedRect) {
         this.fixHtml(true);
 
         // リンク以外のテキスト:
-        var textRects = [];
-        textRects = this.setTextRects(croppedRect);
+        var text = this.getSelectedText();
+        $('#daiz-ss-cropper-main').attr('title', text);
 
         // リンク: 切り抜かれた形内のみ，aタグを覆えばよい
         var idx = 0;
@@ -197,7 +154,7 @@ class ScreenShot {
         var res = {
             cropperRect : pos_cropper,
             aTagRects   : aTagRects,
-            textRects   : textRects,
+            text        : text,
             winW        : window.innerWidth,
             winH        : window.innerHeight,
             baseUri     : window.location.href,
@@ -276,6 +233,8 @@ class ScreenShot {
         // 切り抜きボックスがダブルクリックされたとき
         $('body').on('dblclick', '#daiz-ss-cropper-main', ev => {
             var res = [];
+            window.getSelection().removeAllRanges();
+
             // 切り取りボックス内のa要素
             for (var j = 0; j < this.linkdata.aTagRects.length; j++) {
                 var aTagDatum = this.linkdata.aTagRects[j];
@@ -285,17 +244,6 @@ class ScreenShot {
                 }
             }
             this.linkdata.aTagRects = res;
-
-            // 切り取りボックス内のtextNodes
-            var resText = [];
-            for (j = 0; j < this.linkdata.textRects.length; j++) {
-                var textDatum = this.linkdata.textRects[j];
-                var textId = textDatum.id;
-                if ($(`#${textId}`).length > 0) {
-                    resText.push(textDatum);
-                }
-            }
-            this.linkdata.textRects = resText;
 
             this.removeCropperMain();
             this.removeCropper();
