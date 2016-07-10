@@ -252,7 +252,7 @@ var ScreenShot = function () {
             // cropperがクリックされたとき
             // 自身を消去する
             $('body').on('click', '.daiz-ss-cropper', function (ev) {
-                _this2.removeCropper();
+                $(ev.target).closest('.daiz-ss-cropper').remove();
             });
 
             // 切り抜きボックスがダブルクリックされたとき

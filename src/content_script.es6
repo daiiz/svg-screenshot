@@ -215,7 +215,7 @@ class ScreenShot {
         // cropperがクリックされたとき
         // 自身を消去する
         $('body').on('click', '.daiz-ss-cropper', ev => {
-            this.removeCropper();
+            $(ev.target).closest('.daiz-ss-cropper').remove();
         });
 
         // 切り抜きボックスがダブルクリックされたとき
