@@ -13,6 +13,12 @@
     border: 1px solid #FFC107;
 }
 
+.daiz-ss-cropper-text {
+    z-index: 100001;
+    background-color: #9575CD !important;
+    border: 1px solid #673AB7 !important;
+}
+
 #daiz-ss-run, #daiz-ss-send {
     position: fixed;
     z-index: 10000;
@@ -32,4 +38,22 @@
 
 #export {
     color: #1E88E5;
+}
+
+#daiz-ss-cropper-close {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    top: -10px;
+    right: -10px;
+    background-color: #777;
+    border-radius: 50%;
+    z-index: 10001;
+    color: #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
 }

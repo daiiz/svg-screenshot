@@ -1,4 +1,0 @@
-babel src/content_script.js > dist/insite.js
-babel src/background.js > dist/background.js
-babel src/preview.js > dist/preview.js
-babel src/viewer.js > dist/viewer.js

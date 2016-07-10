@@ -3,23 +3,92 @@
     <head>
         <meta charset="utf-8">
         <title>Preview</title>
+        <!-- Material Design Lite -->
+        <link rel="stylesheet" href="./lib/mdl/material.min.css">
+        <script defer src="./lib/mdl/material.min.js"></script>
         <style>
             body {
-                margin: 16px;
+                margin-top: 56px;
                 background-color: #e9e7e4;
+                min-height: 50%;
             }
             .daiz-ss {
                 box-shadow: 0px 2px 2px rgba(0,0,0,0.14);
             }
+
+            #ghead {
+                width: 100%;
+                height: 25px;
+                border: 0px;
+                position: fixed;
+                left: 0px;
+                top: 0px;
+            }
+
+            #gfoot {
+                position: fixed;
+                width: 100%;
+                left: 0px;
+                bottom: 10px;
+            }
+
+            body a {
+                color: #546E7A;
+            }
+
+            #tweetBtn {
+                padding: 20px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+                display: none;
+            }
         </style>
+        <script src="./lib/jquery.js"></script>
     </head>
     <body>
+        <iframe src="https://svgscreenshot.appspot.com/head" id="ghead"></iframe>
         <center>
             <svg class="daiz-ss" data-url=""></svg>
             <br>
             <br>
-            <a href="#" download="ss" id="export">Download SVG</a>
+            <a href="#" download="ss" id="export">SVGスクリーンショットをダウンロード</a><br><br>
+            <a href="#" id="upload">アップロードして保存（ログイン時のみ）</a>　|　
+            <a href="#" id="gen-share-url">Twitterシェアリンクを取得（ログイン時のみ）</a>
+
+            <div id="tweetBtn">
+                <a href="https://twitter.com/share" class="twitter-share-button"
+                   data-url="https://svgscreenshot.appspot.com/"
+                   data-text="SVGスクリーンショット"
+                   data-lang="ja" data-size="large" data-hashtags="SVGScreenshot">ツイート</a>
+                <br><br>
+                ツイートボタンを押しても，勝手に投稿されることはありません．
+            </div>
         </center>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <script src="./dist/twitter.js"></script>
+
+        <div class="mdl-tooltip" for="upload">
+            自分のみが閲覧・削除できます
+        </div>
+        <div class="mdl-tooltip" for="gen-share-url">
+            誰でも閲覧できます
+        </div>
+
+        <div id="gfoot">
+            <center>
+                <a target="_blank" href="http://daiiz.hatenablog.com/search?q=svg+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88">SVG Screenshot について</a>
+            </center>        
+        </div>
+
+        <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
+        </div>
+
         <script src="dist/preview.js"></script>
     </body>
 </html>

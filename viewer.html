@@ -3,83 +3,62 @@
     <head>
         <title>Viewer</title>
         <meta charset="utf-8">
+        <!-- jQuery -->
         <script src="lib/jquery.js"></script>
-        <style>
-            html {
-                width: 100%;
-                height: 100%;
-            }
-
-            body {
-                margin: 0px;
-                background-color: #e9e7e4;
-            }
-
-            #header {
-                position: fixed;
-                box-sizing: border-box;
-                width: 100%;
-                height: 65px;
-                background-color: #607D8B;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.28);
-            }
-
-            #site-title {
-                color: #fff;
-                font-size: 20px;
-                font-weight: 400;
-                padding: 10px;
-                padding-top: 8px;
-                padding-left: 20px;
-            }
-
-            #site-url {
-                color: #fff;
-                padding-left: 20px;
-                font-size: 14px;
-                margin-top: -6px;
-            }
-
-            #a-site-url {
-                color: #fff;
-                font-size: 14px;
-                text-decoration: none;
-            }
-
-            #a-site-url:hover {
-                text-decoration: underline;
-            }
-
-            .s {
-                font-family: "RobotoDraft", "Roboto", sans-serif, arial;
-            }
-
-            #main {
-                position: relative;
-                width: 400px;
-                height: 250px;
-                top: 125px;
-                margin: auto;
-                margin-bottom: 60px;
-                box-shadow: 0px 2px 2px rgba(0,0,0,0.14);
-            }
-        </style>
+        <!-- Material Design Lite -->
+        <link rel="stylesheet" href="lib/mdl/material.min.css">
+        <script src="lib/mdl/material.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!-- Viewer CSS -->
+        <link rel="stylesheet" href="viewer.css">
     </head>
     <body>
-        <div id="header">
-            <div id="site-title" class="s">
-                <!-- auto -->Viewer
+        <!-- Always shows a header, even in smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+              <!-- Title -->
+              <span class="mdl-layout-title" id="site-title" title="">Viewer</span>
+              <!-- Add spacer, to align navigation to the right -->
+              <div class="mdl-layout-spacer"></div>
+              <!-- Navigation. We hide it in small screens. -->
+              <nav class="mdl-navigation headmenu">
+                <button class="mdl-button mdl-js-button mdl-button--icon hb">
+                    <i class="material-icons head_btn" id="btn_toggle_a_rect">flip</i>
+                </button>
+                <div class="mdl-tooltip" for="btn_toggle_a_rect">
+                    リンク領域表示/非表示切り替え
+                </div>
+
+                <button class="mdl-button mdl-js-button mdl-button--icon hb">
+                    <i class="material-icons head_btn" id="btn_switch_ui_theme">format_color_fill</i>
+                </button>
+                <div class="mdl-tooltip" for="btn_switch_ui_theme">
+                    UIテーマ切り換え
+                </div>
+              </nav>
             </div>
-            <div id="site-url" class="s">
-                <a href="#" target="_blank" id="a-site-url">
-                    表示したいスクリーンショットSVGファイルをドラッグ・アンド・ドロップ
-                    <!-- auto -->
-                </a>
-            </div>
+          </header>
+          <main class="mdl-layout__content">
+            <div class="page-content"><!-- Your content goes here --></div>
+          </main>
         </div>
 
         <div id="main">
+            <div class="msg-dd">
+                表示したいスクリーンショットSVGファイルをここにドラッグ・アンド・ドロップしてください
+            </div>
             <!-- auto -->
+        </div>
+
+        <!-- Colored FAB button with ripple -->
+        <button id="btn-site-open" data-orgpageurl="" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+          <i class="material-icons">open_in_new</i>
+        </button>
+
+        <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
         </div>
 
         <div id="hide" style="visibility: hidden; width: 2px; height: 2px;">

@@ -1,10 +1,10 @@
 var sendChromeMsg = (json, callback) => {
     chrome.runtime.sendMessage(json, callback);
-}
+};
 
 class ScreenShot {
     constructor () {
-        this.CROP_BOX_SIZE = 60;
+        this.CROP_BOX_SIZE = 120;
         this.uiInit();
         this.positionLastRclick = [0, 0];
         this.linkdata = null;
@@ -16,7 +16,7 @@ class ScreenShot {
 
     // 切り抜きボックス, a要素カバーボックス
     $genCropper () {
-        var $cropper = $('<div class="daiz-ss-cropper" style="position: fixed;"></div>');
+        var $cropper = $(`<div class="daiz-ss-cropper" style="position: fixed;"></div>`);
         $cropper.css({
             top   : 0,
             left  : 0,
@@ -48,6 +48,12 @@ class ScreenShot {
     // 範囲指定のための長方形を表示する
     setCropper () {
         var $cropper = this.$genCropper();
+        var closeBtnImg = chrome.extension.getURL('x.png');
+        var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
+        $closeBtn.css({
+            'background-image': `url(${closeBtnImg})`
+        });
+
         $cropper[0].className = 'daiz-ss-cropper-main';
         $cropper[0].id = 'daiz-ss-cropper-main';
         // 切り抜きボックスの位置を初期化
@@ -57,11 +63,12 @@ class ScreenShot {
             width : this.CROP_BOX_SIZE,
             height: this.CROP_BOX_SIZE
         });
+        $cropper.append($closeBtn);
         // ドラッグ可能にする
         $cropper.draggable({
             stop: (ev, ui) => {
                 this._setRects();
-            },
+            }
         });
         // リサイズ可能にする
         $cropper.resizable({
@@ -77,15 +84,27 @@ class ScreenShot {
         var $cropper = $('#daiz-ss-cropper-main');
         var rect = $cropper[0].getBoundingClientRect();
         if (rect === undefined) return;
-        // 前回生成した長方形カバーを消去
-        $('.daiz-ss-cropper').remove();
+        this.removeCropper();
         this.linkdata = this.setRects(rect);
     }
 
+    // ページ上で選択されている文字列を取得
+    getSelectedText () {
+        var self = this;
+        var selection = window.getSelection();
+        var text = selection.toString();
+        return text;
+    }
+
     setRects (croppedRect) {
-        var idx = 0;
-        // 切り抜かれた長方形内のみ，aタグを覆えばよい
         this.fixHtml(true);
+
+        // リンク以外のテキスト:
+        var text = this.getSelectedText();
+        $('#daiz-ss-cropper-main').attr('title', text);
+
+        // リンク: 切り抜かれた形内のみ，aタグを覆えばよい
+        var idx = 0;
         var aTags = $('body').find('a');
         var aTagRects = [];
         for (var i = 0; i < aTags.length; i++) {
@@ -107,6 +126,10 @@ class ScreenShot {
                     var pos = this.correctPosition(rect, croppedRect);
                     pos.id = aid;
                     pos.href = $(aTag).prop('href');
+                    pos.text = $(aTag)[0].innerText;
+                    pos.fontSize = $(aTag).css('font-size');
+                    pos.fontFamily = $(aTag).css('font-family');
+
                     $cropper.attr('title', $(aTag).attr('href'));
                     $cropper.attr('id', aid);
                     $('body').append($cropper);
@@ -116,6 +139,8 @@ class ScreenShot {
                 }
             }
         }
+
+        // 切り取り領域
         var pos_cropper = {
             x     : 0,
             y     : 0,
@@ -124,9 +149,11 @@ class ScreenShot {
             width : croppedRect.width,
             height: croppedRect.height
         };
+
         var res = {
             cropperRect : pos_cropper,
             aTagRects   : aTagRects,
+            text        : text,
             winW        : window.innerWidth,
             winH        : window.innerHeight,
             baseUri     : window.location.href,
@@ -158,6 +185,7 @@ class ScreenShot {
     }
 
     // aタグの位置補正
+    // stageRectの左端，上端を基準とした距離表現に直す
     // aTagRect ⊂ stageRect は保証されている
     correctPosition (aTagRect, stageRect) {
         var res = {};
@@ -174,16 +202,28 @@ class ScreenShot {
         return res;
     }
 
+    // 描画されている長方形カバーを全て消去
+    removeCropper () {
+        $('.daiz-ss-cropper').remove();
+    }
+
+    removeCropperMain () {
+        $(".daiz-ss-cropper-main").remove();
+    }
+
     bindEvents () {
         // cropperがクリックされたとき
         // 自身を消去する
         $('body').on('click', '.daiz-ss-cropper', ev => {
-            $(ev.target).remove();
+            this.removeCropper();
         });
 
         // 切り抜きボックスがダブルクリックされたとき
         $('body').on('dblclick', '#daiz-ss-cropper-main', ev => {
             var res = [];
+            window.getSelection().removeAllRanges();
+
+            // 切り取りボックス内のa要素
             for (var j = 0; j < this.linkdata.aTagRects.length; j++) {
                 var aTagDatum = this.linkdata.aTagRects[j];
                 var aid = aTagDatum.id;
@@ -192,10 +232,12 @@ class ScreenShot {
                 }
             }
             this.linkdata.aTagRects = res;
-            console.info(res);
-            $(".daiz-ss-cropper-main").remove();
-            $(".daiz-ss-cropper").remove();
+
+            this.removeCropperMain();
+            this.removeCropper();
             this.fixHtml(false);
+            console.info(this.linkdata);
+
             // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
             // 1秒待ってから送信する
             window.setTimeout(() => {
@@ -208,6 +250,13 @@ class ScreenShot {
                     });
                 }
             }, 1000);
+        });
+
+        // 切り抜きボックスの閉じるボタンがクリックされたとき
+        $('body').on('click', '#daiz-ss-cropper-close', ev => {
+            this.removeCropper();
+            this.removeCropperMain();
+            this.fixHtml(false);
         });
 
         // ページでの右クリックを検出

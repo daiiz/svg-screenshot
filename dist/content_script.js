@@ -1,18 +1,18 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var sendChromeMsg = function sendChromeMsg(json, callback) {
     chrome.runtime.sendMessage(json, callback);
 };
 
-var ScreenShot = (function () {
+var ScreenShot = function () {
     function ScreenShot() {
         _classCallCheck(this, ScreenShot);
 
-        this.CROP_BOX_SIZE = 60;
+        this.CROP_BOX_SIZE = 120;
         this.uiInit();
         this.positionLastRclick = [0, 0];
         this.linkdata = null;
@@ -25,6 +25,7 @@ var ScreenShot = (function () {
         }
 
         // 切り抜きボックス, a要素カバーボックス
+
     }, {
         key: '$genCropper',
         value: function $genCropper() {
@@ -40,6 +41,7 @@ var ScreenShot = (function () {
 
         // true : 表示中のウェブページをスクロール不可にする
         // false: 解除する
+
     }, {
         key: 'fixHtml',
         value: function fixHtml(fg) {
@@ -60,12 +62,19 @@ var ScreenShot = (function () {
         }
 
         // 範囲指定のための長方形を表示する
+
     }, {
         key: 'setCropper',
         value: function setCropper() {
             var _this = this;
 
             var $cropper = this.$genCropper();
+            var closeBtnImg = chrome.extension.getURL('x.png');
+            var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
+            $closeBtn.css({
+                'background-image': 'url(' + closeBtnImg + ')'
+            });
+
             $cropper[0].className = 'daiz-ss-cropper-main';
             $cropper[0].id = 'daiz-ss-cropper-main';
             // 切り抜きボックスの位置を初期化
@@ -75,6 +84,7 @@ var ScreenShot = (function () {
                 width: this.CROP_BOX_SIZE,
                 height: this.CROP_BOX_SIZE
             });
+            $cropper.append($closeBtn);
             // ドラッグ可能にする
             $cropper.draggable({
                 stop: function stop(ev, ui) {
@@ -96,16 +106,31 @@ var ScreenShot = (function () {
             var $cropper = $('#daiz-ss-cropper-main');
             var rect = $cropper[0].getBoundingClientRect();
             if (rect === undefined) return;
-            // 前回生成した長方形カバーを消去
-            $('.daiz-ss-cropper').remove();
+            this.removeCropper();
             this.linkdata = this.setRects(rect);
+        }
+
+        // ページ上で選択されている文字列を取得
+
+    }, {
+        key: 'getSelectedText',
+        value: function getSelectedText() {
+            var self = this;
+            var selection = window.getSelection();
+            var text = selection.toString();
+            return text;
         }
     }, {
         key: 'setRects',
         value: function setRects(croppedRect) {
-            var idx = 0;
-            // 切り抜かれた長方形内のみ，aタグを覆えばよい
             this.fixHtml(true);
+
+            // リンク以外のテキスト:
+            var text = this.getSelectedText();
+            $('#daiz-ss-cropper-main').attr('title', text);
+
+            // リンク: 切り抜かれた形内のみ，aタグを覆えばよい
+            var idx = 0;
             var aTags = $('body').find('a');
             var aTagRects = [];
             for (var i = 0; i < aTags.length; i++) {
@@ -127,6 +152,10 @@ var ScreenShot = (function () {
                         var pos = this.correctPosition(rect, croppedRect);
                         pos.id = aid;
                         pos.href = $(aTag).prop('href');
+                        pos.text = $(aTag)[0].innerText;
+                        pos.fontSize = $(aTag).css('font-size');
+                        pos.fontFamily = $(aTag).css('font-family');
+
                         $cropper.attr('title', $(aTag).attr('href'));
                         $cropper.attr('id', aid);
                         $('body').append($cropper);
@@ -136,6 +165,8 @@ var ScreenShot = (function () {
                     }
                 }
             }
+
+            // 切り取り領域
             var pos_cropper = {
                 x: 0,
                 y: 0,
@@ -144,9 +175,11 @@ var ScreenShot = (function () {
                 width: croppedRect.width,
                 height: croppedRect.height
             };
+
             var res = {
                 cropperRect: pos_cropper,
                 aTagRects: aTagRects,
+                text: text,
                 winW: window.innerWidth,
                 winH: window.innerHeight,
                 baseUri: window.location.href,
@@ -179,7 +212,9 @@ var ScreenShot = (function () {
         }
 
         // aタグの位置補正
+        // stageRectの左端，上端を基準とした距離表現に直す
         // aTagRect ⊂ stageRect は保証されている
+
     }, {
         key: 'correctPosition',
         value: function correctPosition(aTagRect, stageRect) {
@@ -196,6 +231,19 @@ var ScreenShot = (function () {
             };
             return res;
         }
+
+        // 描画されている長方形カバーを全て消去
+
+    }, {
+        key: 'removeCropper',
+        value: function removeCropper() {
+            $('.daiz-ss-cropper').remove();
+        }
+    }, {
+        key: 'removeCropperMain',
+        value: function removeCropperMain() {
+            $(".daiz-ss-cropper-main").remove();
+        }
     }, {
         key: 'bindEvents',
         value: function bindEvents() {
@@ -204,12 +252,15 @@ var ScreenShot = (function () {
             // cropperがクリックされたとき
             // 自身を消去する
             $('body').on('click', '.daiz-ss-cropper', function (ev) {
-                $(ev.target).remove();
+                _this2.removeCropper();
             });
 
             // 切り抜きボックスがダブルクリックされたとき
             $('body').on('dblclick', '#daiz-ss-cropper-main', function (ev) {
                 var res = [];
+                window.getSelection().removeAllRanges();
+
+                // 切り取りボックス内のa要素
                 for (var j = 0; j < _this2.linkdata.aTagRects.length; j++) {
                     var aTagDatum = _this2.linkdata.aTagRects[j];
                     var aid = aTagDatum.id;
@@ -218,10 +269,12 @@ var ScreenShot = (function () {
                     }
                 }
                 _this2.linkdata.aTagRects = res;
-                console.info(res);
-                $(".daiz-ss-cropper-main").remove();
-                $(".daiz-ss-cropper").remove();
+
+                _this2.removeCropperMain();
+                _this2.removeCropper();
                 _this2.fixHtml(false);
+                console.info(_this2.linkdata);
+
                 // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
@@ -234,6 +287,13 @@ var ScreenShot = (function () {
                         });
                     }
                 }, 1000);
+            });
+
+            // 切り抜きボックスの閉じるボタンがクリックされたとき
+            $('body').on('click', '#daiz-ss-cropper-close', function (ev) {
+                _this2.removeCropper();
+                _this2.removeCropperMain();
+                _this2.fixHtml(false);
             });
 
             // ページでの右クリックを検出
@@ -251,7 +311,6 @@ var ScreenShot = (function () {
     }]);
 
     return ScreenShot;
-})();
+}();
 
 var ss = new ScreenShot();
-

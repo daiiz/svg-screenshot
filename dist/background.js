@@ -21,12 +21,12 @@ var renderImage = function renderImage(linkdata, base64img) {
         ctx.drawImage(img, pos_cropper.orgX, pos_cropper.orgY, w, h, 0, 0, w, h);
         var screenshot = canvas.toDataURL('image/png');
         // SVGスクリーンショットタグをつくる
-        makeSVGtag(linkdata.aTagRects, screenshot, w, h, baseUri, title);
+        makeSVGtag(linkdata.aTagRects, linkdata.text, screenshot, w, h, baseUri, title);
     };
     img.src = base64img;
 };
 
-var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUri, title) {
+var makeSVGtag = function makeSVGtag(aTagRects, text, base64img, width, height, baseUri, title) {
     var svgns = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
     // root SVG element
@@ -42,6 +42,7 @@ var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUr
     img.setAttributeNS(null, 'height', height);
     img.setAttributeNS(null, 'x', 0);
     img.setAttributeNS(null, 'y', 0);
+    img.setAttributeNS(null, 'data-selectedtext', text);
     img.setAttributeNS(hrefns, 'href', base64img);
 
     rootSVGtag.appendChild(img);
@@ -53,6 +54,7 @@ var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUr
         var a = document.createElementNS(svgns, 'a');
         a.setAttributeNS(hrefns, 'href', aTagRect.href);
         a.setAttributeNS(null, 'target', '_blank');
+
         // rect element
         var rect = document.createElementNS(svgns, 'rect');
         rect.setAttributeNS(null, 'width', aTagRect.width);
@@ -61,7 +63,15 @@ var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUr
         rect.setAttributeNS(null, 'y', aTagRect.y);
         rect.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
 
+        // text element
+        var text = document.createElementNS(svgns, 'text');
+        text.setAttributeNS(null, 'x', aTagRect.x);
+        text.setAttributeNS(null, 'y', aTagRect.y + aTagRect.height);
+        text.textContent = aTagRect.text;
+        text.setAttributeNS(null, 'fill', 'rgba(0, 0, 0, 0)');
+
         a.appendChild(rect);
+        a.appendChild(text);
         rootSVGtag.appendChild(a);
     }
 
@@ -71,12 +81,15 @@ var makeSVGtag = function makeSVGtag(aTagRects, base64img, width, height, baseUr
     localStorage['title'] = title;
     localStorage['svgroot'] = rootSVGtag.outerHTML;
 
-    window.open('preview.html');
+    chrome.tabs.create({
+        url: chrome.extension.getURL("preview.html")
+    }, null);
 };
 
 // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
 chrome.contextMenus.create({
     title: 'SVGスクリーンショットを撮る',
+    contexts: ['page', 'selection'],
     onclick: function onclick(clicked, tab) {
         chrome.tabs.sendRequest(tab.id, {
             event: 'click-context-menu'
@@ -91,8 +104,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.command === 'make-screen-shot') {
         var linkdata = opts.sitedata;
         chrome.tabs.captureVisibleTab({ format: 'png' }, function (dataUrl) {
-
-            //window.open(dataUrl);
             renderImage(linkdata, dataUrl);
             console.warn(opts.sitedata);
         });
@@ -101,6 +112,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // browser_actionボタンが押されたとき
 chrome.browserAction.onClicked.addListener(function (tab) {
-    window.open("viewer.html");
+    chrome.tabs.create({
+        url: "https://svgscreenshot.appspot.com/"
+    }, null);
 });
-
