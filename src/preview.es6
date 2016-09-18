@@ -51,38 +51,6 @@ var showToast = (msg) => {
     snackbarContainer.MaterialSnackbar.showSnackbar({message: msg});
 };
 
-// ShareURL生成リンクがクリックされたとき
-$('#gen-share-url').on('click', e => {
-    // SVGが表示されているときのみ有効
-    var svgtag = getSvgTag();
-    if (svgtag === null) return;
-    var svgBgBase64Img = getSvgBgImg(svgtag);
-
-    $.ajax({
-        url: SVGSCREENSHOT_APP + '/api/uploadsvg-public',
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({
-            svg: svgtag.outerHTML,
-            base64png: svgBgBase64Img,
-            orgurl: svgtag.getAttribute('data-url'),
-            title: svgtag.getAttribute('data-title') || '',
-            viewbox: svgtag.getAttribute('viewBox')
-        })
-    }).success (data => {
-        console.info(data)
-        var $tweetBtn = $('#tweetBtn').find('a');
-        $tweetBtn.attr('data-url', data.public_viewer_url);
-        $tweetBtn.attr('data-text', data.title);
-        tw(document, 'script', 'twitter-wjs');
-        $('#tweetBtn').show('slow');
-    }).fail (data => {
-        console.error("[Err api/uploadsvg-public]");
-    });
-});
-
-
 // Uploadリンクがクリックされたとき
 $('#upload').on('click', e => {
     // SVGが表示されているときのみ有効
