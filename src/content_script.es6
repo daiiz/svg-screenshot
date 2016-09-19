@@ -285,6 +285,8 @@ var setCLinkMenu = () => {
             cc.Gyazo();
         }else if (serviceName === 'GooglePhoto') {
             cc.GooglePhoto();
+        }else if (serviceName === 'GoogleDriveFolders') {
+            cc.GoogleDriveFolders();
         }
     }
 };

@@ -25,6 +25,7 @@ var CLink = function () {
         /**
          * サービス別に処理を定義する
          */
+        // プレビュー型
         value: function GooglePhoto() {
             $('body').on('mouseenter', 'div.R9U8ab', function (e) {
                 var $v = $(e.target).closest('.R9U8ab');
@@ -63,6 +64,25 @@ var CLink = function () {
         // リスト型
 
     }, {
+        key: 'GoogleDriveFolders',
+        value: function GoogleDriveFolders() {
+            $('body').on('mouseenter', 'span.l-Ab-T-r', function (e) {
+                var $v = $(e.target).closest('.l-Ab-T-r');
+                if ($v.find('a.daiiz-svgss-btn')) {
+                    var fileName = $v[0].innerHTML;
+                    var screenShotId = CLink.extractScreenShotId(fileName);
+                    if (CLink.checkScreenShotId(screenShotId)) {
+                        var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
+                        $a.css('color', '#222');
+                        $v[0].innerHTML = $a[0].outerHTML;
+                    }
+                }
+            });
+        }
+
+        // リスト型
+
+    }, {
         key: 'GyazoSearch',
         value: function GyazoSearch() {
             var extract = function extract($triggerElement) {
@@ -84,7 +104,7 @@ var CLink = function () {
     }], [{
         key: 'targets',
         value: function targets() {
-            var matchUrls = [['GyazoSearch', 'https://gyazo.com/search'], ['Gyazo', 'https://gyazo.com/(.+)'], ['GooglePhoto', 'https://photos.google.com/photo/(.+)']];
+            var matchUrls = [['GyazoSearch', 'https://gyazo.com/search'], ['Gyazo', 'https://gyazo.com/(.+)'], ['GooglePhoto', 'https://photos.google.com/photo/(.+)'], ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']];
             return matchUrls;
         }
     }, {
