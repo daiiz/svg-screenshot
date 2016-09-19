@@ -62,13 +62,28 @@ class CLink {
         return `${base}/${screenShotId}`;
     }
 
-    static baseATag (a) {
-        return $('<a title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="#" style="cursor: pointer">'+ a +'</a>');
+    static baseATag (a, href) {
+        return $(`<a title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="${href}" style="cursor: pointer">${a}</a>`);
     }
 
     /**
      * サービス別に処理を定義する
      */
+    GooglePhoto () {
+        $('body').on('mouseenter', 'div.R9U8ab', e => {
+            var $v = $(e.target).closest('.R9U8ab');
+            if ($v.find('a.daiiz-svgss-btn')) {
+                var fileName = $v[0].innerHTML;
+                var screenShotId = CLink.extractScreenShotId(fileName);
+                if (CLink.checkScreenShotId(screenShotId)) {
+                    var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
+                    $v[0].innerHTML = $a[0].outerHTML;
+                }
+            }
+        });
+    }
+
+    // プレビュー型
     Gyazo () {
         $('body').on('mouseenter', '.metadata-row', e => {
             var $t = $(e.target).closest('.metadata-row');
@@ -78,8 +93,7 @@ class CLink {
                     var fileName = $v[0].innerHTML;
                     var screenShotId = CLink.extractScreenShotId(fileName);
                     if (CLink.checkScreenShotId(screenShotId)) {
-                        var $a = CLink.baseATag(fileName);
-                        $a.attr('href', CLink.getCLink(screenShotId));
+                        var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
                         $v[0].innerHTML = $a[0].outerHTML;
                     }
                 }
@@ -87,6 +101,7 @@ class CLink {
         });
     }
 
+    // リスト型
     GyazoSearch () {
         var extract = ($triggerElement) => {
             var $thumbInner = $triggerElement.closest('.thumb-inner');

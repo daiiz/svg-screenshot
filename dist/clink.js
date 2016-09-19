@@ -19,12 +19,30 @@ var CLink = function () {
     }
 
     _createClass(CLink, [{
-        key: 'Gyazo',
+        key: 'GooglePhoto',
 
 
         /**
          * サービス別に処理を定義する
          */
+        value: function GooglePhoto() {
+            $('body').on('mouseenter', 'div.R9U8ab', function (e) {
+                var $v = $(e.target).closest('.R9U8ab');
+                if ($v.find('a.daiiz-svgss-btn')) {
+                    var fileName = $v[0].innerHTML;
+                    var screenShotId = CLink.extractScreenShotId(fileName);
+                    if (CLink.checkScreenShotId(screenShotId)) {
+                        var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
+                        $v[0].innerHTML = $a[0].outerHTML;
+                    }
+                }
+            });
+        }
+
+        // プレビュー型
+
+    }, {
+        key: 'Gyazo',
         value: function Gyazo() {
             $('body').on('mouseenter', '.metadata-row', function (e) {
                 var $t = $(e.target).closest('.metadata-row');
@@ -34,14 +52,16 @@ var CLink = function () {
                         var fileName = $v[0].innerHTML;
                         var screenShotId = CLink.extractScreenShotId(fileName);
                         if (CLink.checkScreenShotId(screenShotId)) {
-                            var $a = CLink.baseATag(fileName);
-                            $a.attr('href', CLink.getCLink(screenShotId));
+                            var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
                             $v[0].innerHTML = $a[0].outerHTML;
                         }
                     }
                 }
             });
         }
+
+        // リスト型
+
     }, {
         key: 'GyazoSearch',
         value: function GyazoSearch() {
@@ -124,8 +144,8 @@ var CLink = function () {
         }
     }, {
         key: 'baseATag',
-        value: function baseATag(a) {
-            return $('<a title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="#" style="cursor: pointer">' + a + '</a>');
+        value: function baseATag(a, href) {
+            return $('<a title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="' + href + '" style="cursor: pointer">' + a + '</a>');
         }
     }]);
 

@@ -324,6 +324,8 @@ var setCLinkMenu = function setCLinkMenu() {
             cc.GyazoSearch();
         } else if (serviceName === 'Gyazo') {
             cc.Gyazo();
+        } else if (serviceName === 'GooglePhoto') {
+            cc.GooglePhoto();
         }
     }
 };
