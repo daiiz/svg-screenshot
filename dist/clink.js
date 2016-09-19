@@ -106,8 +106,7 @@ var CLink = function () {
         value: function targets() {
             var matchUrls = [
             // ['GyazoSearch', 'https://gyazo.com/search'],
-            // ['Gyazo', 'https://gyazo.com/(.+)'],
-            ['GooglePhoto', 'https://photos.google.com/photo/(.+)'], ['GooglePhoto', 'https://photos.google.com/album/(.+)'], ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']];
+            ['Gyazo', 'https://gyazo.com/(.+)'], ['GooglePhoto', 'https://photos.google.com/photo/(.+)'], ['GooglePhoto', 'https://photos.google.com/album/(.+)'], ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']];
             return matchUrls;
         }
     }, {
