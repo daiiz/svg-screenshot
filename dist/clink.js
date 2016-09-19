@@ -183,7 +183,7 @@ var CLink = function () {
 }();
 
 $('body').on('click', '.daiiz-jslink', function (e) {
-    var $t = $(e.target).closest('.daiiz-svgss-btn');
+    var $t = $(e.target).closest('.daiiz-jslink');
     e.stopPropagation();
     window.open($t.attr('data-url'));
     return false;
