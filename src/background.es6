@@ -2,7 +2,6 @@ var sendChromeMsg = (json, callback) => {
      chrome.runtime.sendMessage(json, callback);
 };
 
-
 // Canvasに画像をセットして，必要部分のみ切り出す
 var renderImage = function (linkdata, base64img) {
     var canvas = document.querySelector("#cav");
@@ -85,20 +84,6 @@ var makeSVGtag = function (aTagRects, text, base64img, width, height, baseUri, t
     }, null);
 };
 
-// ユーザーが閲覧中のページに専用の右クリックメニューを設ける
-chrome.contextMenus.create({
-    title: 'SVGスクリーンショットを撮る',
-    contexts: [
-        'page',
-        'selection'
-    ],
-    onclick: function (clicked, tab) {
-        chrome.tabs.sendRequest(tab.id, {
-            event: 'click-context-menu'
-        });
-    }
-});
-
 // ポップアップ画面から命令を受ける
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
@@ -118,3 +103,30 @@ chrome.browserAction.onClicked.addListener(tab => {
         url: "https://svgscreenshot.appspot.com/"
     }, null);
 });
+
+var takeScreenShotMenu = () => {
+    // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
+    chrome.contextMenus.create({
+        title: 'SVGスクリーンショットを撮る',
+        contexts: [
+            'page',
+            'selection'
+        ],
+        onclick: function (clicked, tab) {
+            chrome.tabs.sendRequest(tab.id, {
+                event: 'click-context-menu'
+            });
+        }
+    });
+};
+
+takeScreenShotMenu();
+
+chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
+    if (info.status === 'complete') {
+        chrome.tabs.sendRequest(tab.id, {
+            event: 'updated-location-href'
+        });
+    }
+});
+

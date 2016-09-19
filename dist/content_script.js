@@ -314,3 +314,22 @@ var ScreenShot = function () {
 }();
 
 var ss = new ScreenShot();
+
+/** c-link を開くためのコンテキストメニュー **/
+var setCLinkMenu = function setCLinkMenu() {
+    var url = window.location.href;
+    var serviceName = CLink.matchUrl(url);
+    if (serviceName) {
+        if (serviceName === 'GyazoSearch') {
+            cc.GyazoSearch();
+        } else if (serviceName === 'Gyazo') {
+            cc.Gyazo();
+        }
+    }
+};
+
+chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
+    if (request.event === 'updated-location-href') {
+        setCLinkMenu();
+    }
+});

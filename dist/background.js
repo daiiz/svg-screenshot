@@ -86,17 +86,6 @@ var makeSVGtag = function makeSVGtag(aTagRects, text, base64img, width, height, 
     }, null);
 };
 
-// ユーザーが閲覧中のページに専用の右クリックメニューを設ける
-chrome.contextMenus.create({
-    title: 'SVGスクリーンショットを撮る',
-    contexts: ['page', 'selection'],
-    onclick: function onclick(clicked, tab) {
-        chrome.tabs.sendRequest(tab.id, {
-            event: 'click-context-menu'
-        });
-    }
-});
-
 // ポップアップ画面から命令を受ける
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
@@ -115,4 +104,27 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.create({
         url: "https://svgscreenshot.appspot.com/"
     }, null);
+});
+
+var takeScreenShotMenu = function takeScreenShotMenu() {
+    // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
+    chrome.contextMenus.create({
+        title: 'SVGスクリーンショットを撮る',
+        contexts: ['page', 'selection'],
+        onclick: function onclick(clicked, tab) {
+            chrome.tabs.sendRequest(tab.id, {
+                event: 'click-context-menu'
+            });
+        }
+    });
+};
+
+takeScreenShotMenu();
+
+chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+    if (info.status === 'complete') {
+        chrome.tabs.sendRequest(tab.id, {
+            event: 'updated-location-href'
+        });
+    }
 });
