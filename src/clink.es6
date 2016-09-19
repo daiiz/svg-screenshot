@@ -9,8 +9,8 @@ class CLink {
 
     static targets () {
         var matchUrls = [
-            ['GyazoSearch', 'https://gyazo.com/search'],
-            ['Gyazo', 'https://gyazo.com/(.+)'],
+            // ['GyazoSearch', 'https://gyazo.com/search'],
+            // ['Gyazo', 'https://gyazo.com/(.+)'],
             ['GooglePhoto', 'https://photos.google.com/photo/(.+)'],
             ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']
         ];

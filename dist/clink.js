@@ -104,7 +104,10 @@ var CLink = function () {
     }], [{
         key: 'targets',
         value: function targets() {
-            var matchUrls = [['GyazoSearch', 'https://gyazo.com/search'], ['Gyazo', 'https://gyazo.com/(.+)'], ['GooglePhoto', 'https://photos.google.com/photo/(.+)'], ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']];
+            var matchUrls = [
+            // ['GyazoSearch', 'https://gyazo.com/search'],
+            // ['Gyazo', 'https://gyazo.com/(.+)'],
+            ['GooglePhoto', 'https://photos.google.com/photo/(.+)'], ['GoogleDriveFolders', 'https://drive.google.com/drive/folders/(.+)']];
             return matchUrls;
         }
     }, {
