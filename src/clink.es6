@@ -9,7 +9,7 @@ class CLink {
 
     static targets () {
         var matchUrls = [
-            // ['GyazoSearch', 'https://gyazo.com/search'],
+            ['GyazoSearch', 'https://gyazo.com/search'],
             ['Gyazo', 'https://gyazo.com/(.+)'],
             ['GooglePhoto', 'https://photos.google.com/photo/(.+)'],
             ['GooglePhoto', 'https://photos.google.com/album/(.+)'],
@@ -64,8 +64,8 @@ class CLink {
         return `${base}/${screenShotId}`;
     }
 
-    static baseATag (a, href) {
-        return $(`<a title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="${href}" style="cursor: pointer">${a}</a>`);
+    static baseATag (a, href, tag='a') {
+        return $(`<${tag} title="SVGスクリーンショットを開く" class="daiiz-svgss-btn" target="_blank" href="${href}" style="cursor: pointer">${a}</${tag}>`);
     }
 
     /**
@@ -75,7 +75,7 @@ class CLink {
     GooglePhoto () {
         $('body').on('mouseenter', 'div.R9U8ab', e => {
             var $v = $(e.target).closest('.R9U8ab');
-            if ($v.find('a.daiiz-svgss-btn')) {
+            if ($v.find('a.daiiz-svgss-btn').length === 0) {
                 var fileName = $v[0].innerHTML;
                 var screenShotId = CLink.extractScreenShotId(fileName);
                 if (CLink.checkScreenShotId(screenShotId)) {
@@ -92,7 +92,7 @@ class CLink {
             var $t = $(e.target).closest('.metadata-row');
             if ($t.find('.metadata-key > i').hasClass('gy-icon-title')) {
                 var $v = $t.find('.metadata-value');
-                if ($v.find('a.daiiz-svgss-btn')) {
+                if ($v.find('a.daiiz-svgss-btn').length === 0) {
                     var fileName = $v[0].innerHTML;
                     var screenShotId = CLink.extractScreenShotId(fileName);
                     if (CLink.checkScreenShotId(screenShotId)) {
@@ -108,12 +108,14 @@ class CLink {
     GoogleDriveFolders () {
         $('body').on('mouseenter', 'span.l-Ab-T-r', e => {
             var $v = $(e.target).closest('.l-Ab-T-r');
-            if ($v.find('a.daiiz-svgss-btn')) {
+            if ($v.find('a.daiiz-svgss-btn').length === 0) {
                 var fileName = $v[0].innerHTML;
                 var screenShotId = CLink.extractScreenShotId(fileName);
                 if (CLink.checkScreenShotId(screenShotId)) {
                     var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId));
-                    $a.css('color', '#222');
+                    $a.css({
+                        'color': '#222'
+                    });
                     $v[0].innerHTML = $a[0].outerHTML;
                 }
             }
@@ -122,22 +124,33 @@ class CLink {
 
     // リスト型
     GyazoSearch () {
-        var extract = ($triggerElement) => {
-            var $thumbInner = $triggerElement.closest('.thumb-inner');
-            var fileName = $thumbInner.find('.title')[0].innerHTML;
-            var screenShotId = CLink.extractScreenShotId(fileName);
-            return CLink.checkScreenShotId(screenShotId);
-        };
+        var $body = $('body');
 
-        var tipStyle = 'position: absolute; top: -24px; left: 2px; background: #555; color: #fff; text-align: left; ' +
-            'z-index: 1000; padding: 4px; line-height: 1; border-radius: 3px; cursor: pointer;';
-        var $tip = $(`<div style="${tipStyle}">Open ScreenShot</div>`);
+        $body.on('click', '.daiiz-svgss-btn', e => {
+            var $t = $(e.target).closest('.daiiz-svgss-btn');
+            e.stopPropagation();
+            window.open($t.attr('data-url'));
+            return false;
+        });
 
-        var aStyle = 'text-decoration: none; display: inline; width: initial; height: initial; position: static;';
-        var $a = $(`<a style="${aStyle}" target="_blank" href="#">`);
-        $a.append($tip);
-
-        CLink.showMenu('.search-thumb', '.thumb-inner', $a, extract);
+        $body.on('mouseenter', 'span.title', e => {
+            var $v = $(e.target).closest('.title');
+            if ($v.find('span.daiiz-svgss-btn').length === 0) {
+                var fileName = $v[0].innerHTML;
+                var screenShotId = CLink.extractScreenShotId(fileName);
+                if (CLink.checkScreenShotId(screenShotId)) {
+                    var $a = CLink.baseATag(fileName, CLink.getCLink(screenShotId), 'span');
+                    $a.css({
+                        'color': '#696969',
+                        'height': '26px',
+                        'text-decoration': 'underline'
+                    });
+                    $a.attr('data-url', $a.attr('href'));
+                    $a.attr('href', '');
+                    $v[0].innerHTML = $a[0].outerHTML;
+                }
+            }
+        });
     }
 }
 
