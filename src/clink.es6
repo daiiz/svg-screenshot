@@ -126,13 +126,6 @@ class CLink {
     GyazoSearch () {
         var $body = $('body');
 
-        $body.on('click', '.daiiz-svgss-btn', e => {
-            var $t = $(e.target).closest('.daiiz-svgss-btn');
-            e.stopPropagation();
-            window.open($t.attr('data-url'));
-            return false;
-        });
-
         $body.on('mouseenter', 'span.title', e => {
             var $v = $(e.target).closest('.title');
             if ($v.find('span.daiiz-svgss-btn').length === 0) {
@@ -147,11 +140,19 @@ class CLink {
                     });
                     $a.attr('data-url', $a.attr('href'));
                     $a.attr('href', '');
+                    $a.addClass('daiiz-jslink');
                     $v[0].innerHTML = $a[0].outerHTML;
                 }
             }
         });
     }
 }
+
+$('body').on('click', '.daiiz-jslink', e => {
+    var $t = $(e.target).closest('.daiiz-svgss-btn');
+    e.stopPropagation();
+    window.open($t.attr('data-url'));
+    return false;
+});
 
 var cc = new CLink();

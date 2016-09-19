@@ -89,13 +89,6 @@ var CLink = function () {
         value: function GyazoSearch() {
             var $body = $('body');
 
-            $body.on('click', '.daiiz-svgss-btn', function (e) {
-                var $t = $(e.target).closest('.daiiz-svgss-btn');
-                e.stopPropagation();
-                window.open($t.attr('data-url'));
-                return false;
-            });
-
             $body.on('mouseenter', 'span.title', function (e) {
                 var $v = $(e.target).closest('.title');
                 if ($v.find('span.daiiz-svgss-btn').length === 0) {
@@ -110,6 +103,7 @@ var CLink = function () {
                         });
                         $a.attr('data-url', $a.attr('href'));
                         $a.attr('href', '');
+                        $a.addClass('daiiz-jslink');
                         $v[0].innerHTML = $a[0].outerHTML;
                     }
                 }
@@ -187,5 +181,12 @@ var CLink = function () {
 
     return CLink;
 }();
+
+$('body').on('click', '.daiiz-jslink', function (e) {
+    var $t = $(e.target).closest('.daiiz-svgss-btn');
+    e.stopPropagation();
+    window.open($t.attr('data-url'));
+    return false;
+});
 
 var cc = new CLink();
