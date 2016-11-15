@@ -8,6 +8,10 @@ class ScreenShot {
         this.uiInit();
         this.positionLastRclick = [0, 0];
         this.linkdata = null;
+        this.tmp = {
+            // 右クリックされた画像要素
+            '$contextMenuImg': []
+        };
     }
 
     uiInit () {
@@ -46,7 +50,7 @@ class ScreenShot {
     }
 
     // 範囲指定のための長方形を表示する
-    setCropper () {
+    setCropper (boxParams=[]) {
         var $cropper = this.$genCropper();
         var closeBtnImg = chrome.extension.getURL('x.png');
         var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
@@ -57,19 +61,30 @@ class ScreenShot {
         $cropper[0].className = 'daiz-ss-cropper-main';
         $cropper[0].id = 'daiz-ss-cropper-main';
         // 切り抜きボックスの位置を初期化
-        $cropper.css({
-            left  : this.positionLastRclick[0] - (this.CROP_BOX_SIZE / 2),
-            top   : this.positionLastRclick[1] - (this.CROP_BOX_SIZE / 2),
-            width : this.CROP_BOX_SIZE,
-            height: this.CROP_BOX_SIZE
-        });
+        if (boxParams.length === 0) {
+            $cropper.css({
+                left  : this.positionLastRclick[0] - (this.CROP_BOX_SIZE / 2),
+                top   : this.positionLastRclick[1] - (this.CROP_BOX_SIZE / 2),
+                width : this.CROP_BOX_SIZE,
+                height: this.CROP_BOX_SIZE
+            });
+        }else {
+            $cropper.css({
+                left  : boxParams[0],
+                top   : boxParams[1],
+                width : boxParams[2],
+                height: boxParams[3]
+            });
+        }
         $cropper.append($closeBtn);
+
         // ドラッグ可能にする
         $cropper.draggable({
             stop: (ev, ui) => {
                 this._setRects();
             }
         });
+
         // リサイズ可能にする
         $cropper.resizable({
             stop: (ev, ui) => {
@@ -77,7 +92,9 @@ class ScreenShot {
             },
             handles: "all"
         });
+
         $('body').append($cropper);
+        this._setRects();
     }
 
     _setRects () {
@@ -212,6 +229,14 @@ class ScreenShot {
     }
 
     bindEvents () {
+        var self = this;
+
+        // 画像上での右クリックを追跡
+        $('body').on('contextmenu', 'img', ev => {
+            var $img = $(ev.target).closest('img');
+            self.tmp.$contextMenuImg = $img;
+        });
+
         // cropperがクリックされたとき
         // 自身を消去する
         $('body').on('click', '.daiz-ss-cropper', ev => {
@@ -224,28 +249,30 @@ class ScreenShot {
             window.getSelection().removeAllRanges();
 
             // 切り取りボックス内のa要素
-            for (var j = 0; j < this.linkdata.aTagRects.length; j++) {
-                var aTagDatum = this.linkdata.aTagRects[j];
-                var aid = aTagDatum.id;
-                if ($(`#${aid}`).length > 0) {
-                    res.push(aTagDatum);
+            if (self.linkdata.aTagRects) {
+                for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
+                    var aTagDatum = self.linkdata.aTagRects[j];
+                    var aid = aTagDatum.id;
+                    if ($(`#${aid}`).length > 0) {
+                        res.push(aTagDatum);
+                    }
                 }
             }
-            this.linkdata.aTagRects = res;
+            self.linkdata.aTagRects = res;
 
             this.removeCropperMain();
             this.removeCropper();
             this.fixHtml(false);
-            console.info(this.linkdata);
 
             // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
             // 1秒待ってから送信する
             window.setTimeout(() => {
-                if (this.linkdata !== null) {
+                if (self.linkdata !== null) {
+                    console.info(self.linkdata);
                     sendChromeMsg({
                         command: 'make-screen-shot',
                         options: {
-                            sitedata: this.linkdata
+                            sitedata: self.linkdata
                         }
                     });
                 }
@@ -267,7 +294,18 @@ class ScreenShot {
         // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
         chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
             if (request.event === 'click-context-menu') {
-                this.setCropper();
+                if (request.elementType === 'image' && this.tmp.$contextMenuImg.length > 0) {
+                    var $img = this.tmp.$contextMenuImg;
+                    var imgRect = $img[0].getBoundingClientRect();
+                    this.setCropper([
+                        imgRect.left,
+                        imgRect.top,
+                        $img.width() - 2,
+                        $img.height() - 2
+                    ]);
+                }else {
+                    this.setCropper();
+                }
             }
         });
     }

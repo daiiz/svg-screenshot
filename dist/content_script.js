@@ -16,6 +16,10 @@ var ScreenShot = function () {
         this.uiInit();
         this.positionLastRclick = [0, 0];
         this.linkdata = null;
+        this.tmp = {
+            // 右クリックされた画像要素
+            '$contextMenuImg': []
+        };
     }
 
     _createClass(ScreenShot, [{
@@ -68,6 +72,8 @@ var ScreenShot = function () {
         value: function setCropper() {
             var _this = this;
 
+            var boxParams = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
             var $cropper = this.$genCropper();
             var closeBtnImg = chrome.extension.getURL('x.png');
             var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
@@ -78,19 +84,30 @@ var ScreenShot = function () {
             $cropper[0].className = 'daiz-ss-cropper-main';
             $cropper[0].id = 'daiz-ss-cropper-main';
             // 切り抜きボックスの位置を初期化
-            $cropper.css({
-                left: this.positionLastRclick[0] - this.CROP_BOX_SIZE / 2,
-                top: this.positionLastRclick[1] - this.CROP_BOX_SIZE / 2,
-                width: this.CROP_BOX_SIZE,
-                height: this.CROP_BOX_SIZE
-            });
+            if (boxParams.length === 0) {
+                $cropper.css({
+                    left: this.positionLastRclick[0] - this.CROP_BOX_SIZE / 2,
+                    top: this.positionLastRclick[1] - this.CROP_BOX_SIZE / 2,
+                    width: this.CROP_BOX_SIZE,
+                    height: this.CROP_BOX_SIZE
+                });
+            } else {
+                $cropper.css({
+                    left: boxParams[0],
+                    top: boxParams[1],
+                    width: boxParams[2],
+                    height: boxParams[3]
+                });
+            }
             $cropper.append($closeBtn);
+
             // ドラッグ可能にする
             $cropper.draggable({
                 stop: function stop(ev, ui) {
                     _this._setRects();
                 }
             });
+
             // リサイズ可能にする
             $cropper.resizable({
                 stop: function stop(ev, ui) {
@@ -98,7 +115,9 @@ var ScreenShot = function () {
                 },
                 handles: "all"
             });
+
             $('body').append($cropper);
+            this._setRects();
         }
     }, {
         key: '_setRects',
@@ -249,6 +268,14 @@ var ScreenShot = function () {
         value: function bindEvents() {
             var _this2 = this;
 
+            var self = this;
+
+            // 画像上での右クリックを追跡
+            $('body').on('contextmenu', 'img', function (ev) {
+                var $img = $(ev.target).closest('img');
+                self.tmp.$contextMenuImg = $img;
+            });
+
             // cropperがクリックされたとき
             // 自身を消去する
             $('body').on('click', '.daiz-ss-cropper', function (ev) {
@@ -261,28 +288,30 @@ var ScreenShot = function () {
                 window.getSelection().removeAllRanges();
 
                 // 切り取りボックス内のa要素
-                for (var j = 0; j < _this2.linkdata.aTagRects.length; j++) {
-                    var aTagDatum = _this2.linkdata.aTagRects[j];
-                    var aid = aTagDatum.id;
-                    if ($('#' + aid).length > 0) {
-                        res.push(aTagDatum);
+                if (self.linkdata.aTagRects) {
+                    for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
+                        var aTagDatum = self.linkdata.aTagRects[j];
+                        var aid = aTagDatum.id;
+                        if ($('#' + aid).length > 0) {
+                            res.push(aTagDatum);
+                        }
                     }
                 }
-                _this2.linkdata.aTagRects = res;
+                self.linkdata.aTagRects = res;
 
                 _this2.removeCropperMain();
                 _this2.removeCropper();
                 _this2.fixHtml(false);
-                console.info(_this2.linkdata);
 
                 // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
-                    if (_this2.linkdata !== null) {
+                    if (self.linkdata !== null) {
+                        console.info(self.linkdata);
                         sendChromeMsg({
                             command: 'make-screen-shot',
                             options: {
-                                sitedata: _this2.linkdata
+                                sitedata: self.linkdata
                             }
                         });
                     }
@@ -304,7 +333,13 @@ var ScreenShot = function () {
             // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
             chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
                 if (request.event === 'click-context-menu') {
-                    _this2.setCropper();
+                    if (request.elementType === 'image' && _this2.tmp.$contextMenuImg.length > 0) {
+                        var $img = _this2.tmp.$contextMenuImg;
+                        var imgRect = $img[0].getBoundingClientRect();
+                        _this2.setCropper([imgRect.left, imgRect.top, $img.width() - 2, $img.height() - 2]);
+                    } else {
+                        _this2.setCropper();
+                    }
                 }
             });
         }
