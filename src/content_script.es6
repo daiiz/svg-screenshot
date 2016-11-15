@@ -312,7 +312,7 @@ class ScreenShot {
 }
 var ss = new ScreenShot();
 
-/** c-link を開くためのコンテキストメニュー **/
+/** c-link **/
 var setCLinkMenu = () => {
     var url = window.location.href;
     var serviceName = CLink.matchUrl(url);
