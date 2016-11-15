@@ -148,11 +148,4 @@ class CLink {
     }
 }
 
-$('body').on('click', '.daiiz-jslink', e => {
-    var $t = $(e.target).closest('.daiiz-jslink');
-    e.stopPropagation();
-    window.open($t.attr('data-url'));
-    return false;
-});
-
 var cc = new CLink();
