@@ -372,5 +372,6 @@ var setCLinkMenu = function setCLinkMenu() {
 chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
     if (request.event === 'updated-location-href') {
         setCLinkMenu();
+        new InlineViewer();
     }
 });

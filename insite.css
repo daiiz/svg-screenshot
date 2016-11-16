@@ -40,6 +40,15 @@
     color: #1E88E5;
 }
 
+
+.daiz-ss-iv-cover {
+    border: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10000;
+    position: absolute;
+    overflow: scroll;
+}
+
 #daiz-ss-cropper-close, #daiz-ss-cropper-capture {
     position: absolute;
     background-repeat: no-repeat;
