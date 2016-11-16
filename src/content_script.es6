@@ -54,6 +54,7 @@ class ScreenShot {
         var $cropper = this.$genCropper();
         var closeBtnImg = chrome.extension.getURL('x.png');
         var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
+        var $captureBtn = $('<div id="daiz-ss-cropper-capture">✔ Capture</div>');
         $closeBtn.css({
             'background-image': `url(${closeBtnImg})`
         });
@@ -76,6 +77,7 @@ class ScreenShot {
                 height: boxParams[3]
             });
         }
+        $cropper.append($captureBtn);
         $cropper.append($closeBtn);
 
         // ドラッグ可能にする
@@ -243,8 +245,8 @@ class ScreenShot {
             $(ev.target).closest('.daiz-ss-cropper').remove();
         });
 
-        // 切り抜きボックスがダブルクリックされたとき
-        $('body').on('dblclick', '#daiz-ss-cropper-main', ev => {
+        // 撮影ボタンがクリックされたとき
+        $('body').on('click', '#daiz-ss-cropper-capture', ev => {
             var res = [];
             window.getSelection().removeAllRanges();
 

@@ -40,20 +40,38 @@
     color: #1E88E5;
 }
 
-#daiz-ss-cropper-close {
+#daiz-ss-cropper-close, #daiz-ss-cropper-capture {
     position: absolute;
-    height: 20px;
-    width: 20px;
     background-repeat: no-repeat;
     background-position: center center;
-    top: -10px;
-    right: -10px;
-    background-color: #777;
-    border-radius: 50%;
     z-index: 10001;
     color: #fff;
     padding: 2px;
     box-sizing: border-box;
     text-align: center;
     cursor: pointer;
+    overflow: hidden;
+}
+
+#daiz-ss-cropper-close {
+    height: 20px;
+    width: 20px;
+    top: -10px;
+    right: -10px;
+    border-radius: 50%;
+    background-color: #777;
+}
+
+#daiz-ss-cropper-capture {
+    height: 20px;
+    left: -10px;
+    top: -10px;
+    font-size: 11px;
+    line-height: 11px;
+    background-color: green;
+    border-radius: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
