@@ -32,7 +32,7 @@ var InlineViewer = function () {
       var cid = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
       var $img = arguments[1];
 
-      var coverId = '"daiz-ss-iv-cover-c-' + cid;
+      var coverId = 'daiz-ss-iv-cover-c-' + cid;
       var pageX = window.pageXOffset;
       var pageY = window.pageYOffset;
 
@@ -62,7 +62,7 @@ var InlineViewer = function () {
       var cid = arguments.length <= 1 || arguments[1] === undefined ? '5735735550279680' : arguments[1];
 
       var cover = $cover[0];
-      var svgUrl = this.appImg + 'cid.svg';
+      var svgUrl = '' + this.appImg + cid + '.svg';
       $.ajax({
         url: svgUrl,
         dataType: "text"
@@ -89,7 +89,7 @@ var InlineViewer = function () {
         // 対象画像であるかを確認
         var src = $img.attr('src');
         if (src.indexOf(_this.appImg) >= 0) {
-          var cid = self.getScreenShotId();
+          var cid = self.getScreenShotId(src);
           var $cover = self.$getCover(cid, $img);
           $body.append($cover);
           self.renderSVGScreenShot($cover, cid);

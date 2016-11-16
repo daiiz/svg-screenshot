@@ -15,7 +15,7 @@ class InlineViewer {
   }
 
   $getCover (cid='', $img) {
-    var coverId = '"daiz-ss-iv-cover-c-' + cid;
+    var coverId = 'daiz-ss-iv-cover-c-' + cid;
     var pageX = window.pageXOffset;
     var pageY = window.pageYOffset;
 
@@ -40,7 +40,7 @@ class InlineViewer {
   // SVGコンテンツを表示する
   renderSVGScreenShot ($cover, cid='5735735550279680') {
     var cover = $cover[0];
-    var svgUrl = `${this.appImg}cid.svg`;
+    var svgUrl = `${this.appImg}${cid}.svg`;
     $.ajax({
       url: svgUrl,
       dataType: "text"
@@ -64,7 +64,7 @@ class InlineViewer {
       // 対象画像であるかを確認
       var src = $img.attr('src');
       if (src.indexOf(this.appImg) >= 0) {
-        var cid = self.getScreenShotId();
+        var cid = self.getScreenShotId(src);
         var $cover = self.$getCover(cid, $img);
         $body.append($cover);
         self.renderSVGScreenShot($cover, cid);
