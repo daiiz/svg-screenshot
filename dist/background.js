@@ -110,7 +110,7 @@ var takeScreenShotMenu = function takeScreenShotMenu() {
   // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
   // ウェブページ向け
   chrome.contextMenus.create({
-    title: 'SVGスクリーンショットを撮る (W)',
+    title: 'SVGスクリーンショットを撮る',
     contexts: ['page', 'selection'],
     onclick: function onclick(clicked, tab) {
       chrome.tabs.sendRequest(tab.id, {
@@ -120,7 +120,7 @@ var takeScreenShotMenu = function takeScreenShotMenu() {
   });
   // ウェブページ上の画像向け
   chrome.contextMenus.create({
-    title: 'SVGスクリーンショットを撮る (I)',
+    title: 'SVGスクリーンショットを撮る',
     contexts: ['image'],
     onclick: function onclick(clicked, tab) {
       chrome.tabs.sendRequest(tab.id, {
