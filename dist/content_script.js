@@ -338,7 +338,7 @@ var ScreenShot = function () {
                     if (request.elementType === 'image' && _this2.tmp.$contextMenuImg.length > 0) {
                         var $img = _this2.tmp.$contextMenuImg;
                         var imgRect = $img[0].getBoundingClientRect();
-                        _this2.setCropper([imgRect.left, imgRect.top, $img.width() - 2, $img.height() - 2]);
+                        _this2.setCropper([imgRect.left, imgRect.top, $img.width(), $img.height()]);
                     } else {
                         _this2.setCropper();
                     }
