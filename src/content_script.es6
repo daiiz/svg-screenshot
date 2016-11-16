@@ -302,8 +302,8 @@ class ScreenShot {
                     this.setCropper([
                         imgRect.left,
                         imgRect.top,
-                        $img.width() - 2,
-                        $img.height() - 2
+                        $img.width(),
+                        $img.height()
                     ]);
                 }else {
                     this.setCropper();

@@ -49,7 +49,9 @@ var getSvgBgImg = function getSvgBgImg(svgTag) {
 
 var showToast = function showToast(msg) {
     var snackbarContainer = document.querySelector('#toast');
-    snackbarContainer.MaterialSnackbar.showSnackbar({ message: msg });
+    snackbarContainer.MaterialSnackbar.showSnackbar({
+        message: msg
+    });
 };
 
 // Uploadリンクがクリックされたとき
@@ -58,6 +60,9 @@ $('#upload').on('click', function (e) {
     var svgtag = getSvgTag();
     if (svgtag === null) return;
     var svgBgBase64Img = getSvgBgImg(svgtag);
+
+    var $openLink = $('#open-item');
+    $openLink.hide();
 
     // Ajaxでapi/uploadsvgをたたく
     $.ajax({
@@ -77,6 +82,9 @@ $('#upload').on('click', function (e) {
         // console.info(data);
         if (stat === 'ok-saved-new-screenshot') {
             $('#btn_upload_wrapper').hide();
+            var url = SVGSCREENSHOT_APP + data.url;
+            $openLink.attr('href', url);
+            $openLink.show();
             showToast("アップロードしました");
         } else if (stat === 'exceed-screenshots-upper-limit') {
             showToast("ファイルの上限数に達しています");
