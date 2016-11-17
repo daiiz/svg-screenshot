@@ -39,7 +39,7 @@ var InlineViewer = function () {
       var $cover = $('#' + coverId);
       var newCover = false;
 
-      // 既に存在する場合はそれを使う
+      // 存在しない場合は新規作成する
       if ($cover.length === 0) {
         newCover = true;
         var imgClose = chrome.extension.getURL('close.png');
@@ -47,13 +47,12 @@ var InlineViewer = function () {
         $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-cover-foot">\n            <span>SVG ScreenShot</span>\n            <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
       }
 
-      // 存在しない場合は新規作成する
       var imgRect = $img[0].getBoundingClientRect();
       $cover.css({
         left: imgRect.left + pageX,
         top: imgRect.top + pageY,
         width: $img.width(),
-        height: $img.height() + 5
+        height: $img.height()
       });
 
       return [$cover, newCover];
@@ -80,8 +79,20 @@ var InlineViewer = function () {
         var viewBox = svg.viewBox.baseVal;
         svg.setAttribute('width', viewBox.width);
         svg.setAttribute('height', viewBox.height);
-        $cover.find('a.jump').attr('href', orgUrl);
-        $cover.find('a.jump')[0].innerHTML = title;
+
+        if ($cover.height() >= viewBox.height) {
+          $cover.css('overflow-y', 'hidden');
+        } else {
+          $cover.css('overflow-y', 'scroll');
+        }
+        if ($cover.width() >= viewBox.width) {
+          $cover.css('overflow-x', 'hidden');
+        } else {
+          $cover.css('overflow-x', 'scroll');
+        }
+
+        //$cover.find('a.jump').attr('href', orgUrl);
+        //$cover.find('a.jump')[0].innerHTML = title;
       });
     }
   }, {
@@ -113,7 +124,7 @@ var InlineViewer = function () {
 
       // 画像mouseleave時
       $body.on('mouseleave', '.daiz-ss-iv-cover', function (e) {
-        var $cover = $(e.target).closest('div.daiz-ss-iv-cover');
+        var $cover = $(e.target).closest('.daiz-ss-iv-cover');
         $cover.hide();
       });
     }

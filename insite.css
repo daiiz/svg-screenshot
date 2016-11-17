@@ -44,18 +44,15 @@
     background-color: #fff;
     z-index: 10000;
     position: absolute;
-    overflow: auto;
-}
-
-.daiz-ss-iv-cover:hover {
+    overflow-x: auto;
+    overflow-y: auto;
+    box-sizing: content-box;
     border: 1px solid #eee;
     margin-left: -1px;
     margin-top: -1px;
 }
 
 .daiz-ss-iv-cover-foot {
-    width: 100%;
-    box-sizing: border-box;
     color: #888;
     position: absolute;
     left: 0px;
