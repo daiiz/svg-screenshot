@@ -29,6 +29,7 @@
             "lib/jquery.js",
             "lib/jquery-ui.min.js",
             "dist/clink.js",
+            "dist/inline_viewer.js",
             "dist/content_script.js"
         ],
         "run_at": "document_end"

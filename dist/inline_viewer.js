@@ -37,21 +37,26 @@ var InlineViewer = function () {
       var pageY = window.pageYOffset;
 
       var $cover = $('#' + coverId);
+      var newCover = false;
 
-      // 既に存在する場合はそれを返す
-      if ($cover.length > 0) return $cover;
+      // 既に存在する場合はそれを使う
+      if ($cover.length === 0) {
+        newCover = true;
+        var imgClose = chrome.extension.getURL('close.png');
+        var imgJump = chrome.extension.getURL('jump.png');
+        $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-cover-foot">\n            <span>SVG ScreenShot</span>\n            <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
+      }
 
       // 存在しない場合は新規作成する
       var imgRect = $img[0].getBoundingClientRect();
-      $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover"></div>');
       $cover.css({
         left: imgRect.left + pageX,
         top: imgRect.top + pageY,
         width: $img.width(),
-        height: $img.height()
+        height: $img.height() + 5
       });
 
-      return $cover;
+      return [$cover, newCover];
     }
 
     // SVGコンテンツを表示する
@@ -70,9 +75,13 @@ var InlineViewer = function () {
         var doc = new DOMParser().parseFromString(svgTag, 'application/xml');
         cover.appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
         var svg = cover.querySelector('svg.svg-screenshot');
+        var orgUrl = svg.getAttribute('data-url');
+        var title = svg.getAttribute('data-title');
         var viewBox = svg.viewBox.baseVal;
         svg.setAttribute('width', viewBox.width);
         svg.setAttribute('height', viewBox.height);
+        $cover.find('a.jump').attr('href', orgUrl);
+        $cover.find('a.jump')[0].innerHTML = title;
       });
     }
   }, {
@@ -83,17 +92,29 @@ var InlineViewer = function () {
       var self = this;
       var $body = $('body');
 
-      // 画像ホバー時
+      // 画像mouseenter時
       $body.on('mouseenter', 'img', function (e) {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
         var src = $img.attr('src');
         if (src.indexOf(_this.appImg) >= 0) {
           var cid = self.getScreenShotId(src);
-          var $cover = self.$getCover(cid, $img);
-          $body.append($cover);
-          self.renderSVGScreenShot($cover, cid);
+          var coverInfo = self.$getCover(cid, $img);
+          var $cover = coverInfo[0];
+          if (coverInfo[1]) {
+            // 新規作成されたカバー
+            $body.append($cover);
+            self.renderSVGScreenShot($cover, cid);
+          } else {
+            $cover.show();
+          }
         }
+      });
+
+      // 画像mouseleave時
+      $body.on('mouseleave', '.daiz-ss-iv-cover', function (e) {
+        var $cover = $(e.target).closest('div.daiz-ss-iv-cover');
+        $cover.hide();
       });
     }
   }]);

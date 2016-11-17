@@ -40,13 +40,37 @@
     color: #1E88E5;
 }
 
-
 .daiz-ss-iv-cover {
-    border: 1px solid #eee;
     background-color: #fff;
     z-index: 10000;
     position: absolute;
-    overflow: scroll;
+    overflow: auto;
+}
+
+.daiz-ss-iv-cover:hover {
+    border: 1px solid #eee;
+    margin-left: -1px;
+    margin-top: -1px;
+}
+
+.daiz-ss-iv-cover-foot {
+    width: 100%;
+    box-sizing: border-box;
+    color: #888;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    padding-left: 6px;
+}
+
+.daiz-ss-iv-cover-foot span{
+    font-size: 11px;
+}
+
+.daiz-ss-iv-cover-foot a {
+    margin-left: 6px;
+    font-size: 11px;
+    color: #888;
 }
 
 #daiz-ss-cropper-close, #daiz-ss-cropper-capture {
