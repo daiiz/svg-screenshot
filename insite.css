@@ -43,13 +43,21 @@
 .daiz-ss-iv-cover {
     background-color: #fff;
     z-index: 10000;
-    position: absolute;
-    overflow-x: auto;
-    overflow-y: auto;
     box-sizing: content-box;
     border: 1px solid #eee;
     margin-left: -1px;
     margin-top: -1px;
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.daiz-ss-iv-svg {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    position: absolute;
 }
 
 .daiz-ss-iv-cover-foot {

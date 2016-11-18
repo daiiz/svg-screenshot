@@ -42,9 +42,7 @@ var InlineViewer = function () {
       // 存在しない場合は新規作成する
       if ($cover.length === 0) {
         newCover = true;
-        var imgClose = chrome.extension.getURL('close.png');
-        var imgJump = chrome.extension.getURL('jump.png');
-        $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-cover-foot">\n            <span>SVG ScreenShot</span>\n            <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
+        $cover = $('\n      <div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-svg">\n        </div>\n        <div class="daiz-ss-iv-cover-foot">\n          <span>SVG ScreenShot</span>\n          <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
       }
 
       var imgRect = $img[0].getBoundingClientRect();
@@ -66,13 +64,14 @@ var InlineViewer = function () {
       var cid = arguments.length <= 1 || arguments[1] === undefined ? '5735735550279680' : arguments[1];
 
       var cover = $cover[0];
+      var $svgArea = $cover.find('.daiz-ss-iv-svg');
       var svgUrl = '' + this.appImg + cid + '.svg';
       $.ajax({
         url: svgUrl,
         dataType: "text"
       }).success(function (svgTag) {
         var doc = new DOMParser().parseFromString(svgTag, 'application/xml');
-        cover.appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
+        $svgArea[0].appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
         var svg = cover.querySelector('svg.svg-screenshot');
         var orgUrl = svg.getAttribute('data-url');
         var title = svg.getAttribute('data-title');
@@ -81,18 +80,18 @@ var InlineViewer = function () {
         svg.setAttribute('height', viewBox.height);
 
         if ($cover.height() >= viewBox.height) {
-          $cover.css('overflow-y', 'hidden');
+          $svgArea.css('overflow-y', 'hidden');
         } else {
-          $cover.css('overflow-y', 'scroll');
+          $svgArea.css('overflow-y', 'auto');
         }
         if ($cover.width() >= viewBox.width) {
-          $cover.css('overflow-x', 'hidden');
+          $svgArea.css('overflow-x', 'hidden');
         } else {
-          $cover.css('overflow-x', 'scroll');
+          $svgArea.css('overflow-x', 'auto');
         }
 
-        //$cover.find('a.jump').attr('href', orgUrl);
-        //$cover.find('a.jump')[0].innerHTML = title;
+        $cover.find('a.jump').attr('href', orgUrl);
+        $cover.find('a.jump')[0].innerHTML = title;
       });
     }
   }, {

@@ -25,12 +25,13 @@ class InlineViewer {
     // 存在しない場合は新規作成する
     if ($cover.length === 0) {
       newCover = true;
-      var imgClose = chrome.extension.getURL('close.png');
-      var imgJump = chrome.extension.getURL('jump.png');
-      $cover = $(`<div id="${coverId}" class="daiz-ss-iv-cover">
+      $cover = $(`
+      <div id="${coverId}" class="daiz-ss-iv-cover">
+        <div class="daiz-ss-iv-svg">
+        </div>
         <div class="daiz-ss-iv-cover-foot">
-            <span>SVG ScreenShot</span>
-            <a href="#" class="jump" target="_blank">Original site</a>
+          <span>SVG ScreenShot</span>
+          <a href="#" class="jump" target="_blank">Original site</a>
         </div>
       </div>`);
     }
@@ -49,13 +50,14 @@ class InlineViewer {
   // SVGコンテンツを表示する
   renderSVGScreenShot ($cover, cid='5735735550279680') {
     var cover = $cover[0];
+    var $svgArea = $cover.find('.daiz-ss-iv-svg');
     var svgUrl = `${this.appImg}${cid}.svg`;
     $.ajax({
       url: svgUrl,
       dataType: "text"
     }).success(svgTag => {
       var doc = new DOMParser().parseFromString(svgTag, 'application/xml');
-      cover.appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
+      $svgArea[0].appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
       var svg = cover.querySelector('svg.svg-screenshot');
       var orgUrl = svg.getAttribute('data-url');
       var title = svg.getAttribute('data-title');
@@ -64,18 +66,18 @@ class InlineViewer {
       svg.setAttribute('height', viewBox.height);
 
       if ($cover.height() >= viewBox.height) {
-        $cover.css('overflow-y', 'hidden');
+        $svgArea.css('overflow-y', 'hidden');
       }else {
-        $cover.css('overflow-y', 'scroll');
+        $svgArea.css('overflow-y', 'auto');
       }
       if ($cover.width() >= viewBox.width) {
-        $cover.css('overflow-x', 'hidden');
+        $svgArea.css('overflow-x', 'hidden');
       }else {
-        $cover.css('overflow-x', 'scroll');
+        $svgArea.css('overflow-x', 'auto');
       }
 
-      //$cover.find('a.jump').attr('href', orgUrl);
-      //$cover.find('a.jump')[0].innerHTML = title;
+      $cover.find('a.jump').attr('href', orgUrl);
+      $cover.find('a.jump')[0].innerHTML = title;
     });
   }
 
