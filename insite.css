@@ -61,6 +61,16 @@
     position: absolute;
 }
 
+.daiz-ss-iv-rbar {
+    width: 7px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    background-color: #fafafa;
+}
+
 .daiz-ss-iv-cover-foot {
     color: #888;
     position: absolute;

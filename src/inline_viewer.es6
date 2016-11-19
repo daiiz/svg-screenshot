@@ -25,8 +25,7 @@ class InlineViewer {
     // 存在しない場合は新規作成する
     if ($cover.length === 0) {
       newCover = true;
-      $cover = $(`
-      <div id="${coverId}" class="daiz-ss-iv-cover">
+      $cover = $(`<div id="${coverId}" class="daiz-ss-iv-cover">
         <div class="daiz-ss-iv-svg">
         </div>
         <div class="daiz-ss-iv-cover-foot">
@@ -34,14 +33,17 @@ class InlineViewer {
           <a href="#" class="jump" target="_blank">Original site</a>
         </div>
       </div>`);
+
+      $cover.css({
+        width: $img.width(),
+        height: $img.height()
+      });
     }
 
     var imgRect = $img[0].getBoundingClientRect();
     $cover.css({
         left: imgRect.left + pageX,
-        top: imgRect.top + pageY,
-        width: $img.width(),
-        height: $img.height()
+        top: imgRect.top + pageY
     });
 
     return [$cover, newCover];
@@ -50,6 +52,8 @@ class InlineViewer {
   // SVGコンテンツを表示する
   renderSVGScreenShot ($cover, cid='5735735550279680') {
     var cover = $cover[0];
+    var coverWidth = $cover.width();
+    var coverHeight = $cover.height();
     var $svgArea = $cover.find('.daiz-ss-iv-svg');
     var svgUrl = `${this.appImg}${cid}.svg`;
     $.ajax({
@@ -64,7 +68,8 @@ class InlineViewer {
       var viewBox = svg.viewBox.baseVal;
       svg.setAttribute('width', viewBox.width);
       svg.setAttribute('height', viewBox.height);
-
+      
+      var handles = '';
       if ($cover.height() >= viewBox.height) {
         $svgArea.css('overflow-y', 'hidden');
       }else {
@@ -74,6 +79,23 @@ class InlineViewer {
         $svgArea.css('overflow-x', 'hidden');
       }else {
         $svgArea.css('overflow-x', 'auto');
+        handles = 'e';
+      }
+
+      // リサイズ可能にする
+      if (handles.length > 0) {
+        $cover.resizable({
+          autoHide: true,
+          handles: handles,
+          minWidth: coverWidth,
+          minHeight: coverHeight,
+          start: () => {
+            $cover.show();
+          },
+          resize: () => {
+            $cover.show();
+          }
+        });
       }
 
       $cover.find('a.jump').attr('href', orgUrl);

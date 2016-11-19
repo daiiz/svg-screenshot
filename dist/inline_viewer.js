@@ -42,15 +42,18 @@ var InlineViewer = function () {
       // 存在しない場合は新規作成する
       if ($cover.length === 0) {
         newCover = true;
-        $cover = $('\n      <div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-svg">\n        </div>\n        <div class="daiz-ss-iv-cover-foot">\n          <span>SVG ScreenShot</span>\n          <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
+        $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-svg">\n        </div>\n        <div class="daiz-ss-iv-cover-foot">\n          <span>SVG ScreenShot</span>\n          <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
+
+        $cover.css({
+          width: $img.width(),
+          height: $img.height()
+        });
       }
 
       var imgRect = $img[0].getBoundingClientRect();
       $cover.css({
         left: imgRect.left + pageX,
-        top: imgRect.top + pageY,
-        width: $img.width(),
-        height: $img.height()
+        top: imgRect.top + pageY
       });
 
       return [$cover, newCover];
@@ -64,6 +67,8 @@ var InlineViewer = function () {
       var cid = arguments.length <= 1 || arguments[1] === undefined ? '5735735550279680' : arguments[1];
 
       var cover = $cover[0];
+      var coverWidth = $cover.width();
+      var coverHeight = $cover.height();
       var $svgArea = $cover.find('.daiz-ss-iv-svg');
       var svgUrl = '' + this.appImg + cid + '.svg';
       $.ajax({
@@ -79,6 +84,7 @@ var InlineViewer = function () {
         svg.setAttribute('width', viewBox.width);
         svg.setAttribute('height', viewBox.height);
 
+        var handles = '';
         if ($cover.height() >= viewBox.height) {
           $svgArea.css('overflow-y', 'hidden');
         } else {
@@ -88,6 +94,23 @@ var InlineViewer = function () {
           $svgArea.css('overflow-x', 'hidden');
         } else {
           $svgArea.css('overflow-x', 'auto');
+          handles = 'e';
+        }
+
+        // リサイズ可能にする
+        if (handles.length > 0) {
+          $cover.resizable({
+            autoHide: true,
+            handles: handles,
+            minWidth: coverWidth,
+            minHeight: coverHeight,
+            start: function start() {
+              $cover.show();
+            },
+            resize: function resize() {
+              $cover.show();
+            }
+          });
         }
 
         $cover.find('a.jump').attr('href', orgUrl);
