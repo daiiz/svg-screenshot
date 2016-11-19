@@ -15,6 +15,7 @@ var InlineViewer = function () {
     _classCallCheck(this, InlineViewer);
 
     this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
+    this.contentBaseUrl = 'https://svgscreenshot.appspot.com/c';
     this.bindEvents();
   }
 
@@ -42,7 +43,7 @@ var InlineViewer = function () {
       // 存在しない場合は新規作成する
       if ($cover.length === 0) {
         newCover = true;
-        $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-svg">\n        </div>\n        <div class="daiz-ss-iv-cover-foot">\n          <span>SVG ScreenShot</span>\n          <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
+        $cover = $('<div id="' + coverId + '" class="daiz-ss-iv-cover">\n        <div class="daiz-ss-iv-svg">\n        </div>\n        <div class="daiz-ss-iv-cover-foot">\n          <a href="#" class="svgss" target="_blank">SVG ScreenShot</a>\n          <a href="#" class="jump" target="_blank">Original site</a>\n        </div>\n      </div>');
 
         $cover.css({
           width: $img.width(),
@@ -64,6 +65,8 @@ var InlineViewer = function () {
   }, {
     key: 'renderSVGScreenShot',
     value: function renderSVGScreenShot($cover) {
+      var _this = this;
+
       var cid = arguments.length <= 1 || arguments[1] === undefined ? '5735735550279680' : arguments[1];
 
       var cover = $cover[0];
@@ -113,14 +116,18 @@ var InlineViewer = function () {
           });
         }
 
-        $cover.find('a.jump').attr('href', orgUrl);
-        $cover.find('a.jump')[0].innerHTML = title;
+        // cover footerを設定
+        var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
+        $cFoot.find('a.jump').attr('href', orgUrl);
+        $cFoot.find('a.jump')[0].innerHTML = title;
+        $cFoot.find('a.svgss').attr('href', _this.contentBaseUrl + '/' + cid);
+        $cFoot.show();
       });
     }
   }, {
     key: 'bindEvents',
     value: function bindEvents() {
-      var _this = this;
+      var _this2 = this;
 
       var self = this;
       var $body = $('body');
@@ -130,7 +137,7 @@ var InlineViewer = function () {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
         var src = $img.attr('src');
-        if (src.indexOf(_this.appImg) >= 0) {
+        if (src.indexOf(_this2.appImg) >= 0) {
           var cid = self.getScreenShotId(src);
           var coverInfo = self.$getCover(cid, $img);
           var $cover = coverInfo[0];

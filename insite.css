@@ -77,16 +77,31 @@
     left: 0px;
     bottom: 0px;
     padding-left: 6px;
+    height: 20px;
+    overflow: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: none;
 }
 
-.daiz-ss-iv-cover-foot span{
+.daiz-ss-iv-cover-foot a.svgss{
     font-size: 11px;
+    text-decoration: none;
+    color: #888;
 }
 
-.daiz-ss-iv-cover-foot a {
+.daiz-ss-iv-cover-foot a.svgss:hover{
+    text-decoration: underline;
+    color: #2962FF;
+}
+
+.daiz-ss-iv-cover-foot a.jump {
     margin-left: 6px;
     font-size: 11px;
     color: #888;
+}
+
+.daiz-ss-iv-cover-foot a.jump:hover {
+    color: #2962FF;
 }
 
 #daiz-ss-cropper-close, #daiz-ss-cropper-capture {

@@ -6,6 +6,7 @@
 class InlineViewer {
   constructor () {
     this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
+    this.contentBaseUrl = 'https://svgscreenshot.appspot.com/c';
     this.bindEvents();
   }
 
@@ -29,7 +30,7 @@ class InlineViewer {
         <div class="daiz-ss-iv-svg">
         </div>
         <div class="daiz-ss-iv-cover-foot">
-          <span>SVG ScreenShot</span>
+          <a href="#" class="svgss" target="_blank">SVG ScreenShot</a>
           <a href="#" class="jump" target="_blank">Original site</a>
         </div>
       </div>`);
@@ -98,8 +99,12 @@ class InlineViewer {
         });
       }
 
-      $cover.find('a.jump').attr('href', orgUrl);
-      $cover.find('a.jump')[0].innerHTML = title;
+      // cover footerを設定
+      var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
+      $cFoot.find('a.jump').attr('href', orgUrl);
+      $cFoot.find('a.jump')[0].innerHTML = title;
+      $cFoot.find('a.svgss').attr('href', `${this.contentBaseUrl}/${cid}`);
+      $cFoot.show();
     });
   }
 
