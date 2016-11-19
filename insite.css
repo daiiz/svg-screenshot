@@ -50,6 +50,7 @@
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
+    background-color: rgba(0, 0, 0 ,0);
 }
 
 .daiz-ss-iv-svg {
