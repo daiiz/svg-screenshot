@@ -15,7 +15,8 @@
             "19": "icon-l.png",
             "38": "icon-l.png"
         },
-        "default_title": "SVG Screenshot"
+        "default_title": "SVG Screenshot",
+        "default_popup": "popup.html"
     },
     "manifest_version": 2,
     "name": "SVG Screenshot",
