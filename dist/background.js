@@ -50,7 +50,10 @@
         showBrowserPopup(itemUrl, svgBgBase64Img, false);
       } else if (stat === 'exceed-screenshots-upper-limit') {
         showBrowserPopup('', '', true, "ファイルの上限数に達しています");
+      } else if (stat == 'no-login') {
+        showBrowserPopup('', '', true, "ウェブアプリにログインしていません");
       } else {
+
         showBrowserPopup('', '', true, "アップロードに失敗しました");
       }
       console.log(data);
