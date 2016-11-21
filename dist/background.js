@@ -2,12 +2,62 @@
 
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
-  var sendChromeMsg = function sendChromeMsg(json, callback) {
-    chrome.runtime.sendMessage(json, callback);
+
+  var showBrowserPopup = function showBrowserPopup() {
+    var itemUrl = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+    var bgImg = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+    var err = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+    var msg = arguments.length <= 3 || arguments[3] === undefined ? '' : arguments[3];
+
+    localStorage.item_url = itemUrl;
+    localStorage.item_img = bgImg;
+    localStorage.is_error = err ? msg : 'y';
+
+    var color = err ? 'red' : '#4abb0c';
+    chrome.browserAction.setBadgeBackgroundColor({
+      'color': color
+    });
+
+    var badge = err ? '✗' : '✔';
+    chrome.browserAction.setBadgeText({
+      'text': badge
+    });
+
+    chrome.browserAction.setPopup({
+      'popup': 'popup.html'
+    });
   };
 
   // スクリーンショットをアップロードする
-  var uploader = function uploader() {};
+  var uploader = function uploader(svgtag, svgBgBase64Img) {
+    // Ajaxでapi/uploadsvgをたたく
+    $.ajax({
+      url: SVGSCREENSHOT_APP + '/api/uploadsvg',
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        svg: svgtag.outerHTML,
+        base64png: svgBgBase64Img,
+        orgurl: svgtag.getAttribute('data-url'),
+        title: svgtag.getAttribute('data-title') || '',
+        viewbox: svgtag.getAttribute('viewBox')
+      })
+    }).success(function (data) {
+      var stat = data.status;
+      if (stat === 'ok-saved-new-screenshot') {
+        var itemUrl = SVGSCREENSHOT_APP + data.url;
+        showBrowserPopup(itemUrl, svgBgBase64Img, false);
+      } else if (stat === 'exceed-screenshots-upper-limit') {
+        showBrowserPopup('', '', true, "ファイルの上限数に達しています");
+      } else {
+        showBrowserPopup('', '', true, "アップロードに失敗しました");
+      }
+      console.log(data);
+    }).fail(function (data) {
+      showBrowserPopup('', '', true, "Unknown error");
+    });
+  };
 
   // ブラウザ側でもa.href, titleを確認する
   var validateUrl = function validateUrl() {
@@ -78,7 +128,6 @@
     rootSVGtag.appendChild(img);
 
     // 外部ページヘのリンク用のrect elements
-    //
     for (var i = 0; i < aTagRects.length; i++) {
       var aTagRect = aTagRects[i];
       // a element
@@ -113,28 +162,19 @@
     rootSVGtag.setAttributeNS(null, 'height', height);
     rootSVGtag.setAttributeNS(null, 'data-url', validateUrl(baseUri));
     rootSVGtag.setAttributeNS(null, 'data-title', validateTitle(title));
-    // localStorage['w'] = width;
-    // localStorage['h'] = height;
-    // localStorage['url'] = baseUri;
-    // localStorage['title'] = title;
-    //localStorage['svgroot'] = rootSVGtag.outerHTML;
 
     // スクリーンショットをアップロード
-
-    chrome.tabs.create({
-      url: chrome.extension.getURL("preview.html")
-    }, null);
+    uploader(rootSVGtag, base64img);
   };
 
   // ポップアップ画面から命令を受ける
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
-    console.warn(opts.sitedata);
     if (request.command === 'make-screen-shot') {
       var linkdata = opts.sitedata;
       chrome.tabs.captureVisibleTab({ format: 'png' }, function (dataUrl) {
         renderImage(linkdata, dataUrl);
-        console.warn(opts.sitedata);
+        //console.log(opts.sitedata);
       });
     }
   });

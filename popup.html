@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG ScreenShot</title>
+  <style>
+    body {
+      width: 400px;
+    }
+    #img {
+      border: 1px solid #ddd;
+      margin-top: 10px;
+    }
+    #msg {
+      padding: 10px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      background-color: #FFF9C4;
+      margin-bottom: 10px;
+    }
+    #n {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h3>最新のスクリーンショット</h3>
+  <div id="y">
+    <a href="#" target="_blank" id="open">スクリーンショットを開く</a>　|　
+    <a href="https://svgscreenshot.appspot.com/home" target="_blank" class="collection">コレクションページを開く</a>
+    <img src id="img" style="max-width: 100%;">
+  </div>
+
+  <div id="n">
+    <h3>SVG ScreenShot</h3>
+    <div id="msg"></div>
+    <a href="https://svgscreenshot.appspot.com/login" target="_blank" id="login">Googleアカウントでログイン</a>　|　
+    <a href="https://svgscreenshot.appspot.com/" target="_blank" classs="collection">コレクションページを開く</a>
+  </div>
+
+  <script src="./dist/popup.js"></script>
+</body>
+</html>
