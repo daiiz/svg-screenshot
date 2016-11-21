@@ -119,7 +119,7 @@ var InlineViewer = function () {
         // cover footerを設定
         var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
         $cFoot.find('a.jump').attr('href', orgUrl);
-        $cFoot.find('a.jump')[0].innerHTML = title;
+        $cFoot.find('a.jump')[0].innerText = title;
         $cFoot.find('a.svgss').attr('href', _this.contentBaseUrl + '/' + cid);
         $cFoot.show();
       });

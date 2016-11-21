@@ -94,14 +94,15 @@
     color: #2962FF;
 }
 
-.daiz-ss-iv-cover-foot a.jump {
+.daiz-ss-iv-cover-foot a.jump:hover{
+    text-decoration: underline;
+    color: #2962FF;
+}
+
+.daiz-ss-iv-cover-foot .jump {
     margin-left: 6px;
     font-size: 11px;
     color: #888;
-}
-
-.daiz-ss-iv-cover-foot a.jump:hover {
-    color: #2962FF;
 }
 
 #daiz-ss-cropper-close, #daiz-ss-cropper-capture {

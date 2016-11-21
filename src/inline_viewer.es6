@@ -69,7 +69,7 @@ class InlineViewer {
       var viewBox = svg.viewBox.baseVal;
       svg.setAttribute('width', viewBox.width);
       svg.setAttribute('height', viewBox.height);
-      
+
       var handles = '';
       if ($cover.height() >= viewBox.height) {
         $svgArea.css('overflow-y', 'hidden');
@@ -102,7 +102,7 @@ class InlineViewer {
       // cover footerを設定
       var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
       $cFoot.find('a.jump').attr('href', orgUrl);
-      $cFoot.find('a.jump')[0].innerHTML = title;
+      $cFoot.find('a.jump')[0].innerText = title;
       $cFoot.find('a.svgss').attr('href', `${this.contentBaseUrl}/${cid}`);
       $cFoot.show();
     });
