@@ -53,26 +53,6 @@
     });
   };
 
-  // ブラウザ側でもa.href, titleを確認する
-  var validateUrl = (url='') => {
-    // http, https で始まるもののみOK
-    var prot = url.split(':')[0].toLowerCase();
-    if (prot && (prot === 'http' || prot === 'https')) {
-      // OK
-    }else {
-      return '';
-    }
-    // <, > を除去
-    url = url.replace(/</g, '').replace(/>/g, '');
-    return url;
-  };
-
-  var validateTitle = (title='') => {
-    // <, > を除去
-    title = title.replace(/</g, '').replace(/>/g, '');
-    return title;
-  };
-
   // Canvasに画像をセットして，必要部分のみ切り出す
   var renderImage = function (linkdata, base64img) {
     var canvas = document.querySelector("#cav");
@@ -152,7 +132,7 @@
     rootSVGtag.setAttributeNS(null, 'height', height);
     rootSVGtag.setAttributeNS(null, 'data-url', validateUrl(baseUri));
     rootSVGtag.setAttributeNS(null, 'data-title', validateTitle(title));
-    
+
     // スクリーンショットをアップロード
     uploader(rootSVGtag, base64img);
   };

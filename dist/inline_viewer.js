@@ -118,8 +118,8 @@ var InlineViewer = function () {
 
         // cover footerを設定
         var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
-        $cFoot.find('a.jump').attr('href', orgUrl);
-        $cFoot.find('a.jump')[0].innerText = title;
+        $cFoot.find('a.jump').attr('href', validateUrl(orgUrl));
+        $cFoot.find('a.jump')[0].innerText = validateTitle(title);
         $cFoot.find('a.svgss').attr('href', _this.contentBaseUrl + '/' + cid);
         $cFoot.show();
       });
@@ -137,7 +137,7 @@ var InlineViewer = function () {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
         var src = $img.attr('src');
-        if (src.indexOf(_this2.appImg) >= 0) {
+        if (src.startsWith(_this2.appImg)) {
           var cid = self.getScreenShotId(src);
           var coverInfo = self.$getCover(cid, $img);
           var $cover = coverInfo[0];
