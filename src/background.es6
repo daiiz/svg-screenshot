@@ -68,7 +68,7 @@
     canvas.height = h;
 
     var ctx = canvas.getContext('2d');
-
+    
     // MacBook ProのRetinaディスプレイなどの高解像度な
     // ディスプレイを使用している場合は1より大きな値となる
     var rat = window.devicePixelRatio;
@@ -77,7 +77,8 @@
 
     var img = new Image();
     img.onload = function () {
-      ctx.drawImage(img, rat * pos_cropper.orgX, rat * pos_cropper.orgY, rat * w, rat * h, 0, 0, rat * w, rat * h);
+      ctx.drawImage(img, rat * pos_cropper.orgX, rat * pos_cropper.orgY, rat * w, rat * h,
+        0, 0, rat * w, rat * h);
       var screenshot = canvas.toDataURL('image/png');
       // SVGスクリーンショットタグをつくる
       makeSVGtag(linkdata.aTagRects, linkdata.text, screenshot, w, h, baseUri, title);
