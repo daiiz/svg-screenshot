@@ -309,7 +309,6 @@ var ScreenShot = function () {
                 // 1秒待ってから送信する
                 window.setTimeout(function () {
                     if (self.linkdata !== null) {
-                        console.info(self.linkdata);
                         sendChromeMsg({
                             command: 'make-screen-shot',
                             options: {

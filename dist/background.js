@@ -179,6 +179,7 @@
       title: 'SVGスクリーンショットを撮る',
       contexts: ['page', 'selection'],
       onclick: function onclick(clicked, tab) {
+        clearBadge();
         chrome.tabs.sendRequest(tab.id, {
           event: 'click-context-menu'
         });
@@ -189,6 +190,7 @@
       title: 'SVGスクリーンショットを撮る',
       contexts: ['image'],
       onclick: function onclick(clicked, tab) {
+        clearBadge();
         chrome.tabs.sendRequest(tab.id, {
           event: 'click-context-menu',
           elementType: 'image'

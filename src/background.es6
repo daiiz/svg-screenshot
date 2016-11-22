@@ -176,6 +176,7 @@
         'selection'
       ],
       onclick: function (clicked, tab) {
+        clearBadge();
         chrome.tabs.sendRequest(tab.id, {
           event: 'click-context-menu'
         });
@@ -188,6 +189,7 @@
         'image'
       ],
       onclick: function (clicked, tab) {
+        clearBadge();
         chrome.tabs.sendRequest(tab.id, {
           event: 'click-context-menu',
           elementType: 'image'
