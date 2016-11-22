@@ -77,13 +77,13 @@
 
     // MacBook ProのRetinaディスプレイなどの高解像度な
     // ディスプレイを使用している場合は1より大きな値となる
-    var devicePixelRatio = window.devicePixelRatio;
-    if (devicePixelRatio < 1) devicePixelRatio = 1;
-    ctx.scale(1 / devicePixelRatio, 1 / devicePixelRatio);
+    var rat = window.devicePixelRatio;
+    if (rat < 1) rat = 1;
+    ctx.scale(1 / rat, 1 / rat);
 
     var img = new Image();
     img.onload = function () {
-      ctx.drawImage(img, pos_cropper.orgX, pos_cropper.orgY, w, h, 0, 0, w, h);
+      ctx.drawImage(img, rat * pos_cropper.orgX, rat * pos_cropper.orgY, rat * w, rat * h, 0, 0, rat * w, rat * h);
       var screenshot = canvas.toDataURL('image/png');
       // SVGスクリーンショットタグをつくる
       makeSVGtag(linkdata.aTagRects, linkdata.text, screenshot, w, h, baseUri, title);
