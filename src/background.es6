@@ -66,7 +66,14 @@
     var h = +pos_cropper.height;
     canvas.width  = w;
     canvas.height = h;
+
     var ctx = canvas.getContext('2d');
+
+    // MacBook ProのRetinaディスプレイなどの高解像度な
+    // ディスプレイを使用している場合は1より大きな値となる
+    var devicePixelRatio = window.devicePixelRatio;
+    if (devicePixelRatio < 1) devicePixelRatio = 1;
+    ctx.scale(1 / devicePixelRatio, 1 / devicePixelRatio);
 
     var img = new Image();
     img.onload = function () {
