@@ -25,13 +25,9 @@
   }, false);
 
   document.querySelector('#open').addEventListener('click', function () {
-    chrome.browserAction.setBadgeText({
-      'text': ''
-    });
+    clearBadge();
   }, false);
   document.querySelector('#login').addEventListener('click', function () {
-    chrome.browserAction.setBadgeText({
-      'text': ''
-    });
+    clearBadge();
   }, false);
 })();

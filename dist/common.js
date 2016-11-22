@@ -1,5 +1,12 @@
 'use strict';
 
+// BrowserActionのBadgeをクリア
+var clearBadge = function clearBadge() {
+  chrome.browserAction.setBadgeText({
+    'text': ''
+  });
+};
+
 // ブラウザ側でもa.href, titleを確認する
 var validateUrl = function validateUrl() {
   var url = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
