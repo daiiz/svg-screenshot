@@ -2,6 +2,7 @@
 
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
+  SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   var showBrowserPopup = function showBrowserPopup() {
     var itemUrl = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
@@ -168,15 +169,23 @@
   // browser_actionボタンが押されたとき
   chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.create({
-      url: "https://svgscreenshot.appspot.com/"
+      url: SVGSCREENSHOT_APP
     }, null);
   });
+
+  var getContextMenuTitle = function getContextMenuTitle(title) {
+    var prefix = '';
+    if (SVGSCREENSHOT_APP.indexOf('localhost') !== -1) {
+      prefix = '[#] ';
+    }
+    return prefix + title;
+  };
 
   var initScreenShotMenu = function initScreenShotMenu() {
     // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
     // ウェブページ向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: ['page', 'selection'],
       onclick: function onclick(clicked, tab) {
         clearBadge();
@@ -187,7 +196,7 @@
     });
     // ウェブページ上の画像向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: ['image'],
       onclick: function onclick(clicked, tab) {
         clearBadge();

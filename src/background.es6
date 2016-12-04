@@ -1,5 +1,6 @@
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
+  SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   var showBrowserPopup = (itemUrl='', bgImg='', err=false, msg='') => {
     localStorage.item_url = itemUrl;
@@ -163,15 +164,23 @@
   // browser_actionボタンが押されたとき
   chrome.browserAction.onClicked.addListener(tab => {
     chrome.tabs.create({
-      url: "https://svgscreenshot.appspot.com/"
+      url: SVGSCREENSHOT_APP
     }, null);
   });
+
+  var getContextMenuTitle = (title) => {
+    var prefix = '';
+    if (SVGSCREENSHOT_APP.indexOf('localhost') !== -1) {
+      prefix = '[#] ';
+    }
+    return prefix + title;
+  };
 
   var initScreenShotMenu = () => {
     // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
     // ウェブページ向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: [
         'page',
         'selection'
@@ -185,7 +194,7 @@
     });
     // ウェブページ上の画像向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: [
         'image'
       ],
