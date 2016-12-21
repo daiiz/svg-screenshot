@@ -26,6 +26,9 @@
 
   // スクリーンショットをアップロードする
   var uploader = (svgtag, svgBgBase64Img) => {
+    var pub = 'no';
+    if (MODE === 'scrap') pub = 'yes';
+    console.info(MODE);
     // Ajaxでapi/uploadsvgをたたく
     $.ajax({
       url: SVGSCREENSHOT_APP + '/api/uploadsvg',
@@ -37,7 +40,8 @@
         base64png: svgBgBase64Img,
         orgurl: svgtag.getAttribute('data-url'),
         title: svgtag.getAttribute('data-title') || '',
-        viewbox: svgtag.getAttribute('viewBox')
+        viewbox: svgtag.getAttribute('viewBox'),
+        public: pub
       })
     }).success (data => {
       var stat = data.status;
@@ -49,7 +53,6 @@
       }else if (stat == 'no-login') {
         showBrowserPopup('', '', true, "ウェブアプリにログインしていません");
       }else {
-
         showBrowserPopup('', '', true, "アップロードに失敗しました");
       }
       console.log(data);
@@ -150,12 +153,14 @@
     uploader(rootSVGtag, base64img);
   };
 
+  var MODE = 'capture';
   // ポップアップ画面から命令を受ける
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
     if (request.command === 'make-screen-shot') {
       var linkdata = opts.sitedata;
       chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
+        MODE = opts.mode;
         renderImage(linkdata, dataUrl);
         //console.log(opts.sitedata);
       });
