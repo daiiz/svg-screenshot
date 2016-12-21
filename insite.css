@@ -105,7 +105,9 @@
     color: #888;
 }
 
-#daiz-ss-cropper-close, #daiz-ss-cropper-capture {
+#daiz-ss-cropper-close,
+#daiz-ss-cropper-capture,
+#daiz-ss-cropper-scrapbox {
     position: absolute;
     background-repeat: no-repeat;
     background-position: center center;
@@ -127,7 +129,7 @@
     background-color: #777;
 }
 
-#daiz-ss-cropper-capture {
+#daiz-ss-cropper-capture, #daiz-ss-cropper-scrapbox {
     height: 20px;
     left: -10px;
     top: -10px;
@@ -139,4 +141,8 @@
     padding-right: 6px;
     padding-top: 4px;
     padding-bottom: 4px;
+}
+
+#daiz-ss-cropper-scrapbox {
+    left: 60px;
 }

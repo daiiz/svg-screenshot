@@ -78,6 +78,7 @@ var ScreenShot = function () {
             var closeBtnImg = chrome.extension.getURL('x.png');
             var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
             var $captureBtn = $('<div id="daiz-ss-cropper-capture">✔ Capture</div>');
+            var $scrapboxBtn = $('<div id="daiz-ss-cropper-scrapbox">✔ Scrap</div>');
             $closeBtn.css({
                 'background-image': 'url(' + closeBtnImg + ')'
             });
@@ -101,6 +102,7 @@ var ScreenShot = function () {
                 });
             }
             $cropper.append($captureBtn);
+            $cropper.append($scrapboxBtn);
             $cropper.append($closeBtn);
 
             // ドラッグ可能にする
@@ -266,6 +268,45 @@ var ScreenShot = function () {
             $(".daiz-ss-cropper-main").remove();
         }
     }, {
+        key: 'capture',
+        value: function capture() {
+            var mode = arguments.length <= 0 || arguments[0] === undefined ? 'capture' : arguments[0];
+
+            var self = this;
+            var res = [];
+            window.getSelection().removeAllRanges();
+
+            // 切り取りボックス内のa要素
+            if (self.linkdata.aTagRects) {
+                for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
+                    var aTagDatum = self.linkdata.aTagRects[j];
+                    var aid = aTagDatum.id;
+                    if ($('#' + aid).length > 0) {
+                        res.push(aTagDatum);
+                    }
+                }
+            }
+            self.linkdata.aTagRects = res;
+
+            self.removeCropperMain();
+            self.removeCropper();
+            self.fixHtml(false);
+
+            // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
+            // 1秒待ってから送信する
+            window.setTimeout(function () {
+                if (self.linkdata !== null) {
+                    sendChromeMsg({
+                        command: 'make-screen-shot',
+                        options: {
+                            sitedata: self.linkdata,
+                            mode: mode
+                        }
+                    });
+                }
+            }, 1000);
+        }
+    }, {
         key: 'bindEvents',
         value: function bindEvents() {
             var _this2 = this;
@@ -285,38 +326,8 @@ var ScreenShot = function () {
             });
 
             // 撮影ボタンがクリックされたとき
-            $('body').on('click', '#daiz-ss-cropper-capture', function (ev) {
-                var res = [];
-                window.getSelection().removeAllRanges();
-
-                // 切り取りボックス内のa要素
-                if (self.linkdata.aTagRects) {
-                    for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
-                        var aTagDatum = self.linkdata.aTagRects[j];
-                        var aid = aTagDatum.id;
-                        if ($('#' + aid).length > 0) {
-                            res.push(aTagDatum);
-                        }
-                    }
-                }
-                self.linkdata.aTagRects = res;
-
-                _this2.removeCropperMain();
-                _this2.removeCropper();
-                _this2.fixHtml(false);
-
-                // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
-                // 1秒待ってから送信する
-                window.setTimeout(function () {
-                    if (self.linkdata !== null) {
-                        sendChromeMsg({
-                            command: 'make-screen-shot',
-                            options: {
-                                sitedata: self.linkdata
-                            }
-                        });
-                    }
-                }, 1000);
+            $('body').on('click', '#daiz-ss-cropper-capture', function () {
+                _this2.capture('capture');
             });
 
             // 切り抜きボックスの閉じるボタンがクリックされたとき

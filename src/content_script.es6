@@ -55,6 +55,7 @@ class ScreenShot {
         var closeBtnImg = chrome.extension.getURL('x.png');
         var $closeBtn = $('<div id="daiz-ss-cropper-close"></div>');
         var $captureBtn = $('<div id="daiz-ss-cropper-capture">✔ Capture</div>');
+        var $scrapboxBtn = $('<div id="daiz-ss-cropper-scrapbox">✔ Scrap</div>');
         $closeBtn.css({
             'background-image': `url(${closeBtnImg})`
         });
@@ -78,6 +79,7 @@ class ScreenShot {
             });
         }
         $cropper.append($captureBtn);
+        $cropper.append($scrapboxBtn);
         $cropper.append($closeBtn);
 
         // ドラッグ可能にする
@@ -230,6 +232,42 @@ class ScreenShot {
         $(".daiz-ss-cropper-main").remove();
     }
 
+    capture (mode='capture') {
+        var self = this;
+        var res = [];
+        window.getSelection().removeAllRanges();
+
+        // 切り取りボックス内のa要素
+        if (self.linkdata.aTagRects) {
+            for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
+                var aTagDatum = self.linkdata.aTagRects[j];
+                var aid = aTagDatum.id;
+                if ($(`#${aid}`).length > 0) {
+                    res.push(aTagDatum);
+                }
+            }
+        }
+        self.linkdata.aTagRects = res;
+
+        self.removeCropperMain();
+        self.removeCropper();
+        self.fixHtml(false);
+
+        // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
+        // 1秒待ってから送信する
+        window.setTimeout(() => {
+            if (self.linkdata !== null) {
+                sendChromeMsg({
+                    command: 'make-screen-shot',
+                    options: {
+                        sitedata: self.linkdata,
+                        mode: mode
+                    }
+                });
+            }
+        }, 1000);
+    }
+
     bindEvents () {
         var self = this;
 
@@ -246,38 +284,8 @@ class ScreenShot {
         });
 
         // 撮影ボタンがクリックされたとき
-        $('body').on('click', '#daiz-ss-cropper-capture', ev => {
-            var res = [];
-            window.getSelection().removeAllRanges();
-
-            // 切り取りボックス内のa要素
-            if (self.linkdata.aTagRects) {
-                for (var j = 0; j < self.linkdata.aTagRects.length; j++) {
-                    var aTagDatum = self.linkdata.aTagRects[j];
-                    var aid = aTagDatum.id;
-                    if ($(`#${aid}`).length > 0) {
-                        res.push(aTagDatum);
-                    }
-                }
-            }
-            self.linkdata.aTagRects = res;
-
-            this.removeCropperMain();
-            this.removeCropper();
-            this.fixHtml(false);
-
-            // ページから不要なdivが消去されてからスクリーンショットを撮りたいので，
-            // 1秒待ってから送信する
-            window.setTimeout(() => {
-                if (self.linkdata !== null) {
-                    sendChromeMsg({
-                        command: 'make-screen-shot',
-                        options: {
-                            sitedata: self.linkdata
-                        }
-                    });
-                }
-            }, 1000);
+        $('body').on('click', '#daiz-ss-cropper-capture', () => {
+            this.capture('capture');
         });
 
         // 切り抜きボックスの閉じるボタンがクリックされたとき

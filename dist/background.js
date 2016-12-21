@@ -2,6 +2,7 @@
 
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
+  var SVGSCREENSHOT_DEV = '#';
   SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   var showBrowserPopup = function showBrowserPopup() {
@@ -174,10 +175,7 @@
   });
 
   var getContextMenuTitle = function getContextMenuTitle(title) {
-    var prefix = '';
-    if (SVGSCREENSHOT_APP.indexOf('localhost') !== -1) {
-      prefix = '[#] ';
-    }
+    var prefix = SVGSCREENSHOT_DEV;
     return prefix + title;
   };
 
