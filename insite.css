@@ -44,9 +44,9 @@
     background-color: #fff;
     z-index: 10000;
     box-sizing: content-box;
-    border: 1px solid #eee;
-    margin-left: -1px;
-    margin-top: -1px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
+        0 3px 1px -2px rgba(0,0,0,.2),
+        0 1px 5px 0 rgba(0,0,0,.12);
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -56,8 +56,8 @@
 .daiz-ss-iv-svg {
     width: 100%;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
     position: absolute;
 }
 
