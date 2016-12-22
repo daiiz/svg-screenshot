@@ -288,6 +288,12 @@ class ScreenShot {
             this.capture('capture');
         });
 
+        // 撮影してScrapboxのページを作成するボタンが
+        // クリックされたとき
+        $('body').on('click', '#daiz-ss-cropper-scrapbox', ev => {
+            this.capture('scrap');
+        });
+
         // 切り抜きボックスの閉じるボタンがクリックされたとき
         $('body').on('click', '#daiz-ss-cropper-close', ev => {
             this.removeCropper();

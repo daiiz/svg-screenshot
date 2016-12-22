@@ -3,6 +3,15 @@
   var SVGSCREENSHOT_DEV = '#';
   SVGSCREENSHOT_APP = 'http://localhost:8080';
 
+  /**
+   * MODE
+   * - capture: 撮影して保存
+   * - scrap: 撮影して保存した後Scrapboxのページを作成
+   */
+  var MODE = 'capture';
+  var SITE_TITLE = '';
+  var SITE_URL = '';
+
   var showBrowserPopup = (itemUrl='', bgImg='', err=false, msg='') => {
     localStorage.item_url = itemUrl;
     localStorage.item_img = bgImg;
@@ -21,14 +30,39 @@
     chrome.browserAction.setPopup({
       'popup': 'popup.html'
     });
+  };
 
+  var getSettings = () => {
+    var s = null;
+    if (localStorage.svgscreenshot_settings) {
+      s = JSON.parse(localStorage.svgscreenshot_settings);
+    }
+    return s
+  };
+
+  var makeScrapboxPage = (cid='') => {
+    if (cid.length === 0) return;
+    var s = getSettings();
+    if (s === null || s.use_scrapbox === 'no') return;
+
+    var cUrl = SVGSCREENSHOT_APP + `/c/c-${cid}.png`;
+    // Scrapbox id
+    var scrapboxId = s.id_scrapbox;
+    var title = encodeURIComponent(SITE_TITLE.trim());
+    var body = encodeURIComponent(`[${cUrl}]\n[${SITE_TITLE} ${SITE_URL}]`);
+    var scrapboxBookmarkletUrl = `https://scrapbox.io/${scrapboxId}/${title}?body=${body}`;
+    chrome.tabs.create({
+      url: scrapboxBookmarkletUrl
+    }, null);
   };
 
   // スクリーンショットをアップロードする
   var uploader = (svgtag, svgBgBase64Img) => {
     var pub = 'no';
     if (MODE === 'scrap') pub = 'yes';
-    console.info(MODE);
+    SITE_TITLE = svgtag.getAttribute('data-title') || '';
+    SITE_URL = svgtag.getAttribute('data-url') || '';
+
     // Ajaxでapi/uploadsvgをたたく
     $.ajax({
       url: SVGSCREENSHOT_APP + '/api/uploadsvg',
@@ -38,8 +72,8 @@
       data: JSON.stringify({
         svg: svgtag.outerHTML,
         base64png: svgBgBase64Img,
-        orgurl: svgtag.getAttribute('data-url'),
-        title: svgtag.getAttribute('data-title') || '',
+        orgurl: SITE_URL,
+        title: SITE_TITLE,
         viewbox: svgtag.getAttribute('viewBox'),
         public: pub
       })
@@ -48,6 +82,9 @@
       if (stat === 'ok-saved-new-screenshot') {
         var itemUrl = SVGSCREENSHOT_APP + data.url;
         showBrowserPopup(itemUrl, svgBgBase64Img, false);
+        if (MODE === 'scrap') {
+          makeScrapboxPage(data.cid);
+        }
       }else if (stat === 'exceed-screenshots-upper-limit') {
         showBrowserPopup('', '', true, "ファイルの上限数に達しています");
       }else if (stat == 'no-login') {
@@ -153,7 +190,6 @@
     uploader(rootSVGtag, base64img);
   };
 
-  var MODE = 'capture';
   // ポップアップ画面から命令を受ける
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;

@@ -330,6 +330,12 @@ var ScreenShot = function () {
                 _this2.capture('capture');
             });
 
+            // 撮影してScrapboxのページを作成するボタンが
+            // クリックされたとき
+            $('body').on('click', '#daiz-ss-cropper-scrapbox', function (ev) {
+                _this2.capture('scrap');
+            });
+
             // 切り抜きボックスの閉じるボタンがクリックされたとき
             $('body').on('click', '#daiz-ss-cropper-close', function (ev) {
                 _this2.removeCropper();

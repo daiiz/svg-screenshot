@@ -5,6 +5,15 @@
   var SVGSCREENSHOT_DEV = '#';
   SVGSCREENSHOT_APP = 'http://localhost:8080';
 
+  /**
+   * MODE
+   * - capture: 撮影して保存
+   * - scrap: 撮影して保存した後Scrapboxのページを作成
+   */
+  var MODE = 'capture';
+  var SITE_TITLE = '';
+  var SITE_URL = '';
+
   var showBrowserPopup = function showBrowserPopup() {
     var itemUrl = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
     var bgImg = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
@@ -30,8 +39,39 @@
     });
   };
 
+  var getSettings = function getSettings() {
+    var s = null;
+    if (localStorage.svgscreenshot_settings) {
+      s = JSON.parse(localStorage.svgscreenshot_settings);
+    }
+    return s;
+  };
+
+  var makeScrapboxPage = function makeScrapboxPage() {
+    var cid = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+
+    if (cid.length === 0) return;
+    var s = getSettings();
+    if (s === null || s.use_scrapbox === 'no') return;
+
+    var cUrl = SVGSCREENSHOT_APP + ('/c/c-' + cid + '.png');
+    // Scrapbox id
+    var scrapboxId = s.id_scrapbox;
+    var title = encodeURIComponent(SITE_TITLE.trim());
+    var body = encodeURIComponent('[' + cUrl + ']\n[' + SITE_TITLE + ' ' + SITE_URL + ']');
+    var scrapboxBookmarkletUrl = 'https://scrapbox.io/' + scrapboxId + '/' + title + '?body=' + body;
+    chrome.tabs.create({
+      url: scrapboxBookmarkletUrl
+    }, null);
+  };
+
   // スクリーンショットをアップロードする
   var uploader = function uploader(svgtag, svgBgBase64Img) {
+    var pub = 'no';
+    if (MODE === 'scrap') pub = 'yes';
+    SITE_TITLE = svgtag.getAttribute('data-title') || '';
+    SITE_URL = svgtag.getAttribute('data-url') || '';
+
     // Ajaxでapi/uploadsvgをたたく
     $.ajax({
       url: SVGSCREENSHOT_APP + '/api/uploadsvg',
@@ -41,21 +81,24 @@
       data: JSON.stringify({
         svg: svgtag.outerHTML,
         base64png: svgBgBase64Img,
-        orgurl: svgtag.getAttribute('data-url'),
-        title: svgtag.getAttribute('data-title') || '',
-        viewbox: svgtag.getAttribute('viewBox')
+        orgurl: SITE_URL,
+        title: SITE_TITLE,
+        viewbox: svgtag.getAttribute('viewBox'),
+        public: pub
       })
     }).success(function (data) {
       var stat = data.status;
       if (stat === 'ok-saved-new-screenshot') {
         var itemUrl = SVGSCREENSHOT_APP + data.url;
         showBrowserPopup(itemUrl, svgBgBase64Img, false);
+        if (MODE === 'scrap') {
+          makeScrapboxPage(data.cid);
+        }
       } else if (stat === 'exceed-screenshots-upper-limit') {
         showBrowserPopup('', '', true, "ファイルの上限数に達しています");
       } else if (stat == 'no-login') {
         showBrowserPopup('', '', true, "ウェブアプリにログインしていません");
       } else {
-
         showBrowserPopup('', '', true, "アップロードに失敗しました");
       }
       console.log(data);
@@ -161,6 +204,7 @@
     if (request.command === 'make-screen-shot') {
       var linkdata = opts.sitedata;
       chrome.tabs.captureVisibleTab({ format: 'png' }, function (dataUrl) {
+        MODE = opts.mode;
         renderImage(linkdata, dataUrl);
         //console.log(opts.sitedata);
       });
