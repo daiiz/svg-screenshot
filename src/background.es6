@@ -1,7 +1,7 @@
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
-  var SVGSCREENSHOT_DEV = '#';
-  SVGSCREENSHOT_APP = 'http://localhost:8080';
+  var SVGSCREENSHOT_DEV = '[#] ';
+  //SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   /**
    * MODE
