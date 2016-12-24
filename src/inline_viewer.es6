@@ -67,37 +67,11 @@ class InlineViewer {
       var orgUrl = svg.getAttribute('data-url');
       var title = svg.getAttribute('data-title');
       var viewBox = svg.viewBox.baseVal;
-      svg.setAttribute('width', viewBox.width);
-      svg.setAttribute('height', viewBox.height);
-
-      var handles = '';
-      if ($cover.height() >= viewBox.height) {
-        $svgArea.css('overflow-y', 'hidden');
-      }else {
-        $svgArea.css('overflow-y', 'auto');
-      }
-      if ($cover.width() >= viewBox.width) {
-        $svgArea.css('overflow-x', 'hidden');
-      }else {
-        $svgArea.css('overflow-x', 'auto');
-        handles = 'e';
-      }
-
-      // リサイズ可能にする
-      if (handles.length > 0) {
-        $cover.resizable({
-          autoHide: true,
-          handles: handles,
-          minWidth: coverWidth,
-          minHeight: coverHeight,
-          start: () => {
-            $cover.show();
-          },
-          resize: () => {
-            $cover.show();
-          }
-        });
-      }
+      // SVGレイヤーのサイズを設定
+      // viewBox.width, viewBox.height: SVGのオリジナルサイズ
+      // coverWidth, coverHeight: サムネイルのサイズ
+      svg.setAttribute('width', coverWidth);
+      svg.setAttribute('height', coverHeight);
 
       // cover footerを設定
       var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
