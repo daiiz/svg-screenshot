@@ -107,6 +107,7 @@
 
 #daiz-ss-cropper-close,
 #daiz-ss-cropper-capture,
+#daiz-ss-cropper-scrap-select,
 #daiz-ss-cropper-scrapbox {
     position: absolute;
     background-repeat: no-repeat;
@@ -118,6 +119,12 @@
     text-align: center;
     cursor: pointer;
     overflow: hidden;
+}
+
+#daiz-ss-cropper-scrap-select {
+    color: #000;
+    top: -10px;
+    left: 95px;
 }
 
 #daiz-ss-cropper-close {
@@ -144,5 +151,5 @@
 }
 
 #daiz-ss-cropper-scrapbox {
-    left: 60px;
+    left: 50px;
 }

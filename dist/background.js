@@ -11,6 +11,7 @@
    * - scrap: 撮影して保存した後Scrapboxのページを作成
    */
   var MODE = 'capture';
+  var SCRAP_BOX_ID = '';
   var SITE_TITLE = '';
   var SITE_URL = '';
 
@@ -56,7 +57,7 @@
 
     var cUrl = SVGSCREENSHOT_APP + ('/c/c-' + cid + '.png');
     // Scrapbox id
-    var scrapboxId = s.id_scrapbox;
+    var scrapboxId = SCRAP_BOX_ID || s.id_scrapbox[0];
     var title = encodeURIComponent(SITE_TITLE.trim());
     var body = encodeURIComponent('[' + cUrl + ']\n[' + SITE_TITLE + ' ' + SITE_URL + ']');
     var scrapboxBookmarkletUrl = 'https://scrapbox.io/' + scrapboxId + '/' + title + '?body=' + body;
@@ -201,13 +202,23 @@
   // ポップアップ画面から命令を受ける
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
+
     if (request.command === 'make-screen-shot') {
+      // スクリーンショットの撮影
       var linkdata = opts.sitedata;
       chrome.tabs.captureVisibleTab({ format: 'png' }, function (dataUrl) {
         MODE = opts.mode;
+        SCRAP_BOX_ID = opts.scrapbox_box_id;
         renderImage(linkdata, dataUrl);
-        //console.log(opts.sitedata);
       });
+    } else if (request.command === 'get-scrapbox-list') {
+      //crapboxボックス名リストを返す
+      var scrapboxIds = [];
+      var s = getSettings();
+      if (s != null) {
+        scrapboxIds = s.id_scrapbox;
+      }
+      sendResponse(scrapboxIds);
     }
   });
 
