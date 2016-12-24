@@ -10,24 +10,34 @@ $(function () {
     if (!localStorage.svgscreenshot_settings) {
       setStorage({
         "use_scrapbox": "no",
-        "id_scrapbox": ""
+        "id_scrapbox": "[]"
       });
     }else {
       var s = getStorage();
-      console.info(s)
       if (s.use_scrapbox === 'yes') {
         $('#use_scrapbox')[0].checked = true;
       }
-      $('#id_scrapbox')[0].value = s.id_scrapbox || '';
+      var idSet = s.id_scrapbox.join('\n');
+      $('#id_scrapbox')[0].value = idSet || '';
     }
 
     $('#btn_save').on('click', ev => {
       var useScrapbox = ($('#use_scrapbox')[0].checked) ? 'yes' : 'no';
       var idScrapbox = $('#id_scrapbox').val();
-      if (idScrapbox.length === 0) useScrapbox = 'no';
+      var ids = idScrapbox.split('\n');
+      var idSet = [];
+      for (var i = 0; i < ids.length; i++) {
+        var toks = ('/' + ids[i]).split('/');
+        var id = (toks[toks.length - 1]).trim();
+        if (id.length > 0) {
+          idSet.push(id);
+        }
+      }
+      if (idSet.length === 0) useScrapbox = 'no';
+
       var s = getStorage();
       s.use_scrapbox = useScrapbox;
-      s.id_scrapbox = idScrapbox;
+      s.id_scrapbox = idSet;
       setStorage(s);
     });
 });
