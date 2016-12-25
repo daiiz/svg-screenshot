@@ -125,6 +125,16 @@
     color: #000;
     top: -10px;
     left: 95px;
+    height: 20px;
+    width: initial;
+    border: initial;
+    border-radius: initial;
+    font-size: 11px;
+}
+
+.daiz-ss-cropper-main select {
+    -webkit-appearance: menulist;
+    background-image: none;
 }
 
 #daiz-ss-cropper-close {
@@ -152,4 +162,5 @@
 
 #daiz-ss-cropper-scrapbox {
     left: 50px;
+    height: 20px;
 }
