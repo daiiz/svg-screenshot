@@ -110,8 +110,8 @@ var InlineViewer = function () {
       $body.on('mouseenter', 'img', function (e) {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
-        var src = $img.attr('src');
-        if (src.startsWith(_this2.appImg)) {
+        var src = decodeURIComponent($img.attr('src'));
+        if (src.indexOf(_this2.appImg) != -1) {
           var cid = self.getScreenShotId(src);
           var coverInfo = self.$getCover(cid, $img);
           var $cover = coverInfo[0];
