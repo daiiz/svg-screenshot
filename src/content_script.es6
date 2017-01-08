@@ -18,8 +18,10 @@ class ScreenShot {
         var self = this;
         chrome.runtime.sendMessage({
             command: 'get-scrapbox-list'
-        }, (scrapboxIds) => {
-            if (scrapboxIds.length > 0) {
+        }, (info) => {
+            var scrapboxEnabled = info.scrapbox_enabled;
+            var scrapboxIds = info.scrapbox_ids;
+            if (scrapboxEnabled === 'yes' && scrapboxIds.length > 0) {
                 var $select = $(`<select id="daiz-ss-cropper-scrap-select"></select>`);
                 for (var i = 0; i < scrapboxIds.length; i++) {
                     var scrapboxId = scrapboxIds[i];
@@ -377,7 +379,7 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
         var $body = $('body');
         if ($body.length > 0) {
             $body[0].dataset.stat_daiz_svgss = mark;
-            
+
         }
 
         new InlineViewer();

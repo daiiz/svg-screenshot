@@ -8,7 +8,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * ウェブページ中で SVG ScreenShot のプレビューを展開する
  * 対象画像をホバーしたときにSVGコンテンツを重ねて表示する
  */
-// TODO: 読み込み要求のボタンを設ける?
 
 var InlineViewer = function () {
   function InlineViewer() {

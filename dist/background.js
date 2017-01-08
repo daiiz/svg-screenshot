@@ -2,7 +2,7 @@
 
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
-  var SVGSCREENSHOT_DEV = '[#] ';
+  var SVGSCREENSHOT_DEV = '';
   //SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   /**
@@ -212,13 +212,18 @@
         renderImage(linkdata, dataUrl);
       });
     } else if (request.command === 'get-scrapbox-list') {
-      //crapboxボックス名リストを返す
+      // scrapboxボックス名リストを返す
       var scrapboxIds = [];
+      var scrapboxEnabled = 'no';
       var s = getSettings();
       if (s != null) {
         scrapboxIds = s.id_scrapbox;
+        scrapboxEnabled = s.use_scrapbox;
       }
-      sendResponse(scrapboxIds);
+      sendResponse({
+        scrapbox_enabled: scrapboxEnabled,
+        scrapbox_ids: scrapboxIds
+      });
     }
   });
 

@@ -2,7 +2,6 @@
  * ウェブページ中で SVG ScreenShot のプレビューを展開する
  * 対象画像をホバーしたときにSVGコンテンツを重ねて表示する
  */
-  // TODO: 読み込み要求のボタンを設ける?
 class InlineViewer {
   constructor () {
     this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
