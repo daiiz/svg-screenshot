@@ -92,6 +92,8 @@ class InlineViewer {
       // 対象画像であるかを確認
       var src = decodeURIComponent($img.attr('src'));
       if (src.indexOf(this.appImg) != -1) {
+        // 既存の消し忘れカバーを消す
+        $('.daiz-ss-iv-cover').css('display', 'none');
         var cid = self.getScreenShotId(src);
         var coverInfo = self.$getCover(cid, $img);
         var $cover = coverInfo[0];
