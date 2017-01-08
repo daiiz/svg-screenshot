@@ -370,8 +370,16 @@ var setCLinkMenu = () => {
 };
 
 chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+    var mark = "chrome-ext";
     if (request.event === 'updated-location-href') {
         setCLinkMenu();
+
+        var $body = $('body');
+        if ($body.length > 0) {
+            $body[0].dataset.stat_daiz_svgss = mark;
+            
+        }
+
         new InlineViewer();
     }
 });

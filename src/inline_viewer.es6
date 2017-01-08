@@ -7,6 +7,7 @@ class InlineViewer {
   constructor () {
     this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
     this.contentBaseUrl = 'https://svgscreenshot.appspot.com/c';
+    this.hideAllSVGScreenShots();
     this.bindEvents();
   }
 
@@ -91,9 +92,17 @@ class InlineViewer {
       height: h
     });
     var svg = $cover[0].querySelector('svg.svg-screenshot');
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
+    if (svg) {
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+    }
     $cover.show();
+  }
+
+  // 全てのcoverを非表示にする
+  hideAllSVGScreenShots () {
+    // 既存の消し忘れカバーを消す
+    $('.daiz-ss-iv-cover').css('display', 'none');
   }
 
   bindEvents () {
@@ -106,8 +115,7 @@ class InlineViewer {
       // 対象画像であるかを確認
       var src = decodeURIComponent($img.attr('src'));
       if (src.indexOf(this.appImg) != -1) {
-        // 既存の消し忘れカバーを消す
-        $('.daiz-ss-iv-cover').css('display', 'none');
+        self.hideAllSVGScreenShots();
         var cid = self.getScreenShotId(src);
         var coverInfo = self.$getCover(cid, $img);
         var $cover = coverInfo[0];
