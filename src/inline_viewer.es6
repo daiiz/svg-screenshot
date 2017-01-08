@@ -82,6 +82,20 @@ class InlineViewer {
     });
   }
 
+  // SVGコンテンツを最新のサムネイルのサイズに合わせる
+  updateSVGScreenShotSize ($cover, $img) {
+    var w = $img.width();
+    var h = $img.height();
+    $cover.css({
+      width: w,
+      height: h
+    });
+    var svg = $cover[0].querySelector('svg.svg-screenshot');
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+    $cover.show();
+  }
+
   bindEvents () {
     var self = this;
     var $body = $('body');
@@ -102,7 +116,7 @@ class InlineViewer {
           $body.append($cover);
           self.renderSVGScreenShot($cover, cid);
         }else {
-          $cover.show();
+          self.updateSVGScreenShotSize($cover, $img);
         }
       }
     });
