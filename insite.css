@@ -44,9 +44,9 @@
     background-color: #fff;
     z-index: 10000;
     box-sizing: content-box;
-    border: 1px solid #eee;
-    margin-left: -1px;
-    margin-top: -1px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
+        0 3px 1px -2px rgba(0,0,0,.2),
+        0 1px 5px 0 rgba(0,0,0,.12);
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -56,8 +56,8 @@
 .daiz-ss-iv-svg {
     width: 100%;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
     position: absolute;
 }
 
@@ -105,7 +105,10 @@
     color: #888;
 }
 
-#daiz-ss-cropper-close, #daiz-ss-cropper-capture {
+#daiz-ss-cropper-close,
+#daiz-ss-cropper-capture,
+#daiz-ss-cropper-scrap-select,
+#daiz-ss-cropper-scrapbox {
     position: absolute;
     background-repeat: no-repeat;
     background-position: center center;
@@ -118,6 +121,22 @@
     overflow: hidden;
 }
 
+#daiz-ss-cropper-scrap-select {
+    color: #000;
+    top: -10px;
+    left: 95px;
+    height: 20px;
+    width: initial;
+    border: initial;
+    border-radius: initial;
+    font-size: 11px;
+}
+
+.daiz-ss-cropper-main select {
+    -webkit-appearance: menulist;
+    background-image: none;
+}
+
 #daiz-ss-cropper-close {
     height: 20px;
     width: 20px;
@@ -127,7 +146,7 @@
     background-color: #777;
 }
 
-#daiz-ss-cropper-capture {
+#daiz-ss-cropper-capture, #daiz-ss-cropper-scrapbox {
     height: 20px;
     left: -10px;
     top: -10px;
@@ -139,4 +158,9 @@
     padding-right: 6px;
     padding-top: 4px;
     padding-bottom: 4px;
+}
+
+#daiz-ss-cropper-scrapbox {
+    left: 50px;
+    height: 20px;
 }

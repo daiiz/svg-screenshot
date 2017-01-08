@@ -1,5 +1,17 @@
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
+  var SVGSCREENSHOT_DEV = '';
+  //SVGSCREENSHOT_APP = 'http://localhost:8080';
+
+  /**
+   * MODE
+   * - capture: 撮影して保存
+   * - scrap: 撮影して保存した後Scrapboxのページを作成
+   */
+  var MODE = 'capture';
+  var SCRAP_BOX_ID = '';
+  var SITE_TITLE = '';
+  var SITE_URL = '';
 
   var showBrowserPopup = (itemUrl='', bgImg='', err=false, msg='') => {
     localStorage.item_url = itemUrl;
@@ -19,11 +31,39 @@
     chrome.browserAction.setPopup({
       'popup': 'popup.html'
     });
+  };
 
+  var getSettings = () => {
+    var s = null;
+    if (localStorage.svgscreenshot_settings) {
+      s = JSON.parse(localStorage.svgscreenshot_settings);
+    }
+    return s
+  };
+
+  var makeScrapboxPage = (cid='') => {
+    if (cid.length === 0) return;
+    var s = getSettings();
+    if (s === null || s.use_scrapbox === 'no') return;
+
+    var cUrl = SVGSCREENSHOT_APP + `/c/c-${cid}.png`;
+    // Scrapbox id
+    var scrapboxId = SCRAP_BOX_ID || s.id_scrapbox[0];
+    var title = encodeURIComponent(SITE_TITLE.trim());
+    var body = encodeURIComponent(`[${cUrl}]\n[${SITE_TITLE} ${SITE_URL}]`);
+    var scrapboxBookmarkletUrl = `https://scrapbox.io/${scrapboxId}/${title}?body=${body}`;
+    chrome.tabs.create({
+      url: scrapboxBookmarkletUrl
+    }, null);
   };
 
   // スクリーンショットをアップロードする
   var uploader = (svgtag, svgBgBase64Img) => {
+    var pub = 'no';
+    if (MODE === 'scrap') pub = 'yes';
+    SITE_TITLE = svgtag.getAttribute('data-title') || '';
+    SITE_URL = svgtag.getAttribute('data-url') || '';
+
     // Ajaxでapi/uploadsvgをたたく
     $.ajax({
       url: SVGSCREENSHOT_APP + '/api/uploadsvg',
@@ -33,21 +73,24 @@
       data: JSON.stringify({
         svg: svgtag.outerHTML,
         base64png: svgBgBase64Img,
-        orgurl: svgtag.getAttribute('data-url'),
-        title: svgtag.getAttribute('data-title') || '',
-        viewbox: svgtag.getAttribute('viewBox')
+        orgurl: SITE_URL,
+        title: SITE_TITLE,
+        viewbox: svgtag.getAttribute('viewBox'),
+        public: pub
       })
     }).success (data => {
       var stat = data.status;
       if (stat === 'ok-saved-new-screenshot') {
         var itemUrl = SVGSCREENSHOT_APP + data.url;
         showBrowserPopup(itemUrl, svgBgBase64Img, false);
+        if (MODE === 'scrap') {
+          makeScrapboxPage(data.cid);
+        }
       }else if (stat === 'exceed-screenshots-upper-limit') {
         showBrowserPopup('', '', true, "ファイルの上限数に達しています");
       }else if (stat == 'no-login') {
         showBrowserPopup('', '', true, "ウェブアプリにログインしていません");
       }else {
-
         showBrowserPopup('', '', true, "アップロードに失敗しました");
       }
       console.log(data);
@@ -151,27 +194,49 @@
   // ポップアップ画面から命令を受ける
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var opts = request.options;
+
     if (request.command === 'make-screen-shot') {
+      // スクリーンショットの撮影
       var linkdata = opts.sitedata;
       chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
+        MODE = opts.mode;
+        SCRAP_BOX_ID = opts.scrapbox_box_id;
         renderImage(linkdata, dataUrl);
-        //console.log(opts.sitedata);
+      });
+    }else if (request.command === 'get-scrapbox-list') {
+      // scrapboxボックス名リストを返す
+      var scrapboxIds = [];
+      var scrapboxEnabled = 'no';
+      var s = getSettings();
+      if (s != null) {
+        scrapboxIds = s.id_scrapbox;
+        scrapboxEnabled = s.use_scrapbox;
+      }
+      sendResponse({
+        scrapbox_enabled: scrapboxEnabled,
+        scrapbox_ids: scrapboxIds
       });
     }
   });
 
+
   // browser_actionボタンが押されたとき
   chrome.browserAction.onClicked.addListener(tab => {
     chrome.tabs.create({
-      url: "https://svgscreenshot.appspot.com/"
+      url: SVGSCREENSHOT_APP
     }, null);
   });
+
+  var getContextMenuTitle = (title) => {
+    var prefix = SVGSCREENSHOT_DEV;
+    return prefix + title;
+  };
 
   var initScreenShotMenu = () => {
     // ユーザーが閲覧中のページに専用の右クリックメニューを設ける
     // ウェブページ向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: [
         'page',
         'selection'
@@ -185,7 +250,7 @@
     });
     // ウェブページ上の画像向け
     chrome.contextMenus.create({
-      title: 'SVGスクリーンショットを撮る',
+      title: getContextMenuTitle('SVGスクリーンショットを撮る'),
       contexts: [
         'image'
       ],

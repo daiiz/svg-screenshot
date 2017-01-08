@@ -8,7 +8,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * ウェブページ中で SVG ScreenShot のプレビューを展開する
  * 対象画像をホバーしたときにSVGコンテンツを重ねて表示する
  */
-// TODO: 読み込み要求のボタンを設ける?
 
 var InlineViewer = function () {
   function InlineViewer() {
@@ -16,6 +15,7 @@ var InlineViewer = function () {
 
     this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
     this.contentBaseUrl = 'https://svgscreenshot.appspot.com/c';
+    this.hideAllSVGScreenShots();
     this.bindEvents();
   }
 
@@ -84,37 +84,11 @@ var InlineViewer = function () {
         var orgUrl = svg.getAttribute('data-url');
         var title = svg.getAttribute('data-title');
         var viewBox = svg.viewBox.baseVal;
-        svg.setAttribute('width', viewBox.width);
-        svg.setAttribute('height', viewBox.height);
-
-        var handles = '';
-        if ($cover.height() >= viewBox.height) {
-          $svgArea.css('overflow-y', 'hidden');
-        } else {
-          $svgArea.css('overflow-y', 'auto');
-        }
-        if ($cover.width() >= viewBox.width) {
-          $svgArea.css('overflow-x', 'hidden');
-        } else {
-          $svgArea.css('overflow-x', 'auto');
-          handles = 'e';
-        }
-
-        // リサイズ可能にする
-        if (handles.length > 0) {
-          $cover.resizable({
-            autoHide: true,
-            handles: handles,
-            minWidth: coverWidth,
-            minHeight: coverHeight,
-            start: function start() {
-              $cover.show();
-            },
-            resize: function resize() {
-              $cover.show();
-            }
-          });
-        }
+        // SVGレイヤーのサイズを設定
+        // viewBox.width, viewBox.height: SVGのオリジナルサイズ
+        // coverWidth, coverHeight: サムネイルのサイズ
+        svg.setAttribute('width', coverWidth);
+        svg.setAttribute('height', coverHeight);
 
         // cover footerを設定
         var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
@@ -123,6 +97,34 @@ var InlineViewer = function () {
         $cFoot.find('a.svgss').attr('href', _this.contentBaseUrl + '/' + cid);
         $cFoot.show();
       });
+    }
+
+    // SVGコンテンツを最新のサムネイルのサイズに合わせる
+
+  }, {
+    key: 'updateSVGScreenShotSize',
+    value: function updateSVGScreenShotSize($cover, $img) {
+      var w = $img.width();
+      var h = $img.height();
+      $cover.css({
+        width: w,
+        height: h
+      });
+      var svg = $cover[0].querySelector('svg.svg-screenshot');
+      if (svg) {
+        svg.setAttribute('width', w);
+        svg.setAttribute('height', h);
+      }
+      $cover.show();
+    }
+
+    // 全てのcoverを非表示にする
+
+  }, {
+    key: 'hideAllSVGScreenShots',
+    value: function hideAllSVGScreenShots() {
+      // 既存の消し忘れカバーを消す
+      $('.daiz-ss-iv-cover').css('display', 'none');
     }
   }, {
     key: 'bindEvents',
@@ -136,8 +138,9 @@ var InlineViewer = function () {
       $body.on('mouseenter', 'img', function (e) {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
-        var src = $img.attr('src');
-        if (src.startsWith(_this2.appImg)) {
+        var src = decodeURIComponent($img.attr('src'));
+        if (src.indexOf(_this2.appImg) != -1) {
+          self.hideAllSVGScreenShots();
           var cid = self.getScreenShotId(src);
           var coverInfo = self.$getCover(cid, $img);
           var $cover = coverInfo[0];
@@ -146,7 +149,7 @@ var InlineViewer = function () {
             $body.append($cover);
             self.renderSVGScreenShot($cover, cid);
           } else {
-            $cover.show();
+            self.updateSVGScreenShotSize($cover, $img);
           }
         }
       });
