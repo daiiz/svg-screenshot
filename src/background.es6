@@ -1,7 +1,7 @@
 (function () {
   var SVGSCREENSHOT_APP = 'https://svgscreenshot.appspot.com';
   var SVGSCREENSHOT_DEV = '';
-  //SVGSCREENSHOT_APP = 'http://localhost:8080';
+  SVGSCREENSHOT_APP = 'http://localhost:8080';
 
   /**
    * MODE
@@ -41,16 +41,16 @@
     return s
   };
 
-  var makeScrapboxPage = (cid='') => {
-    if (cid.length === 0) return;
+  var makeScrapboxPage = (xKey='') => {
+    if (xKey.length === 0) return;
     var s = getSettings();
     if (s === null || s.use_scrapbox === 'no') return;
 
-    var cUrl = SVGSCREENSHOT_APP + `/c/c-${cid}.png`;
+    var xUrl = SVGSCREENSHOT_APP + `/c/x/${xKey}.png`;
     // Scrapbox id
     var scrapboxId = SCRAP_BOX_ID || s.id_scrapbox[0];
     var title = encodeURIComponent(SITE_TITLE.trim());
-    var body = encodeURIComponent(`[${cUrl}]\n[${SITE_TITLE} ${SITE_URL}]`);
+    var body = encodeURIComponent(`[${xUrl}]\n[${SITE_TITLE} ${SITE_URL}]`);
     var scrapboxBookmarkletUrl = `https://scrapbox.io/${scrapboxId}/${title}?body=${body}`;
     chrome.tabs.create({
       url: scrapboxBookmarkletUrl
@@ -84,7 +84,7 @@
         var itemUrl = SVGSCREENSHOT_APP + data.url;
         showBrowserPopup(itemUrl, svgBgBase64Img, false);
         if (MODE === 'scrap') {
-          makeScrapboxPage(data.cid);
+          makeScrapboxPage(data.x_key);
         }
       }else if (stat === 'exceed-screenshots-upper-limit') {
         showBrowserPopup('', '', true, "ファイルの上限数に達しています");

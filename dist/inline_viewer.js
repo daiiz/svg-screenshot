@@ -13,8 +13,10 @@ var InlineViewer = function () {
   function InlineViewer() {
     _classCallCheck(this, InlineViewer);
 
-    this.appImg = 'https://svgscreenshot.appspot.com/c/c-';
-    this.contentBaseUrl = 'https://svgscreenshot.appspot.com/c';
+    //this.appUrl = 'https://svgscreenshot.appspot.com';
+    this.appUrl = 'http://localhost:8080';
+    this.appImgs = [this.appUrl + '/c/c-', this.appUrl + '/c/x/'];
+    this.contentBaseUrls = [this.appUrl + '/c', this.appUrl + '/x'];
     this.hideAllSVGScreenShots();
     this.bindEvents();
   }
@@ -22,9 +24,13 @@ var InlineViewer = function () {
   _createClass(InlineViewer, [{
     key: 'getScreenShotId',
     value: function getScreenShotId() {
-      var url = arguments.length <= 0 || arguments[0] === undefined ? 'https://svgscreenshot.appspot.com/c/c-xxxx.png' : arguments[0];
+      var url = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+      var imgVesion = arguments[1];
 
-      var cid = url.split(this.appImg)[1].split('.png')[0];
+      var cid = '';
+      if (url.length === 0) return cid;
+      var appImg = this.appImgs[imgVesion];
+      cid = url.split(appImg)[1].split('.png')[0];
       return cid;
     }
   }, {
@@ -67,17 +73,22 @@ var InlineViewer = function () {
     value: function renderSVGScreenShot($cover) {
       var _this = this;
 
-      var cid = arguments.length <= 1 || arguments[1] === undefined ? '5735735550279680' : arguments[1];
+      var cid = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+      var imgVersion = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
 
       var cover = $cover[0];
       var coverWidth = $cover.width();
       var coverHeight = $cover.height();
       var $svgArea = $cover.find('.daiz-ss-iv-svg');
-      var svgUrl = '' + this.appImg + cid + '.svg';
+      var appImg = this.appImgs[imgVersion];
+      if (appImg.length === 0) return;
+
+      var svgUrl = '' + appImg + cid + '.svg';
       $.ajax({
         url: svgUrl,
         dataType: "text"
       }).success(function (svgTag) {
+        if (svgTag.length === 0) return;
         var doc = new DOMParser().parseFromString(svgTag, 'application/xml');
         $svgArea[0].appendChild(cover.ownerDocument.importNode(doc.documentElement, true));
         var svg = cover.querySelector('svg.svg-screenshot');
@@ -94,7 +105,7 @@ var InlineViewer = function () {
         var $cFoot = $cover.find('.daiz-ss-iv-cover-foot');
         $cFoot.find('a.jump').attr('href', validateUrl(orgUrl));
         $cFoot.find('a.jump')[0].innerText = validateTitle(title);
-        $cFoot.find('a.svgss').attr('href', _this.contentBaseUrl + '/' + cid);
+        $cFoot.find('a.svgss').attr('href', _this.contentBaseUrls[imgVersion] + '/' + cid);
         $cFoot.show();
       });
     }
@@ -129,8 +140,6 @@ var InlineViewer = function () {
   }, {
     key: 'bindEvents',
     value: function bindEvents() {
-      var _this2 = this;
-
       var self = this;
       var $body = $('body');
 
@@ -139,15 +148,23 @@ var InlineViewer = function () {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
         var src = decodeURIComponent($img.attr('src'));
-        if (src.indexOf(_this2.appImg) != -1) {
+        var imgVersion = -1;
+        for (var i = 0; i < self.appImgs.length; i++) {
+          var appImg = self.appImgs[i];
+          if (src.indexOf(appImg) != -1) {
+            imgVersion = i;
+          }
+        }
+
+        if (imgVersion != -1 && imgVersion < self.appImgs.length) {
           self.hideAllSVGScreenShots();
-          var cid = self.getScreenShotId(src);
+          var cid = self.getScreenShotId(src, imgVersion);
           var coverInfo = self.$getCover(cid, $img);
           var $cover = coverInfo[0];
           if (coverInfo[1]) {
             // 新規作成されたカバー
             $body.append($cover);
-            self.renderSVGScreenShot($cover, cid);
+            self.renderSVGScreenShot($cover, cid, imgVersion);
           } else {
             self.updateSVGScreenShotSize($cover, $img);
           }
