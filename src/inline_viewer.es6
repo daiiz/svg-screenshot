@@ -4,8 +4,8 @@
  */
 class InlineViewer {
   constructor () {
-    //this.appUrl = 'https://svgscreenshot.appspot.com';
-    this.appUrl = 'http://localhost:8080';
+    this.appUrl = 'https://svgscreenshot.appspot.com';
+    //this.appUrl = 'http://localhost:8080';
     this.appImgs = [
       `${this.appUrl}/c/c-`,
       `${this.appUrl}/c/x/`
@@ -27,6 +27,7 @@ class InlineViewer {
   }
 
   $getCover (cid='', $img) {
+    // cid is cover-id!
     var coverId = 'daiz-ss-iv-cover-c-' + cid;
     var pageX = window.pageXOffset;
     var pageY = window.pageYOffset;
@@ -81,7 +82,7 @@ class InlineViewer {
       var svg = cover.querySelector('svg.svg-screenshot');
       var orgUrl = svg.getAttribute('data-url');
       var title = svg.getAttribute('data-title');
-      var viewBox = svg.viewBox.baseVal;
+      //var viewBox = svg.viewBox.baseVal;
       // SVGレイヤーのサイズを設定
       // viewBox.width, viewBox.height: SVGのオリジナルサイズ
       // coverWidth, coverHeight: サムネイルのサイズ

@@ -13,8 +13,8 @@ var InlineViewer = function () {
   function InlineViewer() {
     _classCallCheck(this, InlineViewer);
 
-    //this.appUrl = 'https://svgscreenshot.appspot.com';
-    this.appUrl = 'http://localhost:8080';
+    this.appUrl = 'https://svgscreenshot.appspot.com';
+    //this.appUrl = 'http://localhost:8080';
     this.appImgs = [this.appUrl + '/c/c-', this.appUrl + '/c/x/'];
     this.contentBaseUrls = [this.appUrl + '/c', this.appUrl + '/x'];
     this.hideAllSVGScreenShots();
@@ -39,6 +39,7 @@ var InlineViewer = function () {
       var cid = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
       var $img = arguments[1];
 
+      // cid is cover-id!
       var coverId = 'daiz-ss-iv-cover-c-' + cid;
       var pageX = window.pageXOffset;
       var pageY = window.pageYOffset;
@@ -94,7 +95,7 @@ var InlineViewer = function () {
         var svg = cover.querySelector('svg.svg-screenshot');
         var orgUrl = svg.getAttribute('data-url');
         var title = svg.getAttribute('data-title');
-        var viewBox = svg.viewBox.baseVal;
+        //var viewBox = svg.viewBox.baseVal;
         // SVGレイヤーのサイズを設定
         // viewBox.width, viewBox.height: SVGのオリジナルサイズ
         // coverWidth, coverHeight: サムネイルのサイズ
