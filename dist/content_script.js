@@ -14,7 +14,7 @@ var ScreenShot = function () {
 
         this.CROP_BOX_SIZE = 150;
         this.uiInit();
-        this.positionLastRclick = [0, 0];
+        this.positionLastRclick = [200, 200];
         this.linkdata = null;
         this.tmp = {
             // 右クリックされた画像要素
@@ -227,6 +227,18 @@ var ScreenShot = function () {
                 height: croppedRect.height
             };
 
+            var title = document.title || '';
+            if (title.length === 0) {
+                // PDFページの場合，embedタグからファイル名を抽出して
+                // titleとする
+                var embeds = $('embed');
+                if (embeds.length > 0 && embeds[0].type === 'application/pdf') {
+                    var pdfPath = '/' + embeds[0].src;
+                    var toks = pdfPath.split('/');
+                    title = toks[toks.length - 1];
+                }
+            }
+
             var res = {
                 cropperRect: pos_cropper,
                 aTagRects: aTagRects,
@@ -234,7 +246,7 @@ var ScreenShot = function () {
                 winW: window.innerWidth,
                 winH: window.innerHeight,
                 baseUri: window.location.href,
-                title: document.title || ''
+                title: title
             };
             return res;
         }
@@ -382,7 +394,8 @@ var ScreenShot = function () {
 
             // コンテキストメニュー（右クリックメニュー）が押された通知をbackgroundページから受け取る
             chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
-                if (request.event === 'click-context-menu') {
+                var re = request.event;
+                if (re === 'click-context-menu') {
                     if (request.elementType === 'image' && _this2.tmp.$contextMenuImg.length > 0) {
                         var $img = _this2.tmp.$contextMenuImg;
                         var imgRect = $img[0].getBoundingClientRect();

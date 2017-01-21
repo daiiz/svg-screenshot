@@ -27,7 +27,20 @@
   document.querySelector('#open').addEventListener('click', function () {
     clearBadge();
   }, false);
+
   document.querySelector('#login').addEventListener('click', function () {
     clearBadge();
   }, false);
+
+  document.querySelector('#btn-show-cropper').addEventListener('click', function () {
+    console.info("22");
+    chrome.tabs.getSelected(null, function (tab) {
+      console.info(tab);
+      clearBadge();
+      chrome.tabs.sendRequest(tab.id, {
+        event: 'click-context-menu'
+      });
+      window.close();
+    });
+  });
 })();
