@@ -5,14 +5,14 @@
 class InlineViewer {
   constructor () {
     this.appUrl = 'https://svgscreenshot.appspot.com';
-    //this.appUrl = 'http://localhost:8080';
+    this.appImgBase = `${this.appUrl}/c/`;
     this.appImgs = [
-      `${this.appUrl}/c/c-`,
-      `${this.appUrl}/c/x/`
+      `${this.appUrl}/c/c-`,  /* v0 */
+      `${this.appUrl}/c/x/`   /* v1 */
     ];
     this.contentBaseUrls = [
-      `${this.appUrl}/c`,
-      `${this.appUrl}/x`
+      `${this.appUrl}/c`,     /* v0 */
+      `${this.appUrl}/x`      /* v1 */
     ];
     this.hideAllSVGScreenShots();
     this.bindEvents();
@@ -82,7 +82,6 @@ class InlineViewer {
       var svg = cover.querySelector('svg.svg-screenshot');
       var orgUrl = svg.getAttribute('data-url');
       var title = svg.getAttribute('data-title');
-      //var viewBox = svg.viewBox.baseVal;
       // SVGレイヤーのサイズを設定
       // viewBox.width, viewBox.height: SVGのオリジナルサイズ
       // coverWidth, coverHeight: サムネイルのサイズ
@@ -131,10 +130,13 @@ class InlineViewer {
       // 対象画像であるかを確認
       var src = decodeURIComponent($img.attr('src'));
       var imgVersion = -1;
-      for (var i = 0; i < self.appImgs.length; i++) {
-        var appImg = self.appImgs[i];
-        if (src.indexOf(appImg) != -1) {
-          imgVersion = i;
+
+      if (src.indexOf(this.appImgBase) != -1) {
+        var sign = src.split(this.appImgBase)[1].charAt(0);
+        if (sign === 'x') {
+          imgVersion = 1;
+        }else if (sign === 'c') {
+          imgVersion = 0;
         }
       }
 

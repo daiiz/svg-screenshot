@@ -14,9 +14,13 @@ var InlineViewer = function () {
     _classCallCheck(this, InlineViewer);
 
     this.appUrl = 'https://svgscreenshot.appspot.com';
-    //this.appUrl = 'http://localhost:8080';
-    this.appImgs = [this.appUrl + '/c/c-', this.appUrl + '/c/x/'];
-    this.contentBaseUrls = [this.appUrl + '/c', this.appUrl + '/x'];
+    this.appImgBase = this.appUrl + '/c/';
+    this.appImgs = [this.appUrl + '/c/c-', /* v0 */
+    this.appUrl + '/c/x/' /* v1 */
+    ];
+    this.contentBaseUrls = [this.appUrl + '/c', /* v0 */
+    this.appUrl + '/x' /* v1 */
+    ];
     this.hideAllSVGScreenShots();
     this.bindEvents();
   }
@@ -95,7 +99,6 @@ var InlineViewer = function () {
         var svg = cover.querySelector('svg.svg-screenshot');
         var orgUrl = svg.getAttribute('data-url');
         var title = svg.getAttribute('data-title');
-        //var viewBox = svg.viewBox.baseVal;
         // SVGレイヤーのサイズを設定
         // viewBox.width, viewBox.height: SVGのオリジナルサイズ
         // coverWidth, coverHeight: サムネイルのサイズ
@@ -141,6 +144,8 @@ var InlineViewer = function () {
   }, {
     key: 'bindEvents',
     value: function bindEvents() {
+      var _this2 = this;
+
       var self = this;
       var $body = $('body');
 
@@ -150,10 +155,13 @@ var InlineViewer = function () {
         // 対象画像であるかを確認
         var src = decodeURIComponent($img.attr('src'));
         var imgVersion = -1;
-        for (var i = 0; i < self.appImgs.length; i++) {
-          var appImg = self.appImgs[i];
-          if (src.indexOf(appImg) != -1) {
-            imgVersion = i;
+
+        if (src.indexOf(_this2.appImgBase) != -1) {
+          var sign = src.split(_this2.appImgBase)[1].charAt(0);
+          if (sign === 'x') {
+            imgVersion = 1;
+          } else if (sign === 'c') {
+            imgVersion = 0;
           }
         }
 
