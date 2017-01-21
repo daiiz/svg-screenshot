@@ -13,13 +13,16 @@
 
   window.addEventListener('load', function () {
     document.querySelector('#open').href = localStorage.item_url || '';
-    document.querySelector('#img').src = localStorage.item_img || '';
+    var thumbnail = document.querySelector('#img');
+    thumbnail.src = localStorage.item_img || '';
+    thumbnail.dataset.clipboardText = localStorage.item_img_url || '';
     var err = localStorage.is_error || 'ようこそ';
     if (err !== 'y') {
       // キャプチャ失敗
       document.querySelector('#msg').innerText = err;
       openN();
     } else {
+      new Clipboard('.copy-btn');
       openY();
     }
   }, false);
@@ -31,6 +34,10 @@
   document.querySelector('#login').addEventListener('click', function () {
     clearBadge();
   }, false);
+
+  document.querySelector('#img').addEventListener('click', function () {
+    window.close();
+  });
 
   document.querySelector('#btn-show-cropper').addEventListener('click', function () {
     console.info("22");

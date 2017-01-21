@@ -14,7 +14,9 @@
 
   var showBrowserPopup = (itemUrl='', bgImg='', err=false, msg='') => {
     localStorage.item_url = itemUrl;
+    var imgUrl = itemUrl.replace('/x/', '/c/x/') + '.png';
     localStorage.item_img = bgImg;
+    localStorage.item_img_url = imgUrl;
     localStorage.is_error = err ? msg : 'y';
 
     var color = err ? 'red' : '#4abb0c';
@@ -58,8 +60,8 @@
 
   // スクリーンショットをアップロードする
   var uploader = (svgtag, svgBgBase64Img) => {
-    var pub = 'no';
-    if (MODE === 'scrap') pub = 'yes';
+    var pub = 'yes';
+    // if (MODE === 'scrap') pub = 'yes';
     SITE_TITLE = svgtag.getAttribute('data-title') || '';
     SITE_URL = svgtag.getAttribute('data-url') || '';
 
