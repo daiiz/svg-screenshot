@@ -4,11 +4,12 @@
  */
 class InlineViewer {
   constructor () {
+    this.appHost = 'svgscreenshot.appspot.com';
     this.appUrl = 'https://svgscreenshot.appspot.com';
-    this.appImgBase = `${this.appUrl}/c/`;
+    this.appImgBase = `${this.appHost}/c/`;
     this.appImgs = [
-      `${this.appUrl}/c/c-`,  /* v0 */
-      `${this.appUrl}/c/x/`   /* v1 */
+      `/c/c-`,  /* v0 */
+      `/c/x/`   /* v1 */
     ];
     this.contentBaseUrls = [
       `${this.appUrl}/c`,     /* v0 */
@@ -128,11 +129,12 @@ class InlineViewer {
     $body.on('mouseenter', 'img', e => {
       var $img = $(e.target).closest('img');
       // 対象画像であるかを確認
-      var src = decodeURIComponent($img.attr('src'));
+      var src = decodeURIComponent($img[0].src);
       var imgVersion = -1;
 
       if (src.indexOf(this.appImgBase) != -1) {
-        var sign = src.split(this.appImgBase)[1].charAt(0);
+        var toks = src.split(this.appImgBase);
+        var sign = toks[toks.length - 1].charAt(0);
         if (sign === 'x') {
           imgVersion = 1;
         }else if (sign === 'c') {

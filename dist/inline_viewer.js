@@ -13,10 +13,11 @@ var InlineViewer = function () {
   function InlineViewer() {
     _classCallCheck(this, InlineViewer);
 
+    this.appHost = 'svgscreenshot.appspot.com';
     this.appUrl = 'https://svgscreenshot.appspot.com';
-    this.appImgBase = this.appUrl + '/c/';
-    this.appImgs = [this.appUrl + '/c/c-', /* v0 */
-    this.appUrl + '/c/x/' /* v1 */
+    this.appImgBase = this.appHost + '/c/';
+    this.appImgs = ['/c/c-', /* v0 */
+    '/c/x/' /* v1 */
     ];
     this.contentBaseUrls = [this.appUrl + '/c', /* v0 */
     this.appUrl + '/x' /* v1 */
@@ -153,11 +154,12 @@ var InlineViewer = function () {
       $body.on('mouseenter', 'img', function (e) {
         var $img = $(e.target).closest('img');
         // 対象画像であるかを確認
-        var src = decodeURIComponent($img.attr('src'));
+        var src = decodeURIComponent($img[0].src);
         var imgVersion = -1;
 
         if (src.indexOf(_this2.appImgBase) != -1) {
-          var sign = src.split(_this2.appImgBase)[1].charAt(0);
+          var toks = src.split(_this2.appImgBase);
+          var sign = toks[toks.length - 1].charAt(0);
           if (sign === 'x') {
             imgVersion = 1;
           } else if (sign === 'c') {
