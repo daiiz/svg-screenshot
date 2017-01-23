@@ -89,7 +89,7 @@ var InlineViewer = function () {
       var appImg = this.appImgs[imgVersion];
       if (appImg.length === 0) return;
 
-      var svgUrl = '' + appImg + cid + '.svg';
+      var svgUrl = this.appUrl + '/' + appImg + cid + '.svg';
       $.ajax({
         url: svgUrl,
         dataType: "text"
