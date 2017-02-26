@@ -4,6 +4,7 @@
     background-color: #ddd;
     opacity: 0.4;
     cursor: pointer;
+    box-sizing: border-box;
     z-index: 10000;
 }
 
