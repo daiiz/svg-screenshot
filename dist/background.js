@@ -70,7 +70,6 @@
   // スクリーンショットをアップロードする
   var uploader = function uploader(svgtag, svgBgBase64Img) {
     var pub = 'yes';
-    // if (MODE === 'scrap') pub = 'yes';
     SITE_TITLE = svgtag.getAttribute('data-title') || '';
     SITE_URL = svgtag.getAttribute('data-url') || '';
 
