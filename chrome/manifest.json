@@ -2,18 +2,21 @@
     "background": {
         "page": "background.html"
     },
-    "options_page": "options.html",
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": false
+    },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "description": "SVG Screenshot",
     "icons": {
-        "128": "icon.png",
-        "48" : "icon.png",
-        "16" : "icon.png"
+        "128": "image/icon.png",
+        "48" : "image/icon.png",
+        "16" : "image/icon.png"
     },
     "browser_action": {
         "default_icon": {
-            "19": "icon-l.png",
-            "38": "icon-l.png"
+            "19": "image/icon-l.png",
+            "38": "image/icon-l.png"
         },
         "default_title": "SVG Screenshot",
         "default_popup": "popup.html"
@@ -24,21 +27,22 @@
         "matches": ["<all_urls>"],
         "css": [
             "lib/jquery-ui.min.css",
-            "insite.css"
+            "css/insite.css"
         ],
         "js": [
             "lib/jquery.js",
             "lib/jquery-ui.min.js",
-            "dist/common.js",
-            "dist/clink.js",
-            "dist/inline_viewer.js",
-            "dist/content_script.js"
+            "build/bundle.js",
+            "build/common.js",
+            "build/inline_viewer.js",
+            "build/content_script.js"
         ],
         "run_at": "document_end"
     }],
 
     "web_accessible_resources": [
-        "x.png"
+        "image/x.png",
+        "image/linkcard/*"
     ],
 
     "permissions": [
@@ -46,7 +50,8 @@
         "pageCapture",
         "tabs",
         "activeTab",
+        "cookies",
         "<all_urls>"
     ],
-    "version": "0.4.5"
+    "version": "0.5.5"
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DynamicGazo</title>
+  <style>
+    body {
+      width: 400px;
+      height: 270px;
+    }
+    #img {
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      cursor: pointer;
+      height: 150px;
+    }
+    #msg {
+      padding: 10px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      background-color: #FFF9C4;
+      margin-bottom: 10px;
+    }
+    #n {
+      display: none;
+    }
+    #area-btn-cropper {
+      background-color: #f3f3f3;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+  <script src="./lib/clipboard.min.js"></script>
+</head>
+<body>
+  <h3>SVG Screenshot</h3>
+
+  <div id="area-btn-cropper">
+    <!-- <input type="button" id="btn-show-cropper" value="DynamicGazoを撮る"> -->
+    範囲選択して撮影できます。
+  </div>
+
+  <div id="y">
+    <a href="#" target="_blank" id="open">
+      Latest screenshot
+    </a>　
+    <a href="https://svgscreenshot.appspot.com/home" target="_blank" class="collection" id="y-collection">
+      Collection
+    </a>　
+    <a href="https://gyazo.com/search/%23SVGScreenshot" target="_blank" id="gyazo-collection">
+      Gyazo collection
+    </a>
+    <br>
+    <img class="card-tool-msg copy-btn" src id="img" style="max-height: 300px; max-width: 100%;">
+  </div>
+
+  <div id="n">
+    <h3>SVG Screenshot</h3>
+    <div id="msg"></div>
+    <a href="https://svgscreenshot.appspot.com/login" target="_blank" id="login">Googleアカウントでログイン</a>　|　
+    <a href="https://svgscreenshot.appspot.com/" target="_blank" classs="collection" id="collection">コレクションページを開く</a>
+  </div>
+
+  <script src="./build/bundle.js"></script>
+  <script src="./build/common.js"></script>
+  <script src="./build/popup.js"></script>
+</body>
+</html>

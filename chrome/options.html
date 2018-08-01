@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Settings - SVG ScreenShot</title>
+    <script src="./lib/jquery.js"></script>
+    <style>
+      #gyazo_hashtag {
+        margin-left: 10px;
+      }
+      a {
+        color: #1555f3;
+        text-decoration: none;
+      }
+      video {
+        height: 300px;
+        margin: 15px 20px 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      The following feature can be used only when logged in to
+      <a href='https://gyazo.com' target='_blank'>Gyazo</a>.
+    </div>
+    <p>
+      <input type="checkbox" id="use_gyazo">
+        Gyazoにもアップロードする
+        <input id="gyazo_hashtag" type="text" value="#SVGScreenshot" placeholder="#Hashtag">
+      <br>
+      <video controls src="https://i.gyazo.com/81d9dc4e27392d2e1a3f8d695d88c3cf.mp4" />
+    </p>
+    <input type="button" value="Save" id="btn_save">
+    <br>
+    <br>
+    <script src="./build/options.js"></script>
+  </body>
+</html>
