@@ -45,13 +45,22 @@
     background-color: #fff;
     z-index: 10000;
     box-sizing: content-box;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
-        0 3px 1px -2px rgba(0,0,0,.2),
-        0 1px 5px 0 rgba(0,0,0,.12);
+    box-shadow: 0 0px 2px 0 rgba(0,0,0,.14),
+        0 2px 1px -2px rgba(0,0,0,.2),
+        0 0px 5px 0 rgba(0,0,0,.12);
+    /*box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),*/
+                /*0 3px 1px -2px rgba(0,0,0,.2),*/
+                /*0 1px 5px 0 rgba(0,0,0,.12);*/
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: rgba(0, 0, 0 ,0);
+    border-radius: 1px;
+}
+
+.gyazo-com {
+    z-index: 999;
+    border: 1px solid #fff;
 }
 
 .daiz-ss-iv-svg {
@@ -60,6 +69,10 @@
     overflow-x: hidden;
     overflow-y: hidden;
     position: absolute;
+}
+
+.daiz-ss-iv-svg a {
+    cursor: pointer;
 }
 
 .daiz-ss-iv-rbar {
@@ -84,13 +97,13 @@
     display: none;
 }
 
-.daiz-ss-iv-cover-foot a.svgss{
+.daiz-ss-iv-cover-foot a.footlink{
     font-size: 11px;
     text-decoration: none;
     color: #888;
 }
 
-.daiz-ss-iv-cover-foot a.svgss:hover{
+.daiz-ss-iv-cover-foot a.footlink:hover{
     text-decoration: underline;
     color: #2962FF;
 }
@@ -106,8 +119,8 @@
     color: #888;
 }
 
-#daiz-ss-cropper-close,
-#daiz-ss-cropper-capture,
+#daiz-ss-cropper-close, .daiz-ss-cropper-close,
+#daiz-ss-cropper-capture, .daiz-ss-cropper-capture,
 #daiz-ss-cropper-scrap-select,
 #daiz-ss-cropper-scrapbox {
     position: absolute;
@@ -138,7 +151,7 @@
     background-image: none;
 }
 
-#daiz-ss-cropper-close {
+#daiz-ss-cropper-close, .daiz-ss-cropper-close {
     height: 20px;
     width: 20px;
     top: -10px;
@@ -147,7 +160,8 @@
     background-color: #777;
 }
 
-#daiz-ss-cropper-capture, #daiz-ss-cropper-scrapbox {
+#daiz-ss-cropper-capture, #daiz-ss-cropper-scrapbox,
+.daiz-ss-cropper-capture, .daiz-ss-cropper-scrapbox {
     height: 20px;
     left: -10px;
     top: -10px;
@@ -161,7 +175,72 @@
     padding-bottom: 4px;
 }
 
-#daiz-ss-cropper-scrapbox {
+#daiz-ss-cropper-scrapbox, .daiz-ss-cropper-scrapbox {
     left: 50px;
     height: 20px;
+}
+
+
+.card-area {
+    position: fixed;
+    background-color: #fff;
+    top: 0;
+    right: 0;
+    width: 220px;
+    height: 220px;
+    padding: 28px;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 10000;
+}
+
+.card-a {
+    position: absolute;
+    font-size: 13px;
+    line-height: 18px;
+    height: 36px;
+    color: #4e505d;
+    overflow: hidden;
+    top: 36px;
+    left: 36px;
+    width: 139px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    cursor: pointer;
+}
+
+.card-a a {
+    color: #4e505d !important;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    text-decoration: none !important;
+}
+
+.card-a a:hover {
+    text-decoration: none !important;
+}
+
+.card-thumbnail {
+    position: absolute;
+    background-color: #fff;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-sizing: border-box;
+    width: 145px;
+    height: 111px;
+    top: 83px;
+    left: 33px;
+}
+
+.card-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgb(119, 119, 119);
+    border-radius: 50%;
+    padding: 3px;
+    cursor: pointer;
 }

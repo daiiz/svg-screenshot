@@ -1,0 +1,36 @@
+{
+  "name": "dynamic-gazo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engine": {
+    "node": "8.7.0"
+  },
+  "repository": "git@github.com:daiz713/DynamicGazo.git",
+  "author": "daiiz <da.iz.mg@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "./node_modules/.bin/run-s build:**",
+    "build:babel": "./node_modules/.bin/babel client/ --out-dir chrome/build/ --minified --source-maps false",
+    "build:browserify": "NODE_ENV=production ./node_modules/.bin/browserify -t [ babelify ] -t envify src/index.js -o chrome/build/bundle.js -v",
+    "build:package": "zip -r releases/chrome.zip chrome",
+    "watch": "./node_modules/.bin/run-p watch:**",
+    "watch:babel": "npm run build:babel -- --watch",
+    "watch:browserify": "NODE_ENV=production ./node_modules/.bin/watchify -t [ babelify ] -t envify src/index.js -o chrome/build/bundle.js -v",
+    "watch-dev": "./node_modules/.bin/run-p watch-dev:**",
+    "watch-dev:babel": "npm run build:babel -- --watch",
+    "watch-dev:browserify": "NODE_ENV=development ./node_modules/.bin/watchify -t [ babelify ] -t envify src/index.js -o chrome/build/bundle.js -v"
+  },
+  "dependencies": {
+    "anchors-in-area": "^1.0.21",
+    "axios": "^0.18.0",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "envify": "^4.1.0",
+    "npm-run-all": "^4.0.2",
+    "watchify": "^3.11.0"
+  }
+}
