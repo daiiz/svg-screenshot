@@ -1,8 +1,8 @@
 (function () {
   let META = {}
 
-  const uploadToGyazo = async ({svgScreenshotImageId, hashTag}) => {
-    const {baseUri, title, base64Img, devicePixelRatio} = META
+  const uploadToGyazo = async ({svgScreenshotImageId, hashTag, base64Img, devicePixelRatio}) => {
+    const {baseUri, title} = META
     await window.dynamicGazo.uploadToGyazo({
       title,
       referer: baseUri,
@@ -18,11 +18,12 @@
     const {useGyazo, gyazoHashtag} = readOptions()
 
     const svg = createSVGTag()
+    const imageDataURI = dynamicGazo.addPhysChunk(base64Img, devicePixelRatio)
     const res = await dynamicGazo.uploadToDynamicGazo({
       svg,
       title,
       referer: baseUri,
-      base64Img,
+      base64Img: imageDataURI,
       devicePixelRatio
     })
     if (res.status === 200 && res.data.x_key) {
@@ -36,7 +37,9 @@
         setBadgeUploadingToGyazo()
         await uploadToGyazo({
           svgScreenshotImageId: res.data.x_key,
-          hashTag: gyazoHashtag || ''
+          hashTag: gyazoHashtag || '',
+          base64Img: imageDataURI,
+          devicePixelRatio
         })
       }
       clearBadge()
@@ -120,7 +123,7 @@
 
   // SVGタグを生成する
   const createSVGTag = () => {
-    const {aTagRects, elementRects, text, width, height, baseUri, title, devicePixelRatio, base64Img} = META
+    const {aTagRects, elementRects, text, width, height, baseUri, title, base64Img} = META
     var svgns  = 'http://www.w3.org/2000/svg';
     var hrefns = 'http://www.w3.org/1999/xlink';
 
