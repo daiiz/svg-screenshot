@@ -1,5 +1,12 @@
 const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
+const {convertToByteArray, convertToDataURI, writeChunkPhys} = require('png-phys-chunk-writer')
+
+const addPhysChunk = (dataURI, dpr=1) => {
+  const orgByteArray = convertToByteArray(dataURI)
+  const genByteArray = writeChunkPhys(orgByteArray, dpr)
+  return convertToDataURI(genByteArray)
+}
 
 window.dynamicGazo = {
   env: process.env.NODE_ENV,
@@ -38,7 +45,7 @@ dynamicGazo.uploadToGyazo = async (
   const dynamicGazoUrl = `${dynamicGazo.appOrigin}/x/${svgScreenshotImageId}`
   const formdata = new window.FormData()
   formdata.append('client_id', clientId)
-  formdata.append('image_url', image)
+  formdata.append('image_url', addPhysChunk(image, scale))
   formdata.append('title', title)
   formdata.append('referer_url', referer)
   formdata.append('scale', scale)
