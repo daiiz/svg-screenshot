@@ -1,8 +1,12 @@
 const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
 const {convertToByteArray, convertToDataURI, writeChunkPhys} = require('png-phys-chunk-writer')
+const {DpiAwareImage} = require('dpi-aware-image')
 
 window.dynamicGazo = {
+  elements: [
+    DpiAwareImage
+  ],
   env: process.env.NODE_ENV,
   appOrigin: (process.env.NODE_ENV === 'production') ?
     'https://svgscreenshot.appspot.com' : 'http://localhost:8080'
