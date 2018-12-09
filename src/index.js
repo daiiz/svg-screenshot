@@ -2,6 +2,7 @@ const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
 const {convertToByteArray, convertToDataURI, writeChunkPhys} = require('png-phys-chunk-writer')
 const {DpiAwareImage} = require('dpi-aware-image')
+const svgize = require('svgize')
 
 window.dynamicGazo = {
   elements: [
@@ -13,6 +14,7 @@ window.dynamicGazo = {
 }
 
 dynamicGazo.AnchorsInArea = AnchorsInArea
+dynamicGazo.svgize = svgize
 
 dynamicGazo.addPhysChunk = (dataURI, dpr=1) => {
   const orgByteArray = convertToByteArray(dataURI)
@@ -25,11 +27,11 @@ dynamicGazo.uploadToDynamicGazo = async ({svg, title, referer, base64Img, device
   let res
   try {
     res = await axios.post(`${dynamicGazo.appOrigin}/api/uploadsvg`, {
-      svg: svg.outerHTML,
+      svg: svg.tagText,
       base64png: base64Img,
       orgurl: referer,
       title,
-      viewbox: svg.getAttribute('viewBox'),
+      viewbox: svg.viewBox,
       public: 'yes',
       dpr: devicePixelRatio
     })

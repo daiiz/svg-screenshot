@@ -33,6 +33,7 @@
     "envify": "^4.1.0",
     "npm-run-all": "^4.0.2",
     "png-phys-chunk-writer": "github:daiiz/png-pHYs-chunk-writer#master",
+    "svgize": "github:daiiz/svgize#master",
     "watchify": "^3.11.0"
   }
 }
