@@ -54,22 +54,23 @@
 
   window.addEventListener('load', function () {
     document.querySelector('#open').href = itemUrl(localStorage.item_url)
-    var thumbnail = document.querySelector('#img');
-    thumbnail.src = localStorage.item_img || '';
-    thumbnail.dataset.clipboardText = itemUrl(localStorage.item_img)
-    var err = localStorage.is_error || 'ようこそ';
+    const thumbnail = document.querySelector('#img')
+    const imgUrl = localStorage.item_img.replace(/\/c\/x\//, '/c/xo/') || ''
+    thumbnail.setAttribute('src', imgUrl)
+    thumbnail.closest('div.copy-btn').dataset.clipboardText = itemUrl(imgUrl)
+    var err = localStorage.is_error || 'ようこそ'
     if (err !== 'y') {
       // キャプチャ失敗
-      document.querySelector('#msg').innerText = err;
-      openN();
+      document.querySelector('#msg').innerText = err
+      openN()
     }else {
-      new Clipboard('.copy-btn');
-      openY();
+      new Clipboard('.copy-btn')
+      openY()
     }
     replaceToDevUrls()
     setGyazoCollectionLink()
     setCancelEvents()
-  }, false);
+  }, false)
 
   document.querySelector('#open').addEventListener('click', function () {
     clearBadge();
@@ -93,5 +94,10 @@
       })
     })
     window.close()
+  }
+
+  // register elements
+  for (const Elem of dynamicGazo.elements) {
+    window.customElements.define(Elem.is, Elem)
   }
 })()

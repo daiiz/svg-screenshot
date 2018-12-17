@@ -1,24 +1,41 @@
 const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
+const {convertToByteArray, convertToDataURI, writePngDpi} = require('png-chunk-phys')
+const {DpiAwareImage} = require('dpi-aware-image')
+const svgize = require('img-svgize')
 
 window.dynamicGazo = {
+  elements: [
+    DpiAwareImage
+  ],
   env: process.env.NODE_ENV,
   appOrigin: (process.env.NODE_ENV === 'production') ?
     'https://svgscreenshot.appspot.com' : 'http://localhost:8080'
 }
 
 dynamicGazo.AnchorsInArea = AnchorsInArea
+dynamicGazo.svgize = svgize
+
+dynamicGazo.addPhysChunk = (dataURI, dpr=1) => {
+  const orgByteArray = convertToByteArray(dataURI)
+  try {
+    const genByteArray = writePngDpi(orgByteArray, dpr * 72)
+    return convertToDataURI(genByteArray)
+  } catch (err) {
+    return orgByteArray
+  }
+}
 
 // upload to SVGScreenshot
 dynamicGazo.uploadToDynamicGazo = async ({svg, title, referer, base64Img, devicePixelRatio}) => {
   let res
   try {
     res = await axios.post(`${dynamicGazo.appOrigin}/api/uploadsvg`, {
-      svg: svg.outerHTML,
+      svg: svg.tagText,
       base64png: base64Img,
       orgurl: referer,
       title,
-      viewbox: svg.getAttribute('viewBox'),
+      viewbox: svg.viewBox,
       public: 'yes',
       dpr: devicePixelRatio
     })
