@@ -1,6 +1,6 @@
 const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
-const {convertToByteArray, convertToDataURI, writeChunkPhys} = require('png-phys-chunk-writer')
+const {convertToByteArray, convertToDataURI, writePngDpi} = require('png-chunk-phys')
 const {DpiAwareImage} = require('dpi-aware-image')
 const svgize = require('svgize')
 
@@ -18,8 +18,12 @@ dynamicGazo.svgize = svgize
 
 dynamicGazo.addPhysChunk = (dataURI, dpr=1) => {
   const orgByteArray = convertToByteArray(dataURI)
-  const genByteArray = writeChunkPhys(orgByteArray, dpr)
-  return convertToDataURI(genByteArray)
+  try {
+    const genByteArray = writePngDpi(orgByteArray, dpr * 72)
+    return convertToDataURI(genByteArray)
+  } catch (err) {
+    return orgByteArray
+  }
 }
 
 // upload to SVGScreenshot

@@ -32,7 +32,7 @@
     "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
     "envify": "^4.1.0",
     "npm-run-all": "^4.0.2",
-    "png-phys-chunk-writer": "github:daiiz/png-pHYs-chunk-writer#master",
+    "png-chunk-phys": "0.0.2",
     "svgize": "github:daiiz/svgize#master",
     "watchify": "^3.11.0"
   }
