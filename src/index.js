@@ -2,7 +2,7 @@ const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
 const {convertToByteArray, convertToDataURI, writePngDpi} = require('png-chunk-phys')
 const {DpiAwareImage} = require('dpi-aware-image')
-const svgize = require('svgize')
+const svgize = require('img-svgize')
 
 window.dynamicGazo = {
   elements: [

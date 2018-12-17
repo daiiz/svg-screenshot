@@ -31,9 +31,9 @@
     "browserify": "^14.4.0",
     "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
     "envify": "^4.1.0",
+    "img-svgize": "^1.0.0",
     "npm-run-all": "^4.0.2",
     "png-chunk-phys": "0.0.2",
-    "svgize": "github:daiiz/svgize#master",
     "watchify": "^3.11.0"
   }
 }
