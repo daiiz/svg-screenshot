@@ -1,6 +1,6 @@
 const AnchorsInArea = require('anchors-in-area')
 const axios = require('axios')
-const {convertToByteArray, convertToDataURI, writePngDpi} = require('png-chunk-phys')
+const {convertToByteArray, convertToDataURI, writePngDpi} = require('png-dpi-reader-writer')
 const {DpiAwareImage} = require('dpi-aware-image')
 const svgize = require('img-svgize')
 

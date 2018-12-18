@@ -23,17 +23,19 @@
   "dependencies": {
     "anchors-in-area": "^1.0.21",
     "axios": "^0.18.0",
+    "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
+    "img-svgize": "^1.0.0",
+    "png-dpi-reader-writer": "^0.1.0"
+  },
+  "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
-    "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
     "envify": "^4.1.0",
-    "img-svgize": "^1.0.0",
     "npm-run-all": "^4.0.2",
-    "png-chunk-phys": "0.0.2",
     "watchify": "^3.11.0"
   }
 }
