@@ -1,6 +1,6 @@
 {
   "name": "dynamic-gazo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "engine": {
     "node": "8.7.0"
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "anchors-in-area": "^1.0.21",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
     "img-svgize": "^1.0.0",
     "png-dpi-reader-writer": "^0.1.0"
@@ -36,6 +36,6 @@
     "browserify": "^14.4.0",
     "envify": "^4.1.0",
     "npm-run-all": "^4.0.2",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.1"
   }
 }
