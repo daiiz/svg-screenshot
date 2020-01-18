@@ -21,9 +21,9 @@
     "watch-dev:browserify": "NODE_ENV=development ./node_modules/.bin/watchify -t [ babelify ] -t envify src/index.js -o chrome/build/bundle.js -v"
   },
   "dependencies": {
+    "@daiiz/dpi-aware-image": "^2.0.7",
     "anchors-in-area": "^1.0.21",
     "axios": "^0.18.1",
-    "dpi-aware-image": "github:daiiz/dpi-aware-image#master",
     "img-svgize": "^1.0.0",
     "png-dpi-reader-writer": "^0.1.0"
   },
