@@ -23,7 +23,7 @@
   "dependencies": {
     "@daiiz/dpi-aware-image": "^2.0.7",
     "anchors-in-area": "^1.0.21",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "img-svgize": "^1.0.0",
     "png-dpi-reader-writer": "^0.1.0"
   },
